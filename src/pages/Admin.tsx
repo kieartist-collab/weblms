@@ -13,8 +13,10 @@ import {
   Pencil,
   Save,
   Trash2,
+  ShieldCheck,
 } from 'lucide-react';
 import { Action, Empty, Loading, Notice, useLoad } from '../components';
+import { AdminRoles } from './AdminRoles';
 import {
   check,
   date,
@@ -58,6 +60,10 @@ export function Admin() {
           <Users size={17} />
           Học viên
         </NavLink>
+        <NavLink to="/admin/administrators">
+          <ShieldCheck size={17} />
+          Quản trị viên
+        </NavLink>
         <NavLink to="/admin/settings">
           <SettingsIcon size={17} />
           Thanh toán
@@ -72,6 +78,7 @@ export function Admin() {
         <Route path="courses/:id" element={<CourseEditor />} />
         <Route path="orders" element={<AdminOrders />} />
         <Route path="students" element={<AdminStudents />} />
+        <Route path="administrators" element={<AdminRoles />} />
         <Route path="settings" element={<BankSettings />} />
         <Route path="audit" element={<AuditPage />} />
         <Route path="*" element={<Empty title="Không tìm thấy trang quản trị" />} />
@@ -1165,12 +1172,14 @@ function AuditPage() {
     cancel: 'Hủy đơn',
     revoke: 'Khóa quyền học',
     confirm_drive_revoked: 'Xác nhận thu hồi Drive',
+    grant_admin: 'Cấp quyền quản trị viên',
+    revoke_admin: 'Thu hồi quyền quản trị viên',
   };
   if (loading) return <Loading />;
   if (error) return <Notice error>{error}</Notice>;
   return (
     <>
-      <h2>200 thao tác quyền học và thanh toán gần nhất</h2>
+      <h2>200 thao tác quản trị gần nhất</h2>
       {data?.logs.length ? (
         <div className="table-wrap">
           <table>

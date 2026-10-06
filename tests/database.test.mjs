@@ -25,6 +25,9 @@ before(async () => {
     await readFile(new URL('../supabase/migrations/001_lms.sql', import.meta.url), 'utf8'),
   );
   await db.exec(await readFile(new URL('../supabase/seed.sql', import.meta.url), 'utf8'));
+  await db.exec(
+    await readFile(new URL('../supabase/migrations/003_admin_roles.sql', import.meta.url), 'utf8'),
+  );
   await db.query(
     `insert into auth.users(id,email) values($1,'admin@example.test'),($2,'alice@example.test'),($3,'bob@example.test')`,
     [admin, alice, bob],
@@ -242,3 +245,46 @@ test('unpublishing a course hides metadata and blocks enrolled users', async () 
   await assert.rejects(as(bob, 'select public.record_progress($1,true)', [lesson]), /quyền học/);
   assert.equal((await as(admin, 'select * from public.resources')).rows.length, 1);
 });
+
+test('admin roles require current admin rights, reject self-removal, and log changes once', async () => {
+  await assert.rejects(
+    as(null, 'select public.admin_set_role($1,true)', [bob]),
+    /permission denied/,
+  );
+  await assert.rejects(
+    as(alice, 'select public.admin_set_role($1,true)', [alice]),
+    /Chỉ quản trị viên/,
+  );
+  await assert.rejects(
+    as(admin, 'select public.admin_set_role($1,false)', [admin]),
+    /Không thể tự/,
+  );
+  await assert.rejects(
+    as(admin, 'select public.admin_set_role($1,null)', [bob]),
+    /Quyền không hợp lệ/,
+  );
+  await assert.rejects(
+    as(admin, 'select public.admin_set_role($1,true)', ['00000000-0000-0000-0000-000000000099']),
+    /Tài khoản chưa tồn tại/,
+  );
+  await as(admin, 'select public.admin_set_role($1,true)', [bob]);
+  await as(admin, 'select public.admin_set_role($1,true)', [bob]);
+  assert.equal((await as(bob, 'select private.is_admin() as allowed')).rows[0].allowed, true);
+  await as(admin, 'select public.admin_set_role($1,false)', [bob]);
+  await as(admin, 'select public.admin_set_role($1,false)', [bob]);
+  await assert.rejects(
+    as(bob, 'select public.admin_set_role($1,true)', [bob]),
+    /Chỉ quản trị viên/,
+  );
+  assert.equal(
+    (
+      await as(
+        admin,
+        "select count(*)::int as n from public.audit_log where action in ('grant_admin','revoke_admin') and target_id=$1",
+        [bob],
+      )
+    ).rows[0].n,
+    2,
+  );
+});
+

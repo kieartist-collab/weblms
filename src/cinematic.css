@@ -1531,6 +1531,34 @@ footer {
 }
 
 /* Film exhibition: image-led, open spacing and quiet typography. */
+.admin-roles {
+  max-width: 900px;
+}
+.admin-roles h3 {
+  margin-top: 32px;
+}
+.admin-role-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px 0;
+  border-bottom: 1px solid #303640;
+}
+.admin-role-row > div {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.admin-role-row p {
+  color: var(--muted);
+  margin: 6px 0 0;
+}
+@media (max-width: 600px) {
+  .admin-role-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
 .section-kicker,
 .info-heading,
 .footer-grid h3 {

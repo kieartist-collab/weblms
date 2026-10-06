@@ -6,6 +6,10 @@ Repository: https://github.com/kieartist-collab/weblms
 
 Lần triển khai đầu dùng Netlify Drop với bản build local. Chưa kết nối tự động GitHub → Netlify; push GitHub chưa tự cập nhật website. Chưa xác nhận Google OAuth trên tên miền online.
 
+## Cập nhật quản trị viên
+
+Chạy `supabase/migrations/003_admin_roles.sql` một lần trong Supabase SQL Editor của project hiện tại, không chạy lại 001/002 hoặc seed. Sau đó vào `/admin/administrators`. Người nhận phải đăng nhập Google trên website trước; tìm theo email, xác nhận cấp quyền. Admin mới có toàn quyền (kể cả quản lý các admin khác). Không cho tự gỡ quyền; mọi thay đổi được ghi vào Nhật ký. Người được cấp quyền tải lại trang để thấy menu admin. Thu hồi có hiệu lực ở database ngay dù giao diện phiên cũ chưa tải lại.
+
 Build bằng `pnpm run build`. Chỉ upload thư mục `dist`, không upload toàn bộ mã nguồn hoặc `.env.local` khi triển khai thủ công.
 
 `public/_redirects` được copy vào bản build để các đường dẫn React và `/auth/callback` hoạt động khi mở trực tiếp. `netlify.toml` dành cho triển khai từ repository, build command `pnpm run build`, publish directory `dist`.
