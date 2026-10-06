@@ -1,5 +1,11 @@
 # Đưa website lên Netlify
 
+Website public: https://kistein-do.netlify.app/
+Netlify project: https://app.netlify.com/projects/kistein-do/overview
+Repository: https://github.com/kieartist-collab/weblms
+
+Lần triển khai đầu dùng Netlify Drop với bản build local. Chưa kết nối tự động GitHub → Netlify; push GitHub chưa tự cập nhật website. Chưa xác nhận Google OAuth trên tên miền online.
+
 Build bằng `pnpm run build`. Chỉ upload thư mục `dist`, không upload toàn bộ mã nguồn hoặc `.env.local` khi triển khai thủ công.
 
 `public/_redirects` được copy vào bản build để các đường dẫn React và `/auth/callback` hoạt động khi mở trực tiếp. `netlify.toml` dành cho triển khai từ repository, build command `pnpm run build`, publish directory `dist`.
@@ -7,7 +13,7 @@ Build bằng `pnpm run build`. Chỉ upload thư mục `dist`, không upload to�
 Sau khi nhận địa chỉ HTTPS chính thức:
 
 1. Trong Supabase → Authentication → URL Configuration, đặt Site URL thành địa chỉ HTTPS của website.
-2. Thêm chính xác `https://TEN-WEBSITE.netlify.app/auth/callback` vào Redirect URLs. Giữ các URL localhost nếu còn phát triển local.
+2. Thêm chính xác `https://kistein-do.netlify.app/auth/callback` vào Redirect URLs. Giữ các URL localhost nếu còn phát triển local.
 3. Google OAuth vẫn dùng callback Supabase đã đăng ký. Không thay callback Google bằng URL Netlify. Nếu có cấu hình JavaScript origins, bổ sung origin HTTPS của website khi cần.
 4. Kiểm tra đăng nhập Google trên website online và quay về đúng tên miền; kiểm tra trang khóa học, đơn hàng và quyền học bằng tài khoản thích hợp.
 
