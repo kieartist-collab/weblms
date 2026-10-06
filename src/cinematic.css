@@ -128,7 +128,8 @@ h3 {
 .cinematic-hero.container {
   width: 100%;
   max-width: none;
-  min-height: 560px;
+  min-height: calc(100vh - 73px);
+  min-height: calc(100svh - 73px);
   display: grid;
   grid-template-columns: 1fr;
   place-items: center;
@@ -651,7 +652,6 @@ footer {
     top: 72px;
   }
   .cinematic-hero.container {
-    min-height: 540px;
     padding: 60px 24px 75px;
   }
   .cinematic-hero .hero-points {
@@ -674,7 +674,6 @@ footer {
 }
 @media (max-width: 560px) {
   .cinematic-hero.container {
-    min-height: 525px;
     padding: 52px 20px 72px;
   }
   .cinematic-hero .hero-copy h1 {
