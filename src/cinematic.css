@@ -204,6 +204,44 @@ h3 {
     linear-gradient(180deg, #080b0e55, #0c1016a8 48%, #101114 100%),
     linear-gradient(90deg, #10111485, transparent 40%, #10111485);
 }
+.hero-video-backdrop {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  container-type: size;
+  pointer-events: none;
+}
+.hero-video-backdrop > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.hero-video-backdrop > iframe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(100cqw, 177.78cqh);
+  height: max(100cqh, 56.25cqw);
+  transform: translate(-50%, -50%);
+  border: 0;
+  pointer-events: none;
+}
+.hero-video-toggle {
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 12px;
+  background: #10151acc;
+  color: #c5d4db;
+  border: 1px solid #ffffff30;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  cursor: pointer;
+}
+.hero-video-toggle:hover { color: var(--accent); border-color: var(--accent); }
 .cinematic-hero .image-caption {
   bottom: 23px;
   left: auto;

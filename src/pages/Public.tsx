@@ -3,6 +3,7 @@ import { ArrowUpRight, Play, BookOpen, Clock, ChevronRight } from 'lucide-react'
 import { useEffect } from 'react';
 import { HomeSections } from '../HomeSections';
 import { MotionSurface } from '../MotionSurface';
+import { HeroVideo } from '../HeroVideo';
 import { useAuth } from '../auth';
 import {
   Action,
@@ -62,10 +63,9 @@ export function Home({ catalog = false }: { catalog?: boolean }) {
             </div>
           </div>
           <div className="hero-visual">
+            <HeroVideo />
             {featured ? (
               <>
-                <CourseImage course={featured} />
-                <div className="hero-image-shade" />
                 <div className="image-caption">
                   <span className="light-eyebrow">KHÓA HỌC NỔI BẬT</span>
                   <h2>{featured.category}</h2>
@@ -78,12 +78,7 @@ export function Home({ catalog = false }: { catalog?: boolean }) {
                   </Link>
                 </div>
               </>
-            ) : (
-              <div className="hero-empty">
-                <BookOpen size={60} />
-                <h2>Bắt đầu một điều mới.</h2>
-              </div>
-            )}
+            ) : null}
           </div>
         </section>
       )}
