@@ -458,22 +458,13 @@ export function Learning() {
                   <p>Video đang được chuẩn bị</p>
                 </div>
               )}
+              {video && <div className="drive-popout-cover" aria-hidden="true" />}
             </div>
             <div className="video-help">
               <span>
-                Đăng nhập Google bằng <strong>{user?.email}</strong>. Nếu video không tải, hãy mở
-                trực tiếp trên Drive.
+                Đăng nhập Google bằng <strong>{user?.email}</strong> để xem video bài học.
               </span>
-              {video && (
-                <a
-                  className="button secondary small"
-                  href={`https://drive.google.com/file/d/${video}/view`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Mở trên Google Drive <ExternalLink size={15} />
-                </a>
-              )}
+
             </div>
             {notice && <Notice error>{notice}</Notice>}
             <div className="lesson-actions">
@@ -540,3 +531,4 @@ export function Learning() {
     </div>
   );
 }
+

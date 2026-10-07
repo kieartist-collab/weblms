@@ -1782,3 +1782,6 @@ code {
     transition: none !important;
   }
 }
+
+.video-frame { position: relative; }
+.drive-popout-cover { position: absolute; top: 0; right: 0; width: 64px; height: 64px; background: #000; z-index: 1; }
