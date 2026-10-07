@@ -1,3 +1,4 @@
+import { RichText } from '../RichText';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { ArrowUpRight, Play, BookOpen, Clock, ChevronRight } from 'lucide-react';
 import { useEffect } from 'react';
@@ -227,7 +228,7 @@ export function CourseDetail() {
             {course.category} · {course.level}
           </span>
           <h1 className="page-title">{course.title}</h1>
-          <p className="lead">{course.summary}</p>
+          <RichText className="lead" value={course.summary} />
           <div className="detail-meta">
             <span>
               <BookOpen size={17} />
@@ -243,7 +244,7 @@ export function CourseDetail() {
             <h2 className="info-heading">
               <BookOpen size={22} aria-hidden="true" /> Về khóa học
             </h2>
-            <p className="prose">{course.description}</p>
+            <RichText value={course.description} />
           </section>
           <section className="content-section">
             <h2 className="info-heading">

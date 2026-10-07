@@ -1,3 +1,4 @@
+import { RichText } from '../RichText';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
@@ -196,98 +197,106 @@ export function OrderDetail() {
       <h1 className="page-title">Đăng ký khóa học</h1>
       <p className="lead">{c?.title || 'Khóa học'}</p>
       <div className={`checkout-layout ${qr ? 'has-qr' : ''}`}>
-      <div className="panel checkout-information">
-        <div className="panel-heading">
-          <h2>{money(o.amount)}</h2>
-          <span className={`badge ${o.status}`}>{orderLabels[o.status]}</span>
-        </div>
-        <p>
-          Email nhận quyền: <strong>{user?.email}</strong>
-        </p>
-        {['pending', 'reported'].includes(o.status) && (
-          <>
-            <div className="bank-details">
-              <div>
-                <small>Ngân hàng</small>
-                <strong>{s.bank_name}</strong>
+        <div className="panel checkout-information">
+          <div className="panel-heading">
+            <h2>{money(o.amount)}</h2>
+            <span className={`badge ${o.status}`}>{orderLabels[o.status]}</span>
+          </div>
+          <p>
+            Email nhận quyền: <strong>{user?.email}</strong>
+          </p>
+          {['pending', 'reported'].includes(o.status) && (
+            <>
+              <div className="bank-details">
+                <div>
+                  <small>Ngân hàng</small>
+                  <strong>{s.bank_name}</strong>
+                </div>
+                <div>
+                  <small>Số tài khoản</small>
+                  <strong>{s.bank_account}</strong>
+                </div>
+                <div>
+                  <small>Chủ tài khoản</small>
+                  <strong>{s.bank_owner}</strong>
+                </div>
+                <div>
+                  <small>Nội dung chuyển khoản (sao chép đầy đủ)</small>
+                  <code>{o.transfer_code}</code>
+                  <Action
+                    className="button secondary small"
+                    onClick={async () => {
+                      await navigator.clipboard.writeText(o.transfer_code);
+                    }}
+                  >
+                    Sao chép mã
+                  </Action>
+                </div>
               </div>
-              <div>
-                <small>Số tài khoản</small>
-                <strong>{s.bank_account}</strong>
-              </div>
-              <div>
-                <small>Chủ tài khoản</small>
-                <strong>{s.bank_owner}</strong>
-              </div>
-              <div>
-                <small>Nội dung chuyển khoản (sao chép đầy đủ)</small>
-                <code>{o.transfer_code}</code>
+              <Notice>
+                Chuyển đúng số tiền và nội dung ở trên. Nút báo chuyển khoản không tự xác nhận thanh
+                toán hoặc cấp quyền học.
+              </Notice>
+              {o.status === 'pending' && (
                 <Action
-                  className="button secondary small"
                   onClick={async () => {
-                    await navigator.clipboard.writeText(o.transfer_code);
+                    check(await db().rpc('report_payment', { p_order: o.id }));
+                    refresh();
                   }}
                 >
-                  Sao chép mã
+                  Tôi đã chuyển khoản
                 </Action>
-              </div>
-            </div>
-            <Notice>
-              Chuyển đúng số tiền và nội dung ở trên. Nút báo chuyển khoản không tự xác nhận thanh
-              toán hoặc cấp quyền học.
-            </Notice>
-            {o.status === 'pending' && (
-              <Action
-                onClick={async () => {
-                  check(await db().rpc('report_payment', { p_order: o.id }));
-                  refresh();
-                }}
-              >
-                Tôi đã chuyển khoản
-              </Action>
-            )}
-          </>
-        )}
-        {o.status === 'reported' && (
-          <p>Yêu cầu của bạn đang chờ admin kiểm tra. Bạn có thể quay lại đây để xem trạng thái.</p>
-        )}
-        {o.status === 'paid' && (
-          <Notice>
-            Đã xác nhận thanh toán. Admin đang chia sẻ folder Drive cho email của bạn trước khi mở
-            khóa học.
-          </Notice>
-        )}
-        {o.status === 'fulfilled' &&
-          (e?.active ? (
-            <>
-              <Notice>
-                Khóa học đã sẵn sàng. Đăng nhập đúng email Google ở trên khi mở video.
-              </Notice>
-              <Link className="button" to={`/learn/${o.course_id}`}>
-                Vào học <Play size={16} />
-              </Link>
+              )}
             </>
-          ) : (
+          )}
+          {o.status === 'reported' && (
+            <p>
+              Yêu cầu của bạn đang chờ admin kiểm tra. Bạn có thể quay lại đây để xem trạng thái.
+            </p>
+          )}
+          {o.status === 'paid' && (
             <Notice>
-              Đơn đã được xử lý nhưng quyền học hiện không hoạt động. Liên hệ giảng viên để được hỗ
-              trợ.
+              Đã xác nhận thanh toán. Admin đang chia sẻ folder Drive cho email của bạn trước khi mở
+              khóa học.
             </Notice>
-          ))}
-        {o.status === 'cancelled' && (
-          <Notice>
-            Đơn hàng đã hủy. Nếu đã chuyển khoản, hãy liên hệ giảng viên để đối soát trước khi tạo
-            đơn mới.
-          </Notice>
+          )}
+          {o.status === 'fulfilled' &&
+            (e?.active ? (
+              <>
+                <Notice>
+                  Khóa học đã sẵn sàng. Đăng nhập đúng email Google ở trên khi mở video.
+                </Notice>
+                <Link className="button" to={`/learn/${o.course_id}`}>
+                  Vào học <Play size={16} />
+                </Link>
+              </>
+            ) : (
+              <Notice>
+                Đơn đã được xử lý nhưng quyền học hiện không hoạt động. Liên hệ giảng viên để được
+                hỗ trợ.
+              </Notice>
+            ))}
+          {o.status === 'cancelled' && (
+            <Notice>
+              Đơn hàng đã hủy. Nếu đã chuyển khoản, hãy liên hệ giảng viên để đối soát trước khi tạo
+              đơn mới.
+            </Notice>
+          )}
+          <button className="text-link refresh" onClick={refresh}>
+            Cập nhật trạng thái
+          </button>
+        </div>
+        {qr && (
+          <aside className="panel checkout-qr-panel" aria-label="Mã QR thanh toán">
+            <h2>Quét mã chuyển khoản</h2>
+            <img
+              className="bank-qr checkout-bank-qr"
+              src={qr}
+              alt="Mã QR chuyển khoản do admin cung cấp"
+            />
+            <p className="muted">Nhập đúng số tiền và nội dung chuyển khoản ở cột thông tin.</p>
+          </aside>
         )}
-        <button className="text-link refresh" onClick={refresh}>
-          Cập nhật trạng thái
-        </button>
-      </div>
-      {qr && <aside className="panel checkout-qr-panel" aria-label="Mã QR thanh toán">
-        <h2>Quét mã chuyển khoản</h2>
-        <img className="bank-qr checkout-bank-qr" src={qr} alt="Mã QR chuyển khoản do admin cung cấp" />
-        <p className="muted">Nhập đúng số tiền và nội dung chuyển khoản ở cột thông tin.</p>
-      </aside>}
       </div>
     </div>
   );
@@ -347,7 +356,8 @@ function LearningCourse() {
       db().from('resources').select('*').eq('lesson_id', lesson.id),
     ]);
     const content = check(contentResult) as LessonContent | null;
-    if (!content) throw new Error('Không tải được bài học. Hãy kiểm tra quyền truy cập hoặc thử lại.');
+    if (!content)
+      throw new Error('Không tải được bài học. Hãy kiểm tra quyền truy cập hoặc thử lại.');
     return { lessonId: lesson.id, content, resources: check(resourceResult) as Resource[] };
   }, [lesson?.id]);
   // Never display the previous lesson while the new request is starting.
@@ -355,7 +365,8 @@ function LearningCourse() {
   const content = currentDetail?.content;
   const resources = currentDetail?.resources ?? [];
   const lessonLoading = detail.loading || (!currentDetail && !detail.error);
-  const isCompleted = (id: string) => completion[id] ?? data?.progress.find((p) => p.lesson_id === id)?.completed ?? false;
+  const isCompleted = (id: string) =>
+    completion[id] ?? data?.progress.find((p) => p.lesson_id === id)?.completed ?? false;
   useEffect(() => {
     if (!lesson || !currentDetail) return;
     let alive = true;
@@ -416,11 +427,22 @@ function LearningCourse() {
   return (
     <div className={`classroom learning-workspace ${outlineOpen ? '' : 'outline-hidden'}`}>
       <header className="learning-topbar">
-        <Link to="/my-learning" className="text-link learning-back"><ChevronLeft size={18} /><span>Góc học tập</span></Link>
+        <Link to="/my-learning" className="text-link learning-back">
+          <ChevronLeft size={18} />
+          <span>Góc học tập</span>
+        </Link>
         <strong className="learning-course-title">{course.title}</strong>
-        <span className="learning-top-progress"><CheckCircle2 size={17} /> {done}/{lessons.length} bài</span>
-        <button className="button secondary small" aria-expanded={outlineOpen} aria-controls="course-outline" onClick={() => setOutlineOpen(!outlineOpen)}>
-          {outlineOpen ? <PanelRightClose size={18} /> : <PanelRightOpen size={18} />}<span>Mục lục</span>
+        <span className="learning-top-progress">
+          <CheckCircle2 size={17} /> {done}/{lessons.length} bài
+        </span>
+        <button
+          className="button secondary small"
+          aria-expanded={outlineOpen}
+          aria-controls="course-outline"
+          onClick={() => setOutlineOpen(!outlineOpen)}
+        >
+          {outlineOpen ? <PanelRightClose size={18} /> : <PanelRightOpen size={18} />}
+          <span>Mục lục</span>
         </button>
       </header>
       <aside className="lesson-sidebar" id="course-outline" hidden={!outlineOpen}>
@@ -446,11 +468,7 @@ function LearningCourse() {
                   key={l.id}
                   to={`/learn/${courseId}/${l.id}`}
                 >
-                  {isCompleted(l.id) ? (
-                    <CheckCircle2 size={17} />
-                  ) : (
-                    <Play size={16} />
-                  )}
+                  {isCompleted(l.id) ? <CheckCircle2 size={17} /> : <Play size={16} />}
                   <span>
                     {l.title}
                     <small>{l.duration_minutes} phút</small>
@@ -464,8 +482,17 @@ function LearningCourse() {
         {lesson ? (
           <>
             <div className="video-frame">
-              {lessonLoading ? <div className="video-empty"><Loading /></div> : detail.error ? (
-                <div className="video-empty"><Notice error>{detail.error}</Notice><button className="button secondary" onClick={detail.refresh}>Thử lại</button></div>
+              {lessonLoading ? (
+                <div className="video-empty">
+                  <Loading />
+                </div>
+              ) : detail.error ? (
+                <div className="video-empty">
+                  <Notice error>{detail.error}</Notice>
+                  <button className="button secondary" onClick={detail.refresh}>
+                    Thử lại
+                  </button>
+                </div>
               ) : video ? (
                 <iframe
                   key={`${lesson.id}:${video}`}
@@ -482,74 +509,81 @@ function LearningCourse() {
               )}
             </div>
             <div className="learning-details">
-            <span className="eyebrow">{modules.find((m) => m.id === lesson.module_id)?.title}</span>
-            <h1>{lesson.title}</h1>
-            <div className="video-help">
-              <span>
-                Đăng nhập Google bằng <strong>{user?.email}</strong> để xem video bài học.
+              <span className="eyebrow">
+                {modules.find((m) => m.id === lesson.module_id)?.title}
               </span>
-
-            </div>
-            {notice && <Notice error>{notice}</Notice>}
-            <div className="lesson-actions">
-              <span className="muted inline">
-                <Clock size={16} />
-                {lesson.duration_minutes} phút
-              </span>
-              <Action
-                key={lesson.id}
-                className={`button ${completed ? 'lesson-completed-button' : ''}`}
-                disabled={!currentDetail}
-                onClick={async () => {
-                  check(
-                    await db().rpc('record_progress', {
-                      p_lesson: lesson.id,
-                      p_completed: !completed,
-                    }),
-                  );
-                  setCompletion((previous) => ({ ...previous, [lesson.id]: !completed }));
-                }}
-              >
-                {completed ? (
-                  <>
-                    <CheckCircle2 size={17} /> Đã hoàn thành · Bỏ đánh dấu
-                  </>
-                ) : (
-                  <>
-                    Hoàn thành bài <CheckCircle2 size={17} />
-                  </>
+              <h1>{lesson.title}</h1>
+              <div className="video-help">
+                <span>
+                  Đăng nhập Google bằng <strong>{user?.email}</strong> để xem video bài học.
+                </span>
+              </div>
+              {notice && <Notice error>{notice}</Notice>}
+              <div className="lesson-actions">
+                <span className="muted inline">
+                  <Clock size={16} />
+                  {lesson.duration_minutes} phút
+                </span>
+                <Action
+                  key={lesson.id}
+                  className={`button ${completed ? 'lesson-completed-button' : ''}`}
+                  disabled={!currentDetail}
+                  onClick={async () => {
+                    check(
+                      await db().rpc('record_progress', {
+                        p_lesson: lesson.id,
+                        p_completed: !completed,
+                      }),
+                    );
+                    setCompletion((previous) => ({ ...previous, [lesson.id]: !completed }));
+                  }}
+                >
+                  {completed ? (
+                    <>
+                      <CheckCircle2 size={17} /> Đã hoàn thành · Bỏ đánh dấu
+                    </>
+                  ) : (
+                    <>
+                      Hoàn thành bài <CheckCircle2 size={17} />
+                    </>
+                  )}
+                </Action>
+                {next && (
+                  <Link className="button secondary" to={`/learn/${courseId}/${next.id}`}>
+                    Bài tiếp theo
+                  </Link>
                 )}
-              </Action>
-              {next && (
-                <Link className="button secondary" to={`/learn/${courseId}/${next.id}`}>
-                  Bài tiếp theo
-                </Link>
-              )}
-            </div>
-            <section className="content-section">
-              <h2>Nội dung bài học</h2>
-              <p className="prose">
-                {lessonLoading ? 'Đang tải nội dung bài học…' : detail.error ? 'Nội dung bài học chưa tải được.' : content?.body || 'Giảng viên chưa bổ sung nội dung cho bài học này.'}
-              </p>
-            </section>
-            {resources.length > 0 && (
+              </div>
               <section className="content-section">
-                <h2>Tài liệu đi kèm</h2>
-                {resources.map((r) => (
-                  <a
-                    className="resource"
-                    key={r.id}
-                    href={safeUrl(r.url)}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    <FileText size={20} />
-                    <span>{r.title}</span>
-                    <ExternalLink size={16} />
-                  </a>
-                ))}
+                <h2>Nội dung bài học</h2>
+                <RichText
+                  value={
+                    lessonLoading
+                      ? 'Đang tải nội dung bài học…'
+                      : detail.error
+                        ? 'Nội dung bài học chưa tải được.'
+                        : content?.body || 'Giảng viên chưa bổ sung nội dung cho bài học này.'
+                  }
+                />
               </section>
-            )}
+              {resources.length > 0 && (
+                <section className="content-section">
+                  <h2>Tài liệu đi kèm</h2>
+                  {resources.map((r) => (
+                    <a
+                      className="resource"
+                      key={r.id}
+                      href={safeUrl(r.url)}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <FileText size={20} />
+                      <span>{r.title}</span>
+                      <ExternalLink size={16} />
+                    </a>
+                  ))}
+                </section>
+              )}
             </div>
           </>
         ) : (
@@ -559,4 +593,3 @@ function LearningCourse() {
     </div>
   );
 }
-

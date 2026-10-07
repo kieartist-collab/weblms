@@ -1,3 +1,5 @@
+import { RichEditor } from './RichEditor';
+import { RichText } from './RichText';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { Bug, MessageCircle, X, Send, ImagePlus, FileText } from 'lucide-react';
@@ -141,13 +143,11 @@ export function SupportWidget() {
                   );
                 }
                 check(
-                  await db()
-                    .from('bug_reports')
-                    .insert({
-                      message: message.trim(),
-                      page_path: location.pathname,
-                      image_path: imagePath,
-                    }),
+                  await db().from('bug_reports').insert({
+                    message: message.trim(),
+                    page_path: location.pathname,
+                    image_path: imagePath,
+                  }),
                 );
                 setSent(true);
                 setMessage('');
@@ -248,7 +248,7 @@ export function PublicPage() {
       ) : data ? (
         <>
           <h1>{data.title}</h1>
-          <div className="prose">{data.body}</div>
+          <RichText value={data.body} />
           <p>
             <a href="https://web.facebook.com/kieartist/" target="_blank" rel="noopener noreferrer">
               Liên hệ Kistein Do trên Facebook ↗
@@ -295,15 +295,10 @@ function PageEditor({ page, onSaved }: { page: Page; onSaved: () => void }) {
         <span>Tiêu đề</span>
         <input value={title} maxLength={200} onChange={(e) => setTitle(e.target.value)} />
       </label>
-      <label className="field">
-        <span>Nội dung (văn bản, xuống dòng để chia đoạn)</span>
-        <textarea
-          rows={14}
-          maxLength={50000}
-          value={body}
-          onChange={(e) => setBody(e.target.value)}
-        />
-      </label>
+      <div className="field">
+        <span>Nội dung</span>
+        <RichEditor value={body} onChange={setBody} label={page.title} />
+      </div>
       <div className="support-actions">
         <Link to={`/pages/${page.slug}`} target="_blank">
           Xem trang ↗

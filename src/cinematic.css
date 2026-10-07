@@ -2326,3 +2326,38 @@ select:disabled {
 
 .support-dialog { margin: auto; }
 .support-dialog .section-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+
+.rich-editor { border: 1px solid #454550; border-radius: 8px; background: #101116; min-width: 0; overflow: clip; }
+.editor-toolbar { position: sticky; top: 0; z-index: 2; display: flex; flex-wrap: wrap; gap: 5px; padding: 10px; background: #24252d; border-bottom: 1px solid #454550; }
+.editor-toolbar button { background: #16181e; color: #dedde7; border: 1px solid #494b58; padding: 6px 9px; border-radius: 4px; font-size: 12px; cursor: pointer; }
+.editor-toolbar button:hover, .editor-toolbar button[aria-pressed=true] { background: #43515d; color: #fff; border-color: #82c4d1; }
+.rich-editor .tiptap, .editor-preview { min-height: 200px; max-height: 550px; overflow: auto; padding: 20px; outline: none; }
+.rich-editor .tiptap:focus { box-shadow: inset 0 0 0 1px #82c4d1; }
+.editor-hint { display: block; padding: 10px 16px; color: #afb3c0; }
+.rich-content { line-height: 1.8; overflow-wrap: anywhere; }
+.rich-content.legacy-text { white-space: pre-wrap; }
+.rich-content p { margin: 0 0 1em; min-height: 1em; }
+.rich-content ul { list-style: disc; padding-left: 28px; margin: 1em 0; }
+.rich-content ol { list-style: decimal; padding-left: 28px; margin: 1em 0; }
+.rich-content li p { margin: 0; }
+.rich-content h2 { font-size: 1.8rem; margin: 24px 0 12px; }
+.rich-content h3 { font-size: 1.4rem; margin: 20px 0 10px; }
+.rich-content blockquote { border-left: 3px solid #82c4d1; background: #202730; padding: 18px; margin: 18px 0; }
+.rich-content a { color: #91dbe6; text-decoration: underline; }
+.rich-content img { max-width: 100%; height: auto; border-radius: 6px; }
+.rich-content table { border-collapse: collapse; width: 100%; table-layout: fixed; margin: 18px 0; }
+.rich-content th, .rich-content td { border: 1px solid #555965; padding: 10px; min-width: 40px; vertical-align: top; }
+.rich-content th { background: #262935; }
+.rich-content hr { border: 0; border-top: 1px solid #555965; margin: 24px 0; }
+.rich-content details, .rich-content [data-type=details] { border: 1px solid #454550; padding: 14px; border-radius: 6px; margin: 16px 0; }
+.rich-content summary { cursor: pointer; font-weight: 600; list-style: disclosure-closed; }
+.rich-content details[open] > summary { list-style: disclosure-open; margin-bottom: 14px; }
+.rich-content [data-type=details] > button { float: left; margin-right: 12px; cursor: pointer; }
+.rich-content [data-type=details] > button::before { content: '▸'; }
+.rich-content .ProseMirror-selectednode { outline: 2px solid #82c4d1; }
+.rich-content .selectedCell { background: #32434b; }
+
+.rich-content ul[data-type=taskList] { list-style: none; padding-left: 0; }
+.rich-content li[data-type=taskItem] { display: flex; align-items: baseline; gap: 10px; }
+.rich-content li[data-type=taskItem] > div { flex: 1; }
+.rich-content input[type=checkbox] { width: auto; accent-color: #82c4d1; }

@@ -1,3 +1,4 @@
+import { RichEditor } from '../RichEditor';
 import { useEffect, useRef, useState } from 'react';
 import type { FormEvent, ReactNode } from 'react';
 import { Link, NavLink, Route, Routes, useNavigate, useParams } from 'react-router-dom';
@@ -109,6 +110,13 @@ function Field({
   min?: number;
   children?: ReactNode;
 }) {
+  if (multiline)
+    return (
+      <div className="field wide">
+        <span>{label}</span>
+        <RichEditor name={name} value={String(value)} compact={name === 'summary'} label={label} />
+      </div>
+    );
   return (
     <label className={`field ${multiline ? 'wide' : ''}`}>
       <span>{label}</span>
@@ -137,12 +145,14 @@ function EditorForm({
   const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (busy) return;
-    const data = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const data = new FormData(form);
     setBusy(true);
     setSaved(false);
     setError('');
     try {
       await onSave(data);
+      form.dispatchEvent(new Event('editor-saved'));
       setSaved(true);
     } catch (e) {
       setError(errorText(e));
@@ -947,7 +957,7 @@ function LessonEditor({
                 type="url"
                 value={data?.video_url}
               />
-              <Field label="Nội dung bài học (văn bản)" name="body" value={data?.body} multiline />
+              <Field label="Nội dung bài học" name="body" value={data?.body} multiline />
             </div>
           </EditorForm>
         )}
