@@ -230,7 +230,7 @@ export function OrderDetail() {
             </div>
             {safeUrl(s.bank_qr_url) && (
               <img
-                className="bank-qr"
+                className="bank-qr checkout-bank-qr"
                 src={safeUrl(s.bank_qr_url)}
                 alt="Mã QR chuyển khoản do admin cung cấp"
               />

@@ -1038,6 +1038,13 @@ progress::-moz-progress-bar {
   margin-top: 22px;
   display: block;
 }
+.bank-qr.checkout-bank-qr {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  max-height: none;
+}
 .classroom {
   display: grid;
   grid-template-columns: 320px minmax(0, 1fr);
