@@ -581,7 +581,8 @@ function CurriculumEditor({ courseId }: { courseId: string; onChange: () => void
               'module',
               drag.id,
               null,
-              remaining.findIndex((x) => x.id === m.id),
+              remaining.findIndex((x) => x.id === m.id) +
+                (e.clientY > e.currentTarget.getBoundingClientRect().top + e.currentTarget.getBoundingClientRect().height / 2 ? 1 : 0),
             );
           }}
         >
@@ -1135,6 +1136,8 @@ function AuditPage() {
     confirm_drive_revoked: 'Xác nhận thu hồi Drive',
     grant_admin: 'Cấp quyền quản trị viên',
     revoke_admin: 'Thu hồi quyền quản trị viên',
+    reorder_module: 'Sắp xếp chương',
+    reorder_lesson: 'Sắp xếp hoặc chuyển bài học',
   };
   if (loading) return <Loading />;
   if (error) return <Notice error>{error}</Notice>;
