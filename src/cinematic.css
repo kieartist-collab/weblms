@@ -2361,3 +2361,13 @@ select:disabled {
 .rich-content li[data-type=taskItem] { display: flex; align-items: baseline; gap: 10px; }
 .rich-content li[data-type=taskItem] > div { flex: 1; }
 .rich-content input[type=checkbox] { width: auto; accent-color: #82c4d1; }
+
+.editor-toolbar { gap: 4px; padding: 8px; }
+.editor-toolbar .editor-tool { position: relative; display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; flex: 0 0 34px; padding: 0; border-color: transparent; background: transparent; border-radius: 5px; color: #bfc5d2; }
+.editor-toolbar .editor-tool.group-start { margin-left: 9px; }
+.editor-toolbar .editor-tool.group-start::before { content: ''; position: absolute; left: -7px; top: 7px; bottom: 7px; width: 1px; background: #454955; }
+.editor-toolbar .editor-tool:hover { background: #343b47; color: #fff; }
+.editor-toolbar .editor-tool[aria-pressed=true] { background: #284550; color: #a7e4ed; border-color: #426b78; }
+.editor-toolbar .editor-tool:focus-visible { outline: 2px solid #82c4d1; outline-offset: 2px; }
+.editor-tool-badge { position: absolute; right: 1px; bottom: 1px; background: #24252d; border-radius: 2px; }
+@media (pointer: coarse) { .editor-toolbar .editor-tool { width: 40px; height: 40px; flex-basis: 40px; } }

@@ -1,3 +1,5 @@
+import { Bold, Italic, Underline, Strikethrough, Heading2, Heading3, List, ListOrdered, ListChecks, IndentIncrease, IndentDecrease, Link2, Unlink, AlignLeft, AlignCenter, AlignRight, Quote, Minus, ImagePlus, TextCursorInput, Minimize2, Maximize2, Expand, Trash2, ChevronsUpDown, ChevronsDownUp, Table2, Rows3, Columns3, Undo2, Redo2, RemoveFormatting, Eye, Pencil, Plus, X } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import TaskList from '@tiptap/extension-task-list';
 import TaskItem from '@tiptap/extension-task-item';
 import { useEffect, useRef, useState } from 'react';
@@ -9,6 +11,19 @@ import { TableKit } from '@tiptap/extension-table';
 import { Details, DetailsContent, DetailsSummary } from '@tiptap/extension-details';
 import { RichText, cleanHTML, encodeRich, toEditorHTML } from './RichText';
 import { check, db, errorText } from './lib';
+
+const toolbarIcons: Record<string, LucideIcon> = {
+ 'Đậm': Bold, 'Nghiêng': Italic, 'Gạch chân': Underline, 'Gạch ngang': Strikethrough,
+ 'H2': Heading2, 'H3': Heading3, '• Danh sách': List, '1. Danh sách': ListOrdered,
+ '☑ Checklist': ListChecks, 'Thụt vào': IndentIncrease, 'Thụt ra': IndentDecrease,
+ 'Link': Link2, 'Gỡ link': Unlink, 'Căn trái': AlignLeft, 'Căn giữa': AlignCenter, 'Căn phải': AlignRight,
+ 'Trích dẫn / Lưu ý': Quote, 'Đường kẻ': Minus, 'Ảnh': ImagePlus, 'Mô tả ảnh': TextCursorInput,
+ 'Ảnh 320px': Minimize2, 'Ảnh 640px': Expand, 'Ảnh 960px': Maximize2, 'Xóa ảnh': Trash2,
+ 'Accordion': ChevronsUpDown, 'Bỏ accordion': ChevronsDownUp, 'Bảng': Table2,
+ '+ Hàng': Rows3, '+ Cột': Columns3, 'Xóa hàng': Rows3, 'Xóa cột': Columns3, 'Xóa bảng': Trash2,
+ '↶ Hoàn tác': Undo2, '↷ Làm lại': Redo2, 'Xóa định dạng': RemoveFormatting, 'Xem trước': Eye, 'Soạn thảo': Pencil,
+};
+const groupStarts = new Set(['H2','• Danh sách','Link','Căn trái','Trích dẫn / Lưu ý','Ảnh','Accordion','Bảng','↶ Hoàn tác','Xem trước','Soạn thảo']);
 
 export function RichEditor({
   value = '',
@@ -99,11 +114,15 @@ export function RichEditor({
     };
   }, []);
   if (!editor) return null;
-  const button = (text: string, action: () => void, active = false) => (
-    <button type="button" key={text} title={text} aria-pressed={active} onClick={action}>
-      {text}
-    </button>
-  );
+  const button = (text: string, action: () => void, active = false) => {
+    const Icon = toolbarIcons[text];
+    const Badge = text.startsWith('+ ') ? Plus : ['Xóa hàng','Xóa cột'].includes(text) ? X : null;
+    return <button type="button" key={text} title={text} aria-label={text} aria-pressed={active}
+      className={groupStarts.has(text) ? 'editor-tool group-start' : 'editor-tool'} onClick={action}>
+      <Icon size={18} strokeWidth={1.8} aria-hidden="true" />
+      {Badge && <Badge className="editor-tool-badge" size={10} aria-hidden="true" />}
+    </button>;
+  };
   return (
     <div className="rich-editor" ref={wrapper}>
       {name && <input type="hidden" name={name} value={html} />}
