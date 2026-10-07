@@ -17,6 +17,7 @@ import {
 import { useAuth } from './auth';
 import { db, demo, errorText, money, safeUrl } from './lib';
 import type { Course } from './types';
+import { SupportLinks } from './Support';
 import { ContactInfo } from './ContactInfo';
 
 export function useLoad<T>(fn: () => Promise<T>, deps: DependencyList = []) {
@@ -145,7 +146,11 @@ export function Layout({ children }: { children: ReactNode }) {
     window.scrollTo({ top: 0, behavior: 'instant' });
   }, [location.pathname, location.hash, location.key]);
   if (location.pathname.startsWith('/learn/')) {
-    return <main id="main" className="learning-route">{children}</main>;
+    return (
+      <main id="main" className="learning-route">
+        {children}
+      </main>
+    );
   }
   return (
     <>
@@ -239,6 +244,7 @@ export function Layout({ children }: { children: ReactNode }) {
             </h3>
             <Link to="/my-learning">Góc học tập</Link>
             <Link to="/login">Đăng nhập</Link>
+            <SupportLinks />
             <Link to="/#faq">Câu hỏi thường gặp</Link>
           </div>
           <div>

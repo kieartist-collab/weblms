@@ -498,3 +498,20 @@ test('curriculum moves are admin-only, atomic and confined to one course', async
     /Vị trí/,
   );
 });
+
+test('support pages and reports enforce public reading, admin editing and private attachments', async () => {
+  await db.exec('reset role');
+  await db.exec(await readFile(new URL('../supabase/migrations/006_support_pages.sql', import.meta.url), 'utf8'));
+  assert.equal((await as(null,'select * from public.site_pages')).rows.length,4);
+  assert.equal((await as(alice,"update public.site_pages set body='tampered' returning slug")).rows.length,0);
+  assert.equal((await as(admin,"update public.site_pages set body='Updated content' where slug='mentor-1vs1' returning slug")).rows.length,1);
+  await assert.rejects(()=>as(null,"insert into public.bug_reports(message,page_path) values('Anonymous report','/learn/test')"));
+  const report=(await as(alice,"insert into public.bug_reports(message,page_path,image_path) values('Video does not load','/learn/test',$1) returning id",[alice+'/test.png'])).rows[0];
+  assert.equal((await as(bob,'select * from public.bug_reports')).rows.length,0);
+  assert.equal((await as(alice,"update public.bug_reports set status='resolved' returning id")).rows.length,0);
+  assert.equal((await as(admin,"update public.bug_reports set status='resolved' where id=$1 returning id",[report.id])).rows.length,1);
+  await assert.rejects(()=>as(alice,"insert into public.bug_reports(message,page_path,image_path) values('Spoof attachment','/learn/test',$1)",[bob+'/test.png']));
+  await as(alice,"insert into storage.objects(bucket_id,name) values('bug-reports',$1)",[alice+'/test.png']);
+  assert.equal((await as(bob,"select * from storage.objects where bucket_id='bug-reports'")).rows.length,0);
+  assert.equal((await as(admin,"select * from storage.objects where bucket_id='bug-reports'")).rows.length,1);
+});

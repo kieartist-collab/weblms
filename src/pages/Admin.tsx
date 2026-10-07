@@ -18,6 +18,7 @@ import {
   ArrowDown,
 } from 'lucide-react';
 import { Action, Empty, Loading, Notice, useLoad } from '../components';
+import { AdminPages, AdminReports } from '../Support';
 import { AdminRoles } from './AdminRoles';
 import { AdminDirectory } from './AdminDirectory';
 import { useAuth } from '../auth';
@@ -59,6 +60,14 @@ export function Admin() {
           <SettingsIcon size={17} />
           Thanh toán
         </NavLink>
+        <NavLink to="/admin/pages">
+          <BookOpen size={17} />
+          Trang thông tin
+        </NavLink>
+        <NavLink to="/admin/reports">
+          <History size={17} />
+          Báo lỗi
+        </NavLink>
         <NavLink to="/admin/audit">
           <History size={17} />
           Nhật ký
@@ -71,6 +80,8 @@ export function Admin() {
         <Route path="students" element={<AdminDirectory key="students" kind="students" />} />
         <Route path="administrators" element={<AdminRoles />} />
         <Route path="settings" element={<BankSettings />} />
+        <Route path="pages" element={<AdminPages />} />
+        <Route path="reports" element={<AdminReports />} />
         <Route path="audit" element={<AuditPage />} />
         <Route path="*" element={<Empty title="Không tìm thấy trang quản trị" />} />
       </Routes>
@@ -582,7 +593,11 @@ function CurriculumEditor({ courseId }: { courseId: string; onChange: () => void
               drag.id,
               null,
               remaining.findIndex((x) => x.id === m.id) +
-                (e.clientY > e.currentTarget.getBoundingClientRect().top + e.currentTarget.getBoundingClientRect().height / 2 ? 1 : 0),
+                (e.clientY >
+                e.currentTarget.getBoundingClientRect().top +
+                  e.currentTarget.getBoundingClientRect().height / 2
+                  ? 1
+                  : 0),
             );
           }}
         >

@@ -5,6 +5,7 @@ import { AuthProvider } from './auth';
 import { Empty, Layout, Protected } from './components';
 import { CourseDetail, Home, Login, Setup } from './pages/Public';
 import { Learning, MyLearning, OrderDetail } from './pages/Student';
+import { PublicPage, SupportWidget } from './Support';
 import { Admin } from './pages/Admin';
 import '@fontsource/barlow-condensed/latin-600.css';
 import '@fontsource/barlow-condensed/vietnamese-600.css';
@@ -25,6 +26,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter>
       <AuthProvider>
+        <SupportWidget />
         <Layout>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -32,6 +34,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             <Route path="/courses/:slug" element={<CourseDetail />} />
             <Route path="/login" element={<Login />} />
             <Route path="/auth/callback" element={<Login />} />
+            <Route path="/pages/:slug" element={<PublicPage />} />
             <Route path="/setup" element={<Setup />} />
             <Route
               path="/my-learning"
