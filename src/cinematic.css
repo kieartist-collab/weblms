@@ -2323,3 +2323,6 @@ select:disabled {
 .support-editor .field { margin-top: 20px; }
 .information-page { max-width: 900px; min-height: 65vh; }
 .information-page .prose { white-space: pre-wrap; line-height: 1.95; }
+
+.support-dialog { margin: auto; }
+.support-dialog .section-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
