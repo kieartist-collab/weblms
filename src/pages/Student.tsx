@@ -9,6 +9,8 @@ import {
   ExternalLink,
   FileText,
   Play,
+  PanelRightClose,
+  PanelRightOpen,
 } from 'lucide-react';
 import { useAuth } from '../auth';
 import { Action, CourseImage, Empty, Loading, Notice, useLoad } from '../components';
@@ -296,6 +298,7 @@ export function Learning() {
   return <LearningCourse key={`${courseId}:${user?.id}:${profile?.is_admin}`} />;
 }
 function LearningCourse() {
+  const [outlineOpen, setOutlineOpen] = useState(true);
   const { courseId, lessonId } = useParams();
   const { user, profile } = useAuth();
   const navigate = useNavigate();
@@ -411,12 +414,17 @@ function LearningCourse() {
   const ordered = modules.flatMap((m) => lessons.filter((l) => l.module_id === m.id));
   const next = ordered[ordered.findIndex((l) => l.id === lesson?.id) + 1];
   return (
-    <div className="classroom">
-      <aside className="lesson-sidebar">
-        <Link to="/my-learning" className="text-link">
-          <ChevronLeft size={16} /> Góc học tập
-        </Link>
-        <h2>{course.title}</h2>
+    <div className={`classroom learning-workspace ${outlineOpen ? '' : 'outline-hidden'}`}>
+      <header className="learning-topbar">
+        <Link to="/my-learning" className="text-link learning-back"><ChevronLeft size={18} /><span>Góc học tập</span></Link>
+        <strong className="learning-course-title">{course.title}</strong>
+        <span className="learning-top-progress"><CheckCircle2 size={17} /> {done}/{lessons.length} bài</span>
+        <button className="button secondary small" aria-expanded={outlineOpen} aria-controls="course-outline" onClick={() => setOutlineOpen(!outlineOpen)}>
+          {outlineOpen ? <PanelRightClose size={18} /> : <PanelRightOpen size={18} />}<span>Mục lục</span>
+        </button>
+      </header>
+      <aside className="lesson-sidebar" id="course-outline" hidden={!outlineOpen}>
+        <h2>Nội dung khóa học</h2>
         <div className="progress-caption">
           <span>Tiến độ của bạn</span>
           <strong>
@@ -455,8 +463,6 @@ function LearningCourse() {
       <section className="lesson-main">
         {lesson ? (
           <>
-            <span className="eyebrow">{modules.find((m) => m.id === lesson.module_id)?.title}</span>
-            <h1>{lesson.title}</h1>
             <div className="video-frame">
               {lessonLoading ? <div className="video-empty"><Loading /></div> : detail.error ? (
                 <div className="video-empty"><Notice error>{detail.error}</Notice><button className="button secondary" onClick={detail.refresh}>Thử lại</button></div>
@@ -474,8 +480,10 @@ function LearningCourse() {
                   <p>Video đang được chuẩn bị</p>
                 </div>
               )}
-              {video && <div className="drive-popout-cover" aria-hidden="true" />}
             </div>
+            <div className="learning-details">
+            <span className="eyebrow">{modules.find((m) => m.id === lesson.module_id)?.title}</span>
+            <h1>{lesson.title}</h1>
             <div className="video-help">
               <span>
                 Đăng nhập Google bằng <strong>{user?.email}</strong> để xem video bài học.
@@ -542,6 +550,7 @@ function LearningCourse() {
                 ))}
               </section>
             )}
+            </div>
           </>
         ) : (
           <Empty title="Bài học chưa có hoặc không thuộc khóa này" />

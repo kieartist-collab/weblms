@@ -144,6 +144,9 @@ export function Layout({ children }: { children: ReactNode }) {
     }
     window.scrollTo({ top: 0, behavior: 'instant' });
   }, [location.pathname, location.hash, location.key]);
+  if (location.pathname.startsWith('/learn/')) {
+    return <main id="main" className="learning-route">{children}</main>;
+  }
   return (
     <>
       <a className="skip-link" href="#main">
