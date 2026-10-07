@@ -2147,7 +2147,9 @@ footer {
     padding: 20px;
   }
 }
-.admin-filters input, .admin-filters select, .admin-pagination select {
+.admin-filters input,
+.admin-filters select,
+.admin-pagination select {
   border: 1px solid var(--line);
   border-radius: 5px;
   background: #101116;
@@ -2156,7 +2158,9 @@ footer {
   min-height: 42px;
   color-scheme: dark;
 }
-.admin-filters input:focus, .admin-filters select:focus, .admin-pagination select:focus {
+.admin-filters input:focus,
+.admin-filters select:focus,
+.admin-pagination select:focus {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
@@ -2171,7 +2175,8 @@ select {
   padding: 12px;
   font: inherit;
 }
-select option, select optgroup {
+select option,
+select optgroup {
   background-color: #101117;
   color: #e9e2f0;
 }
@@ -2179,16 +2184,88 @@ select:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
-select:disabled { opacity: 0.6; cursor: not-allowed; }
+select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
 
-.checkout-page { max-width: 1200px; }
-.checkout-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; align-items: start; }
-.checkout-layout.has-qr { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); }
-.checkout-layout > .panel { min-width: 0; margin: 0; }
-.checkout-information { overflow-wrap: anywhere; }
-.checkout-qr-panel .checkout-bank-qr { width: 100%; height: auto; margin: 20px 0; border-radius: 8px; }
-.checkout-qr-panel > p { font-size: .8rem; line-height: 1.7; }
+.checkout-page {
+  max-width: 1200px;
+}
+.checkout-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+.checkout-layout.has-qr {
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+}
+.checkout-layout > .panel {
+  min-width: 0;
+  margin: 0;
+}
+.checkout-information {
+  overflow-wrap: anywhere;
+}
+.checkout-qr-panel .checkout-bank-qr {
+  width: 100%;
+  height: auto;
+  margin: 20px 0;
+  border-radius: 8px;
+}
+.checkout-qr-panel > p {
+  font-size: 0.8rem;
+  line-height: 1.7;
+}
 @media (max-width: 800px) {
-  .checkout-layout.has-qr { grid-template-columns: minmax(0, 1fr); }
-  .checkout-layout { gap: 20px; }
+  .checkout-layout.has-qr {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .checkout-layout {
+    gap: 20px;
+  }
+}
+.curriculum-sort-bar {
+  margin-bottom: 18px;
+}
+.drag-grip {
+  cursor: grab;
+  touch-action: none;
+}
+.drag-grip:active {
+  cursor: grabbing;
+}
+.curriculum-drop-target {
+  outline: 1px dashed var(--accent);
+  outline-offset: -2px;
+}
+.curriculum-drop-target:hover {
+  border-color: var(--accent);
+}
+.curriculum-drop-end {
+  padding: 10px;
+  margin: 12px 0;
+  font-size: 0.75rem;
+  color: var(--muted);
+  border: 1px dashed var(--line);
+  border-radius: 5px;
+}
+.curriculum-drop-end.is-dragging {
+  min-height: 65px;
+  border-color: var(--accent);
+  background: #82c6d318;
+}
+.lesson-sort-actions select {
+  max-width: 180px;
+  font-size: 0.75rem;
+}
+.module-lesson {
+  flex-wrap: wrap;
+  gap: 10px;
+}
+@media (max-width: 600px) {
+  .lesson-sort-actions {
+    width: 100%;
+  }
 }

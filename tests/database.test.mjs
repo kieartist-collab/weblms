@@ -394,3 +394,107 @@ test('order day filters include the full Vietnamese calendar day and combine wit
   ).rows[0].data;
   assert.ok(pending.rows.some((p) => p.id === bob));
 });
+
+test('curriculum moves are admin-only, atomic and confined to one course', async () => {
+  await db.exec('reset role');
+  await db.exec(
+    await readFile(
+      new URL('../supabase/migrations/005_curriculum_order.sql', import.meta.url),
+      'utf8',
+    ),
+  );
+  const c = '90000000-0000-0000-0000-000000000001';
+  const foreign = '90000000-0000-0000-0000-000000000002';
+  await db.query(
+    "insert into public.courses(id,slug,title) values($1,'sort-test','Sort test'),($2,'sort-other','Other')",
+    [c, foreign],
+  );
+  const modules = (
+    await db.query(
+      "insert into public.modules(course_id,title,position) values($1,'A',0),($1,'B',1),($1,'C',2) returning id",
+      [c],
+    )
+  ).rows.map((r) => r.id);
+  const external = (
+    await db.query(
+      "insert into public.modules(course_id,title) values($1,'Foreign') returning id",
+      [foreign],
+    )
+  ).rows[0].id;
+  const lessons = (
+    await db.query(
+      "insert into public.lessons(module_id,title,position) values($1,'One',0),($1,'Two',1),($1,'Three',2) returning id",
+      [modules[0]],
+    )
+  ).rows.map((r) => r.id);
+  await assert.rejects(
+    as(null, "select public.admin_move_curriculum($1,'module',$2,null,1)", [c, modules[0]]),
+    /permission denied/,
+  );
+  await assert.rejects(
+    as(alice, "select public.admin_move_curriculum($1,'module',$2,null,1)", [c, modules[0]]),
+    /Chỉ quản trị viên/,
+  );
+  await as(admin, "select public.admin_move_curriculum($1,'module',$2,null,2)", [c, modules[0]]);
+  const sorted = (
+    await as(admin, 'select id,position from public.modules where course_id=$1 order by position', [
+      c,
+    ])
+  ).rows;
+  assert.deepEqual(
+    sorted.map((r) => r.id),
+    [modules[1], modules[2], modules[0]],
+  );
+  assert.deepEqual(
+    sorted.map((r) => r.position),
+    [0, 1, 2],
+  );
+  await as(admin, "select public.admin_move_curriculum($1,'lesson',$2,$3,0)", [
+    c,
+    lessons[2],
+    modules[0],
+  ]);
+  assert.equal(
+    (
+      await as(admin, 'select id from public.lessons where module_id=$1 order by position', [
+        modules[0],
+      ])
+    ).rows[0].id,
+    lessons[2],
+  );
+  await as(admin, "select public.admin_move_curriculum($1,'lesson',$2,$3,0)", [
+    c,
+    lessons[2],
+    modules[1],
+  ]);
+  const moved = (
+    await as(admin, 'select module_id,position from public.lessons where id=$1', [lessons[2]])
+  ).rows[0];
+  assert.equal(moved.module_id, modules[1]);
+  assert.equal(moved.position, 0);
+  assert.deepEqual(
+    (
+      await as(admin, 'select position from public.lessons where module_id=$1 order by position', [
+        modules[0],
+      ])
+    ).rows.map((r) => r.position),
+    [0, 1],
+  );
+  await assert.rejects(
+    as(admin, "select public.admin_move_curriculum($1,'lesson',$2,$3,0)", [
+      c,
+      lessons[0],
+      external,
+    ]),
+    /không thuộc/,
+  );
+  assert.equal(
+    (await as(admin, 'select module_id from public.lessons where id=$1', [lessons[0]])).rows[0]
+      .module_id,
+    modules[0],
+  );
+  await assert.rejects(
+    as(admin, "select public.admin_move_curriculum($1,'module',$2,null,-1)", [c, modules[0]]),
+    /Vị trí/,
+  );
+});

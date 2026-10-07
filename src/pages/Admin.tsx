@@ -13,6 +13,9 @@ import {
   Save,
   Trash2,
   ShieldCheck,
+  GripVertical,
+  ArrowUp,
+  ArrowDown,
 } from 'lucide-react';
 import { Action, Empty, Loading, Notice, useLoad } from '../components';
 import { AdminRoles } from './AdminRoles';
@@ -471,9 +474,69 @@ function CourseEditor() {
 function CurriculumEditor({ courseId }: { courseId: string; onChange: () => void }) {
   const [edit, setEdit] = useState<Lesson | null | undefined>(undefined);
   const [newModule, setNewModule] = useState('');
+  const [drag, setDrag] = useState<{ kind: 'module' | 'lesson'; id: string } | null>(null);
+  const [moving, setMoving] = useState(false);
+  const [moveNotice, setMoveNotice] = useState('');
+  const moveLock = useRef(false);
+  async function move(
+    kind: 'module' | 'lesson',
+    item: string,
+    target: string | null,
+    index: number,
+  ) {
+    if (moveLock.current) return;
+    moveLock.current = true;
+    setMoving(true);
+    setMoveNotice('');
+    setDrag(null);
+    try {
+      const response = await db().rpc('admin_move_curriculum', {
+        p_course: courseId,
+        p_kind: kind,
+        p_item: item,
+        p_target: target,
+        p_index: index,
+      });
+      if (response.error?.code === 'PGRST202')
+        throw new Error('Cần chạy 005_curriculum_order.sql trong Supabase trước khi sắp xếp.');
+      check(response);
+      setMoveNotice('Đã lưu thứ tự mới.');
+      refresh();
+    } catch (e) {
+      setMoveNotice(errorText(e));
+    } finally {
+      moveLock.current = false;
+      setMoving(false);
+    }
+  }
+  function grip(kind: 'module' | 'lesson', id: string, title: string) {
+    return (
+      <button
+        type="button"
+        className="button secondary small drag-grip"
+        draggable={!moving}
+        aria-label={`Kéo ${title} để sắp xếp`}
+        title="Kéo để sắp xếp"
+        onDragStart={(e) => {
+          e.stopPropagation();
+          e.dataTransfer.effectAllowed = 'move';
+          e.dataTransfer.setData('text/plain', id);
+          setDrag({ kind, id });
+        }}
+        onDragEnd={() => setDrag(null)}
+      >
+        <GripVertical size={18} />
+      </button>
+    );
+  }
   const { data, loading, error, refresh } = useLoad(async () => {
     const modules = check(
-      await db().from('modules').select('*').eq('course_id', courseId).order('position'),
+      await db()
+        .from('modules')
+        .select('*')
+        .eq('course_id', courseId)
+        .order('position')
+        .order('id'),
     ) as Module[];
     const lessons = modules.length
       ? (check(
@@ -484,7 +547,8 @@ function CurriculumEditor({ courseId }: { courseId: string; onChange: () => void
               'module_id',
               modules.map((m) => m.id),
             )
-            .order('position'),
+            .order('position')
+            .order('id'),
         ) as Lesson[])
       : [];
     return { modules, lessons };
@@ -495,17 +559,59 @@ function CurriculumEditor({ courseId }: { courseId: string; onChange: () => void
     <section className="content-section">
       <h2>Chương và bài học</h2>
       <p className="muted">
-        Thứ tự nhỏ hiển thị trước. Đặt các số khác nhau để sắp xếp chương và bài.
+        Kéo tay nắm ⋮⋮ để sắp xếp. Thả bài lên một bài khác để chèn trước, hoặc xuống cuối chương để
+        chuyển chương. Thay đổi được tự lưu.
       </p>
-      {data?.modules.map((m) => (
-        <div className="panel module-editor" key={m.id}>
+      {moveNotice && <Notice>{moveNotice}</Notice>}
+      {moving && <p role="status">Đang lưu thứ tự…</p>}
+      {data?.modules.map((m, mi) => (
+        <div
+          className={`panel module-editor ${drag?.kind === 'module' ? 'curriculum-drop-target' : ''}`}
+          key={m.id}
+          onDragOver={(e) => {
+            if (drag?.kind === 'module') e.preventDefault();
+          }}
+          onDrop={(e) => {
+            if (drag?.kind !== 'module') return;
+            e.preventDefault();
+            e.stopPropagation();
+            if (drag.id === m.id) return;
+            const remaining = data.modules.filter((x) => x.id !== drag.id);
+            void move(
+              'module',
+              drag.id,
+              null,
+              remaining.findIndex((x) => x.id === m.id),
+            );
+          }}
+        >
+          <div className="inline curriculum-sort-bar">
+            {grip('module', m.id, m.title)}
+            <strong>Chương {mi + 1}</strong>
+            <button
+              className="button secondary small"
+              disabled={moving || mi === 0}
+              aria-label={`Đưa chương ${m.title} lên`}
+              onClick={() => void move('module', m.id, null, mi - 1)}
+            >
+              <ArrowUp size={16} />
+            </button>
+            <button
+              className="button secondary small"
+              disabled={moving || mi === data.modules.length - 1}
+              aria-label={`Đưa chương ${m.title} xuống`}
+              onClick={() => void move('module', m.id, null, mi + 1)}
+            >
+              <ArrowDown size={16} />
+            </button>
+          </div>
           <EditorForm
             label="Lưu chương"
             onSave={async (f) => {
               check(
                 await db()
                   .from('modules')
-                  .update({ title: text(f, 'title'), position: Number(f.get('position')) })
+                  .update({ title: text(f, 'title') })
                   .eq('id', m.id),
               );
               refresh();
@@ -513,18 +619,76 @@ function CurriculumEditor({ courseId }: { courseId: string; onChange: () => void
           >
             <div className="form-grid">
               <Field label="Tên chương" name="title" value={m.title} required />
-              <Field label="Thứ tự" name="position" type="number" value={m.position} />
             </div>
           </EditorForm>
           <div className="module-lessons">
             {data.lessons
               .filter((l) => l.module_id === m.id)
-              .map((l) => (
-                <div className="module-lesson" key={l.id}>
+              .map((l, li, siblings) => (
+                <div
+                  className={`module-lesson ${drag?.kind === 'lesson' ? 'curriculum-drop-target' : ''}`}
+                  key={l.id}
+                  onDragOver={(e) => {
+                    if (drag?.kind === 'lesson') {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }
+                  }}
+                  onDrop={(e) => {
+                    if (drag?.kind !== 'lesson') return;
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (drag.id === l.id) return;
+                    void move(
+                      'lesson',
+                      drag.id,
+                      m.id,
+                      siblings.filter((x) => x.id !== drag.id).findIndex((x) => x.id === l.id),
+                    );
+                  }}
+                >
+                  {grip('lesson', l.id, l.title)}
                   <span>
-                    {l.position + 1}. {l.title}
+                    {li + 1}. {l.title}
                     <small>{l.duration_minutes} phút</small>
                   </span>
+                  <div className="inline lesson-sort-actions">
+                    <button
+                      className="button secondary small"
+                      disabled={moving || li === 0}
+                      aria-label={`Đưa bài ${l.title} lên`}
+                      onClick={() => void move('lesson', l.id, m.id, li - 1)}
+                    >
+                      <ArrowUp size={16} />
+                    </button>
+                    <button
+                      className="button secondary small"
+                      disabled={moving || li === siblings.length - 1}
+                      aria-label={`Đưa bài ${l.title} xuống`}
+                      onClick={() => void move('lesson', l.id, m.id, li + 1)}
+                    >
+                      <ArrowDown size={16} />
+                    </button>
+                    <select
+                      aria-label={`Chuyển bài ${l.title} sang chương`}
+                      disabled={moving}
+                      value={m.id}
+                      onChange={(e) =>
+                        void move(
+                          'lesson',
+                          l.id,
+                          e.target.value,
+                          data.lessons.filter((x) => x.module_id === e.target.value).length,
+                        )
+                      }
+                    >
+                      {data.modules.map((ch) => (
+                        <option key={ch.id} value={ch.id}>
+                          {ch.title}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                   <button className="button secondary small" onClick={() => setEdit(l)}>
                     Sửa bài
                   </button>
@@ -546,6 +710,28 @@ function CurriculumEditor({ courseId }: { courseId: string; onChange: () => void
                   </Action>
                 </div>
               ))}
+          </div>
+          <div
+            className={`curriculum-drop-end ${drag?.kind === 'lesson' ? 'is-dragging' : ''}`}
+            onDragOver={(e) => {
+              if (drag?.kind === 'lesson') {
+                e.preventDefault();
+                e.stopPropagation();
+              }
+            }}
+            onDrop={(e) => {
+              if (drag?.kind !== 'lesson') return;
+              e.preventDefault();
+              e.stopPropagation();
+              void move(
+                'lesson',
+                drag.id,
+                m.id,
+                data.lessons.filter((x) => x.module_id === m.id && x.id !== drag.id).length,
+              );
+            }}
+          >
+            Thả bài vào cuối chương này
           </div>
           <div className="inline">
             <button
@@ -718,7 +904,7 @@ function LessonEditor({
                     id: lessonKey,
                     module_id: moduleId,
                     title: text(f, 'title'),
-                    position: Number(f.get('position')),
+                    position: lesson?.position ?? position,
                     duration_minutes: Number(f.get('duration_minutes')),
                   }),
               );
@@ -738,12 +924,6 @@ function LessonEditor({
                 type="number"
                 min={0}
                 value={lesson?.duration_minutes || 0}
-              />
-              <Field
-                label="Thứ tự"
-                name="position"
-                type="number"
-                value={lesson?.position ?? position}
               />
               <Field
                 label="Video Google Drive"
