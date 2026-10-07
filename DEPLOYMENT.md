@@ -24,3 +24,13 @@ Sau khi nhận địa chỉ HTTPS chính thức:
 Giữ nguyên Supabase hiện có. Không chạy lại migrations khởi tạo hoặc seed khi chỉ cập nhật giao diện. Browser chỉ dùng publishable/anon key, không dùng service role key hay Google client secret.
 
 Các lần cập nhật tiếp theo: build lại, upload `dist` vào đúng project Netlify đang sử dụng để giữ địa chỉ website. Gói Free có hạn mức sử dụng; theo dõi trong Netlify và không bật nâng cấp trả phí ngoài ý muốn.
+
+## Bảng đơn hàng và học viên (004)
+
+Chạy `supabase/migrations/004_admin_directory.sql` trong Supabase SQL Editor trước khi sử dụng giao diện mới. Migration chỉ thêm hàm đọc dành cho admin và chỉ mục; có thể chạy lại.
+
+- Đơn hàng: tìm email/mã chuyển khoản, lọc khóa học/trạng thái và ngày đặt theo giờ Việt Nam. Khoảng ngày tính cả ngày kết thúc. Thứ tự mới nhất trước, ID phân định khi trùng thời gian.
+- Học viên: tìm tên/email, lọc vai trò, khóa học và quyền học; mỗi tài khoản một dòng. Số khóa đang học là tổng quyền đang hoạt động của tài khoản.
+- Mỗi trang 25/50/100 dòng. Database trả tổng số kết quả và chỉ dữ liệu trang hiện tại. Bộ lọc và trang lưu trên URL.
+- Bấm Chi tiết để tải đơn hoặc các quyền học/tiến độ của đúng người đó. Escape hoặc nút đóng trở về bảng giữ nguyên bộ lọc.
+- Các thao tác duyệt tiền, cấp/thu hồi quyền vẫn qua RPC cũ, có xác nhận. Không tự động chia sẻ/thu hồi Drive.

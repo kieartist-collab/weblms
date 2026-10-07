@@ -8,7 +8,6 @@ import {
   Settings as SettingsIcon,
   History,
   Plus,
-  ExternalLink,
   ChevronLeft,
   Pencil,
   Save,
@@ -17,28 +16,16 @@ import {
 } from 'lucide-react';
 import { Action, Empty, Loading, Notice, useLoad } from '../components';
 import { AdminRoles } from './AdminRoles';
+import { AdminDirectory } from './AdminDirectory';
 import { useAuth } from '../auth';
-import {
-  check,
-  date,
-  db,
-  driveId,
-  errorText,
-  money,
-  orderLabels,
-  safeUrl,
-  validDrive,
-} from '../lib';
+import { check, db, driveId, errorText, money, safeUrl, validDrive } from '../lib';
 import type {
   Audit,
   Course,
-  Enrollment,
   Lesson,
   LessonContent,
   Module,
-  Order,
   Profile,
-  Progress,
   Resource,
   Settings,
 } from '../types';
@@ -77,8 +64,8 @@ export function Admin() {
       <Routes>
         <Route index element={<AdminCourses />} />
         <Route path="courses/:id" element={<CourseEditor />} />
-        <Route path="orders" element={<AdminOrders />} />
-        <Route path="students" element={<AdminStudents />} />
+        <Route path="orders" element={<AdminDirectory key="orders" kind="orders" />} />
+        <Route path="students" element={<AdminDirectory key="students" kind="students" />} />
         <Route path="administrators" element={<AdminRoles />} />
         <Route path="settings" element={<BankSettings />} />
         <Route path="audit" element={<AuditPage />} />
@@ -298,46 +285,80 @@ function Thumbnail({ value }: { value: string }) {
   );
 }
 function courseSlug(title: string) {
-  return title.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[đĐ]/g, 'd')
-    .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'khoa-hoc';
+  return (
+    title
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[đĐ]/g, 'd')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '') || 'khoa-hoc'
+  );
 }
 function CourseBasics({ course, instructor }: { course?: Course | null; instructor: string }) {
   const [title, setTitle] = useState(course?.title || '');
   const [slug, setSlug] = useState(course?.slug || '');
   const [price, setPrice] = useState(String(course?.price ?? 0));
-  return <>
-    <Field name="title" label="Tên khóa học">
-      <input name="title" value={title} required onChange={e => {
-        setTitle(e.target.value);
-        setSlug(e.target.value.trim() ? courseSlug(e.target.value) : '');
-      }} />
-    </Field>
-    <Field name="slug" label="Đường dẫn tự động" hint="Tự tạo từ tên khóa học; thêm hậu tố nếu đường dẫn đã tồn tại.">
-      <input name="slug" value={slug} readOnly />
-    </Field>
-    <Field name="category" label="Danh mục" value={course?.category || 'Khóa học'} required />
-    <Field name="level" label="Trình độ">
-      <select name="level" defaultValue={['Cơ bản', 'Khá', 'Nâng cao'].includes(course?.level || '') ? course!.level : 'Cơ bản'}>
-        <option>Cơ bản</option><option>Khá</option><option>Nâng cao</option>
-      </select>
-    </Field>
-    <Field name="instructor" label="Giảng viên" hint="Tên tài khoản admin đang đăng nhập.">
-      <input name="instructor" value={instructor} readOnly />
-    </Field>
-    <Field name="price_display" label="Giá (VNĐ)">
-      <span className="course-price-input">
-        <input name="price_display" inputMode="numeric" autoComplete="off" required
-          value={price === '' ? '' : Number(price).toLocaleString('vi-VN')}
-          onChange={e => setPrice(e.target.value.replace(/[^0-9]/g, '').slice(0, 10))} />
-        <span>VNĐ</span>
-      </span>
-    </Field>
-    <input type="hidden" name="price" value={price} />
-  </>;
+  return (
+    <>
+      <Field name="title" label="Tên khóa học">
+        <input
+          name="title"
+          value={title}
+          required
+          onChange={(e) => {
+            setTitle(e.target.value);
+            setSlug(e.target.value.trim() ? courseSlug(e.target.value) : '');
+          }}
+        />
+      </Field>
+      <Field
+        name="slug"
+        label="Đường dẫn tự động"
+        hint="Tự tạo từ tên khóa học; thêm hậu tố nếu đường dẫn đã tồn tại."
+      >
+        <input name="slug" value={slug} readOnly />
+      </Field>
+      <Field name="category" label="Danh mục" value={course?.category || 'Khóa học'} required />
+      <Field name="level" label="Trình độ">
+        <select
+          name="level"
+          defaultValue={
+            ['Cơ bản', 'Khá', 'Nâng cao'].includes(course?.level || '') ? course!.level : 'Cơ bản'
+          }
+        >
+          <option>Cơ bản</option>
+          <option>Khá</option>
+          <option>Nâng cao</option>
+        </select>
+      </Field>
+      <Field name="instructor" label="Giảng viên" hint="Tên tài khoản admin đang đăng nhập.">
+        <input name="instructor" value={instructor} readOnly />
+      </Field>
+      <Field name="price_display" label="Giá (VNĐ)">
+        <span className="course-price-input">
+          <input
+            name="price_display"
+            inputMode="numeric"
+            autoComplete="off"
+            required
+            value={price === '' ? '' : Number(price).toLocaleString('vi-VN')}
+            onChange={(e) => setPrice(e.target.value.replace(/[^0-9]/g, '').slice(0, 10))}
+          />
+          <span>VNĐ</span>
+        </span>
+      </Field>
+      <input type="hidden" name="price" value={price} />
+    </>
+  );
 }
 function CourseEditor() {
   const { profile, user } = useAuth();
-  const instructor = profile?.full_name?.trim() || String(user?.user_metadata?.full_name || user?.user_metadata?.name || '').trim() || profile?.email || '';
+  const instructor =
+    profile?.full_name?.trim() ||
+    String(user?.user_metadata?.full_name || user?.user_metadata?.name || '').trim() ||
+    profile?.email ||
+    '';
   const { id } = useParams();
   const navigate = useNavigate();
   const isNew = id === 'new';
@@ -366,12 +387,15 @@ function CourseEditor() {
             const thumb = text(f, 'thumbnail_url');
             if (thumb && !safeUrl(thumb)) throw new Error('Ảnh cần sử dụng URL HTTPS.');
             if (!text(f, 'title')) throw new Error('Vui lòng nhập tên khóa học.');
-            if (!instructor) throw new Error('Chưa tải được tên tài khoản. Vui lòng tải lại trang.');
+            if (!instructor)
+              throw new Error('Chưa tải được tên tài khoản. Vui lòng tải lại trang.');
             let slug = text(f, 'slug') || courseSlug(text(f, 'title'));
             const existing = check(await db().from('courses').select('id').eq('slug', slug));
-            if (existing?.some((row: { id: string }) => row.id !== id)) slug += `-${crypto.randomUUID().slice(0, 8)}`;
+            if (existing?.some((row: { id: string }) => row.id !== id))
+              slug += `-${crypto.randomUUID().slice(0, 8)}`;
             const price = Number(f.get('price'));
-            if (!Number.isSafeInteger(price) || price < 0 || price > 1000000000) throw new Error('Giá phải từ 0 đến 1.000.000.000 VNĐ.');
+            if (!Number.isSafeInteger(price) || price < 0 || price > 1000000000)
+              throw new Error('Giá phải từ 0 đến 1.000.000.000 VNĐ.');
             const values = {
               title: text(f, 'title'),
               slug,
@@ -791,274 +815,6 @@ function ResourceEditor({ lessonId }: { lessonId: string }) {
     </section>
   );
 }
-function AdminOrders() {
-  const { data, error, loading, refresh } = useLoad(async () => {
-    const [o, p, c, f] = await Promise.all([
-      db().from('orders').select('*').order('created_at', { ascending: false }),
-      db().from('profiles').select('*'),
-      db().from('courses').select('*'),
-      db().from('course_private').select('*'),
-    ]);
-    return {
-      orders: check(o) as Order[],
-      profiles: check(p) as Profile[],
-      courses: check(c) as Course[],
-      folders: check(f) as { course_id: string; drive_folder_url: string }[],
-    };
-  });
-  if (loading) return <Loading />;
-  if (error) return <Notice error>{error}</Notice>;
-  return (
-    <>
-      <div className="section-heading">
-        <h2>Đơn hàng & cấp quyền</h2>
-        <button className="button secondary small" onClick={refresh}>
-          Cập nhật
-        </button>
-      </div>
-      <Notice>
-        Đối soát ngân hàng trước khi xác nhận tiền. Chỉ cấp quyền sau khi bạn đã chia sẻ folder
-        Drive cho đúng email học viên.
-      </Notice>
-      {!data?.orders.length ? (
-        <Empty title="Chưa có đơn hàng" />
-      ) : (
-        data.orders.map((o) => {
-          const p = data.profiles.find((p) => p.id === o.user_id);
-          const folder = data.folders.find((f) => f.course_id === o.course_id)?.drive_folder_url;
-          return (
-            <article className="panel order-admin" key={o.id}>
-              <div className="panel-heading">
-                <h3>{data.courses.find((c) => c.id === o.course_id)?.title}</h3>
-                <span className={`badge ${o.status}`}>{orderLabels[o.status]}</span>
-              </div>
-              <p>
-                <strong>{p?.email}</strong> · {money(o.amount)} · {date(o.created_at)}
-              </p>
-              <code className="transfer-code">{o.transfer_code}</code>
-              <div className="inline">
-                {['pending', 'reported'].includes(o.status) && (
-                  <>
-                    <Action
-                      onClick={async () => {
-                        if (
-                          window.confirm(`Đã nhận ${money(o.amount)} với mã ${o.transfer_code}?`)
-                        ) {
-                          check(
-                            await db().rpc('admin_order_action', {
-                              p_order: o.id,
-                              p_action: 'confirm_payment',
-                            }),
-                          );
-                          refresh();
-                        }
-                      }}
-                    >
-                      Xác nhận đã nhận tiền
-                    </Action>
-                    <Action
-                      className="button secondary"
-                      onClick={async () => {
-                        if (window.confirm('Hủy đơn chưa xác nhận thanh toán này?')) {
-                          check(
-                            await db().rpc('admin_order_action', {
-                              p_order: o.id,
-                              p_action: 'cancel',
-                            }),
-                          );
-                          refresh();
-                        }
-                      }}
-                    >
-                      Hủy đơn
-                    </Action>
-                  </>
-                )}
-                {o.status === 'paid' && (
-                  <>
-                    {folder && (
-                      <a
-                        className="button secondary"
-                        href={safeUrl(folder)}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        Mở folder Drive <ExternalLink size={16} />
-                      </a>
-                    )}
-                    <Action
-                      onClick={async () => {
-                        if (
-                          window.confirm(
-                            `Bạn đã chia sẻ đúng folder cho ${p?.email} với quyền Viewer? Xác nhận để mở quyền học trên website.`,
-                          )
-                        ) {
-                          check(
-                            await db().rpc('admin_order_action', {
-                              p_order: o.id,
-                              p_action: 'grant_access',
-                            }),
-                          );
-                          refresh();
-                        }
-                      }}
-                    >
-                      Đã chia sẻ Drive · Cấp quyền học
-                    </Action>
-                  </>
-                )}
-              </div>
-            </article>
-          );
-        })
-      )}
-    </>
-  );
-}
-function AdminStudents() {
-  const { data, error, loading, refresh } = useLoad(async () => {
-    const [p, e, c, pr, m, l, f] = await Promise.all([
-      db().from('profiles').select('*'),
-      db().from('enrollments').select('*'),
-      db().from('courses').select('*'),
-      db().from('progress').select('*'),
-      db().from('modules').select('*'),
-      db().from('lessons').select('*'),
-      db().from('course_private').select('*'),
-    ]);
-    return {
-      profiles: check(p) as Profile[],
-      enrollments: check(e) as Enrollment[],
-      courses: check(c) as Course[],
-      progress: check(pr) as Progress[],
-      modules: check(m) as Module[],
-      lessons: check(l) as Lesson[],
-      folders: check(f) as { course_id: string; drive_folder_url: string }[],
-    };
-  });
-  if (loading) return <Loading />;
-  if (error) return <Notice error>{error}</Notice>;
-  return (
-    <>
-      <div className="section-heading">
-        <h2>Học viên & quyền truy cập</h2>
-        <button className="button secondary small" onClick={refresh}>
-          Cập nhật
-        </button>
-      </div>
-      <Notice>
-        Thu hồi sẽ khóa website ngay. Sau đó bạn cần xóa quyền trên Drive và xác nhận hoàn tất.
-        Email đã chia sẻ được giữ lại để đối chiếu kể cả khi học viên đổi email.
-      </Notice>
-      {data?.profiles.map((p) => (
-        <article className="panel student-panel" key={p.id}>
-          <h3>
-            {p.full_name || p.email} {p.is_admin && <span className="badge">Admin</span>}
-          </h3>
-          <p className="muted">{p.email}</p>
-          {data.enrollments.filter((e) => e.user_id === p.id).length ? (
-            data.enrollments
-              .filter((e) => e.user_id === p.id)
-              .map((e) => {
-                const ls = data.lessons.filter((l) =>
-                  data.modules.some((m) => m.id === l.module_id && m.course_id === e.course_id),
-                );
-                const n = data.progress.filter(
-                  (pr) =>
-                    pr.user_id === p.id && pr.completed && ls.some((l) => l.id === pr.lesson_id),
-                ).length;
-                const folder = data.folders.find(
-                  (f) => f.course_id === e.course_id,
-                )?.drive_folder_url;
-                return (
-                  <div className="enrollment-row" key={e.course_id}>
-                    <div>
-                      <strong>{data.courses.find((c) => c.id === e.course_id)?.title}</strong>
-                      <small>
-                        {n}/{ls.length} bài hoàn thành · Drive: {e.drive_email}
-                      </small>
-                      <span
-                        className={`badge ${e.active ? 'fulfilled' : e.drive_status === 'revoke_pending' ? 'reported' : 'cancelled'}`}
-                      >
-                        {e.active
-                          ? 'Đang học'
-                          : e.drive_status === 'revoke_pending'
-                            ? 'Chờ thu hồi Drive'
-                            : 'Đã thu hồi cả hai'}
-                      </span>
-                    </div>
-                    <div className="inline">
-                      {e.active ? (
-                        <Action
-                          className="button danger small"
-                          onClick={async () => {
-                            if (
-                              window.confirm(
-                                `Khóa quyền học của ${p.email}? Bạn vẫn phải thu hồi quyền trên Drive.`,
-                              )
-                            ) {
-                              check(
-                                await db().rpc('admin_access_action', {
-                                  p_user: p.id,
-                                  p_course: e.course_id,
-                                  p_action: 'revoke',
-                                }),
-                              );
-                              refresh();
-                            }
-                          }}
-                        >
-                          Thu hồi quyền học
-                        </Action>
-                      ) : (
-                        e.drive_status === 'revoke_pending' && (
-                          <>
-                            {folder && (
-                              <a
-                                className="button secondary small"
-                                href={safeUrl(folder)}
-                                target="_blank"
-                                rel="noreferrer"
-                              >
-                                Mở Drive <ExternalLink size={14} />
-                              </a>
-                            )}
-                            <Action
-                              className="button small"
-                              onClick={async () => {
-                                if (
-                                  window.confirm(
-                                    `Đã xóa mọi quyền xem folder/file của ${e.drive_email} trên Google Drive?`,
-                                  )
-                                ) {
-                                  check(
-                                    await db().rpc('admin_access_action', {
-                                      p_user: p.id,
-                                      p_course: e.course_id,
-                                      p_action: 'confirm_drive_revoked',
-                                    }),
-                                  );
-                                  refresh();
-                                }
-                              }}
-                            >
-                              Đã thu hồi Drive
-                            </Action>
-                          </>
-                        )
-                      )}
-                    </div>
-                  </div>
-                );
-              })
-          ) : (
-            <p>Chưa được cấp khóa học nào.</p>
-          )}
-        </article>
-      ))}
-    </>
-  );
-}
 function BankQrUpload({ value }: { value: string }) {
   const [file, setFile] = useState<File | null>(null);
   const [removed, setRemoved] = useState(false);
@@ -1236,4 +992,3 @@ function AuditPage() {
     </>
   );
 }
-

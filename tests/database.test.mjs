@@ -26,6 +26,12 @@ before(async () => {
   );
   await db.exec(await readFile(new URL('../supabase/seed.sql', import.meta.url), 'utf8'));
   await db.exec(
+    await readFile(
+      new URL('../supabase/migrations/004_admin_directory.sql', import.meta.url),
+      'utf8',
+    ),
+  );
+  await db.exec(
     await readFile(new URL('../supabase/migrations/003_admin_roles.sql', import.meta.url), 'utf8'),
   );
   await db.query(
@@ -288,3 +294,103 @@ test('admin roles require current admin rights, reject self-removal, and log cha
   );
 });
 
+test('admin directories protect data and paginate filtered results with stable ordering', async () => {
+  await assert.rejects(as(null, "select public.admin_directory('orders')"), /permission denied/);
+  await assert.rejects(as(alice, "select public.admin_directory('students')"), /Chỉ quản trị viên/);
+  await assert.rejects(
+    as(bob, 'select public.admin_student_detail($1)', [alice]),
+    /Chỉ quản trị viên/,
+  );
+  await assert.rejects(
+    as(admin, "select public.admin_directory('orders',p_from=>'2026-10-08',p_to=>'2026-10-07')"),
+    /Ngày bắt đầu/,
+  );
+  await db.exec('reset role');
+  await db.query(
+    `insert into public.orders(user_id,course_id,amount,transfer_code,status,created_at)
+    select $1,$2,200000,'PAGE_TEST_'||n,'cancelled', '2026-10-07 05:00:00+00'::timestamptz from generate_series(1,61) n`,
+    [alice, course],
+  );
+  const list = async (page) =>
+    (
+      await as(
+        admin,
+        "select public.admin_directory('orders',p_search=>'PAGE_TEST_',p_page=>$1,p_size=>25) as data",
+        [page],
+      )
+    ).rows[0].data;
+  const pages = [1, 2, 3];
+  const results = [];
+  for (const p of pages) results.push(await list(p));
+  assert.deepEqual(
+    results.map((r) => r.rows.length),
+    [25, 25, 11],
+  );
+  assert.equal(results[0].total, 61);
+  assert.equal(new Set(results.flatMap((r) => r.rows.map((o) => o.id))).size, 61);
+  assert.equal((await list(999)).page, 3);
+  const none = (
+    await as(admin, "select public.admin_directory('orders',p_search=>'DOES_NOT_EXIST') as data")
+  ).rows[0].data;
+  assert.deepEqual(none.rows, []);
+  assert.equal(none.total, 0);
+  const students = (
+    await as(
+      admin,
+      "select public.admin_directory('students',p_search=>'ALICE@',p_role=>'student',p_size=>1) as data",
+    )
+  ).rows[0].data;
+  assert.equal(students.total, 1);
+  assert.equal(students.rows[0].email, 'alice@example.test');
+  const admins = (
+    await as(admin, "select public.admin_directory('students',p_role=>'admin') as data")
+  ).rows[0].data;
+  assert.equal(admins.total, 1);
+  assert.equal(admins.rows[0].id, admin);
+  const detail = (await as(admin, 'select public.admin_student_detail($1) as data', [bob])).rows[0]
+    .data;
+  assert.ok(detail.length > 0);
+  assert.equal(detail[0].total_lessons, 4);
+});
+
+test('order day filters include the full Vietnamese calendar day and combine with course/status/email', async () => {
+  await db.exec('reset role');
+  for (const [code, time] of [
+    ['BOUNDARY_BEFORE', '2026-10-06 16:59:59+00'],
+    ['BOUNDARY_START', '2026-10-06 17:00:00+00'],
+    ['BOUNDARY_END', '2026-10-07 16:59:59+00'],
+    ['BOUNDARY_AFTER', '2026-10-07 17:00:00+00'],
+  ]) {
+    await db.query(
+      "insert into public.orders(user_id,course_id,amount,transfer_code,status,created_at) values($1,$2,0,$3,'cancelled',$4)",
+      [alice, course, code, time],
+    );
+  }
+  const r = (
+    await as(
+      admin,
+      "select public.admin_directory('orders',p_search=>'BOUNDARY_',p_from=>'2026-10-07',p_to=>'2026-10-07',p_status=>'cancelled',p_course=>$1) as data",
+      [course],
+    )
+  ).rows[0].data;
+  assert.equal(r.total, 2);
+  assert.deepEqual(
+    r.rows.map((o) => o.transfer_code),
+    ['BOUNDARY_END', 'BOUNDARY_START'],
+  );
+  const none = (
+    await as(
+      admin,
+      "select public.admin_directory('orders',p_search=>'BOUNDARY_',p_status=>'paid') as data",
+    )
+  ).rows[0].data;
+  assert.equal(none.total, 0);
+  const pending = (
+    await as(
+      admin,
+      "select public.admin_directory('students',p_status=>'active',p_course=>$1) as data",
+      [course],
+    )
+  ).rows[0].data;
+  assert.ok(pending.rows.some((p) => p.id === bob));
+});
