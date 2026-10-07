@@ -185,14 +185,16 @@ export function OrderDetail() {
     );
   if (!data) return <Empty title="Không tìm thấy đơn hàng" />;
   const { order: o, course: c, settings: s, enrollment: e } = data;
+  const qr = ['pending', 'reported'].includes(o.status) ? safeUrl(s.bank_qr_url) : '';
   return (
-    <div className="container page narrow">
+    <div className="container page checkout-page">
       <Link className="text-link" to="/my-learning">
         <ChevronLeft size={16} /> Góc học tập
       </Link>
       <h1 className="page-title">Đăng ký khóa học</h1>
       <p className="lead">{c?.title || 'Khóa học'}</p>
-      <div className="panel">
+      <div className={`checkout-layout ${qr ? 'has-qr' : ''}`}>
+      <div className="panel checkout-information">
         <div className="panel-heading">
           <h2>{money(o.amount)}</h2>
           <span className={`badge ${o.status}`}>{orderLabels[o.status]}</span>
@@ -228,13 +230,6 @@ export function OrderDetail() {
                 </Action>
               </div>
             </div>
-            {safeUrl(s.bank_qr_url) && (
-              <img
-                className="bank-qr checkout-bank-qr"
-                src={safeUrl(s.bank_qr_url)}
-                alt="Mã QR chuyển khoản do admin cung cấp"
-              />
-            )}
             <Notice>
               Chuyển đúng số tiền và nội dung ở trên. Nút báo chuyển khoản không tự xác nhận thanh
               toán hoặc cấp quyền học.
@@ -285,6 +280,12 @@ export function OrderDetail() {
         <button className="text-link refresh" onClick={refresh}>
           Cập nhật trạng thái
         </button>
+      </div>
+      {qr && <aside className="panel checkout-qr-panel" aria-label="Mã QR thanh toán">
+        <h2>Quét mã chuyển khoản</h2>
+        <img className="bank-qr checkout-bank-qr" src={qr} alt="Mã QR chuyển khoản do admin cung cấp" />
+        <p className="muted">Nhập đúng số tiền và nội dung chuyển khoản ở cột thông tin.</p>
+      </aside>}
       </div>
     </div>
   );

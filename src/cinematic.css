@@ -2180,3 +2180,15 @@ select:focus-visible {
   outline-offset: 2px;
 }
 select:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.checkout-page { max-width: 1200px; }
+.checkout-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; align-items: start; }
+.checkout-layout.has-qr { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); }
+.checkout-layout > .panel { min-width: 0; margin: 0; }
+.checkout-information { overflow-wrap: anywhere; }
+.checkout-qr-panel .checkout-bank-qr { width: 100%; height: auto; margin: 20px 0; border-radius: 8px; }
+.checkout-qr-panel > p { font-size: .8rem; line-height: 1.7; }
+@media (max-width: 800px) {
+  .checkout-layout.has-qr { grid-template-columns: minmax(0, 1fr); }
+  .checkout-layout { gap: 20px; }
+}
