@@ -122,8 +122,13 @@ export function Layout({ children }: { children: ReactNode }) {
   const { user, profile } = useAuth();
   const [open, setOpen] = useState(false);
   const location = useLocation();
+  const previousPath = useRef(location.pathname);
   useEffect(() => {
+    const previousCourse = previousPath.current.match(/^\/learn\/([^/]+)/)?.[1];
+    const currentCourse = location.pathname.match(/^\/learn\/([^/]+)/)?.[1];
+    previousPath.current = location.pathname;
     setOpen(false);
+    if (previousCourse && previousCourse === currentCourse && !location.hash) return;
     if (location.hash) {
       const timer = window.setTimeout(
         () =>

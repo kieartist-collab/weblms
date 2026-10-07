@@ -291,11 +291,17 @@ export function OrderDetail() {
   );
 }
 export function Learning() {
+  const { courseId } = useParams();
+  const { user, profile } = useAuth();
+  return <LearningCourse key={`${courseId}:${user?.id}:${profile?.is_admin}`} />;
+}
+function LearningCourse() {
   const { courseId, lessonId } = useParams();
   const { user, profile } = useAuth();
   const navigate = useNavigate();
   const [notice, setNotice] = useState('');
-  const { data, loading, error, refresh } = useLoad(async () => {
+  const [completion, setCompletion] = useState<Record<string, boolean>>({});
+  const { data, loading, error } = useLoad(async () => {
     const course = check(
       await db().from('courses').select('*').eq('id', courseId!).maybeSingle(),
     ) as Course | null;
@@ -326,32 +332,40 @@ export function Learning() {
     const progress = check(
       await db().from('progress').select('*').eq('user_id', user!.id),
     ) as Progress[];
-    const lesson = lessonId
-      ? lessons.find((l) => l.id === lessonId)
-      : modules.flatMap((m) => lessons.filter((l) => l.module_id === m.id))[0];
-    const content = lesson
-      ? (check(
-          await db().from('lesson_contents').select('*').eq('lesson_id', lesson.id).maybeSingle(),
-        ) as LessonContent | null)
-      : null;
-    const resources = lesson
-      ? (check(await db().from('resources').select('*').eq('lesson_id', lesson.id)) as Resource[])
-      : [];
-    return { course, access, modules, lessons, progress, lesson, content, resources };
-  }, [courseId, lessonId, user!.id, profile?.is_admin]);
+    return { course, access, modules, lessons, progress };
+  }, [courseId, user!.id, profile?.is_admin]);
+  const lesson = lessonId
+    ? data?.lessons.find((l) => l.id === lessonId)
+    : data?.modules.flatMap((m) => data.lessons.filter((l) => l.module_id === m.id))[0];
+  const detail = useLoad(async () => {
+    if (!lesson) return null;
+    const [contentResult, resourceResult] = await Promise.all([
+      db().from('lesson_contents').select('*').eq('lesson_id', lesson.id).maybeSingle(),
+      db().from('resources').select('*').eq('lesson_id', lesson.id),
+    ]);
+    const content = check(contentResult) as LessonContent | null;
+    if (!content) throw new Error('Không tải được bài học. Hãy kiểm tra quyền truy cập hoặc thử lại.');
+    return { lessonId: lesson.id, content, resources: check(resourceResult) as Resource[] };
+  }, [lesson?.id]);
+  // Never display the previous lesson while the new request is starting.
+  const currentDetail = detail.data?.lessonId === lesson?.id ? detail.data : null;
+  const content = currentDetail?.content;
+  const resources = currentDetail?.resources ?? [];
+  const lessonLoading = detail.loading || (!currentDetail && !detail.error);
+  const isCompleted = (id: string) => completion[id] ?? data?.progress.find((p) => p.lesson_id === id)?.completed ?? false;
   useEffect(() => {
-    if (!data?.lesson || !data.content) return;
+    if (!lesson || !currentDetail) return;
     let alive = true;
     setNotice('');
     db()
-      .rpc('record_progress', { p_lesson: data.lesson.id })
+      .rpc('record_progress', { p_lesson: lesson.id })
       .then(({ error }) => {
         if (error && alive) setNotice(error.message);
       });
     return () => {
       alive = false;
     };
-  }, [data?.lesson?.id, data?.content]);
+  }, [lesson?.id, currentDetail]);
   useEffect(() => {
     let alive = true;
     const verify = async () => {
@@ -390,11 +404,9 @@ export function Learning() {
         </Empty>
       </div>
     );
-  const { course, modules, lessons, progress, lesson, content, resources } = data;
-  const done = progress.filter(
-    (p) => p.completed && lessons.some((l) => l.id === p.lesson_id),
-  ).length;
-  const completed = progress.find((p) => p.lesson_id === lesson?.id)?.completed;
+  const { course, modules, lessons } = data;
+  const done = lessons.filter((l) => isCompleted(l.id)).length;
+  const completed = lesson ? isCompleted(lesson.id) : false;
   const video = driveId(content?.video_url || '');
   const ordered = modules.flatMap((m) => lessons.filter((l) => l.module_id === m.id));
   const next = ordered[ordered.findIndex((l) => l.id === lesson?.id) + 1];
@@ -421,11 +433,12 @@ export function Learning() {
               .filter((l) => l.module_id === m.id)
               .map((l) => (
                 <Link
-                  className={`lesson-link ${l.id === lesson?.id ? 'selected' : ''}`}
+                  className={`lesson-link ${l.id === lesson?.id ? 'selected' : ''} ${isCompleted(l.id) ? 'completed' : ''}`}
+                  aria-current={l.id === lesson?.id ? 'page' : undefined}
                   key={l.id}
                   to={`/learn/${courseId}/${l.id}`}
                 >
-                  {progress.find((p) => p.lesson_id === l.id)?.completed ? (
+                  {isCompleted(l.id) ? (
                     <CheckCircle2 size={17} />
                   ) : (
                     <Play size={16} />
@@ -445,9 +458,11 @@ export function Learning() {
             <span className="eyebrow">{modules.find((m) => m.id === lesson.module_id)?.title}</span>
             <h1>{lesson.title}</h1>
             <div className="video-frame">
-              {video ? (
+              {lessonLoading ? <div className="video-empty"><Loading /></div> : detail.error ? (
+                <div className="video-empty"><Notice error>{detail.error}</Notice><button className="button secondary" onClick={detail.refresh}>Thử lại</button></div>
+              ) : video ? (
                 <iframe
-                  key={video}
+                  key={`${lesson.id}:${video}`}
                   src={`https://drive.google.com/file/d/${video}/preview`}
                   title={lesson.title}
                   allow="autoplay; fullscreen"
@@ -474,6 +489,9 @@ export function Learning() {
                 {lesson.duration_minutes} phút
               </span>
               <Action
+                key={lesson.id}
+                className={`button ${completed ? 'lesson-completed-button' : ''}`}
+                disabled={!currentDetail}
                 onClick={async () => {
                   check(
                     await db().rpc('record_progress', {
@@ -481,7 +499,7 @@ export function Learning() {
                       p_completed: !completed,
                     }),
                   );
-                  refresh();
+                  setCompletion((previous) => ({ ...previous, [lesson.id]: !completed }));
                 }}
               >
                 {completed ? (
@@ -503,7 +521,7 @@ export function Learning() {
             <section className="content-section">
               <h2>Nội dung bài học</h2>
               <p className="prose">
-                {content?.body || 'Giảng viên chưa bổ sung nội dung cho bài học này.'}
+                {lessonLoading ? 'Đang tải nội dung bài học…' : detail.error ? 'Nội dung bài học chưa tải được.' : content?.body || 'Giảng viên chưa bổ sung nội dung cho bài học này.'}
               </p>
             </section>
             {resources.length > 0 && (
