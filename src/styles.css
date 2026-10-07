@@ -1247,6 +1247,7 @@ td .inline {
   font-weight: 600;
 }
 .field input,
+.field select,
 .field textarea {
   padding: 12px;
   background: #fff;

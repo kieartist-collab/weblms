@@ -501,6 +501,7 @@ th {
   color: #b4a8c1;
 }
 .field input,
+.field select,
 .field textarea {
   background: #101117;
   border-color: #3a3344;
