@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { Action, Empty, Loading, Notice, useLoad } from '../components';
 import { AdminRoles } from './AdminRoles';
+import { useAuth } from '../auth';
 import {
   check,
   date,
@@ -296,7 +297,47 @@ function Thumbnail({ value }: { value: string }) {
     </div>
   );
 }
+function courseSlug(title: string) {
+  return title.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[đĐ]/g, 'd')
+    .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'khoa-hoc';
+}
+function CourseBasics({ course, instructor }: { course?: Course | null; instructor: string }) {
+  const [title, setTitle] = useState(course?.title || '');
+  const [slug, setSlug] = useState(course?.slug || '');
+  const [price, setPrice] = useState(String(course?.price ?? 0));
+  return <>
+    <Field name="title" label="Tên khóa học">
+      <input name="title" value={title} required onChange={e => {
+        setTitle(e.target.value);
+        setSlug(e.target.value.trim() ? courseSlug(e.target.value) : '');
+      }} />
+    </Field>
+    <Field name="slug" label="Đường dẫn tự động" hint="Tự tạo từ tên khóa học; thêm hậu tố nếu đường dẫn đã tồn tại.">
+      <input name="slug" value={slug} readOnly />
+    </Field>
+    <Field name="category" label="Danh mục" value={course?.category || 'Khóa học'} required />
+    <Field name="level" label="Trình độ">
+      <select name="level" defaultValue={['Cơ bản', 'Khá', 'Nâng cao'].includes(course?.level || '') ? course!.level : 'Cơ bản'}>
+        <option>Cơ bản</option><option>Khá</option><option>Nâng cao</option>
+      </select>
+    </Field>
+    <Field name="instructor" label="Giảng viên" hint="Tên tài khoản admin đang đăng nhập.">
+      <input name="instructor" value={instructor} readOnly />
+    </Field>
+    <Field name="price_display" label="Giá (VNĐ)">
+      <span className="course-price-input">
+        <input name="price_display" inputMode="numeric" autoComplete="off" required
+          value={price === '' ? '' : Number(price).toLocaleString('vi-VN')}
+          onChange={e => setPrice(e.target.value.replace(/[^0-9]/g, '').slice(0, 10))} />
+        <span>VNĐ</span>
+      </span>
+    </Field>
+    <input type="hidden" name="price" value={price} />
+  </>;
+}
 function CourseEditor() {
+  const { profile, user } = useAuth();
+  const instructor = profile?.full_name?.trim() || String(user?.user_metadata?.full_name || user?.user_metadata?.name || '').trim() || profile?.email || '';
   const { id } = useParams();
   const navigate = useNavigate();
   const isNew = id === 'new';
@@ -324,15 +365,22 @@ function CourseEditor() {
           onSave={async (f) => {
             const thumb = text(f, 'thumbnail_url');
             if (thumb && !safeUrl(thumb)) throw new Error('Ảnh cần sử dụng URL HTTPS.');
+            if (!text(f, 'title')) throw new Error('Vui lòng nhập tên khóa học.');
+            if (!instructor) throw new Error('Chưa tải được tên tài khoản. Vui lòng tải lại trang.');
+            let slug = text(f, 'slug') || courseSlug(text(f, 'title'));
+            const existing = check(await db().from('courses').select('id').eq('slug', slug));
+            if (existing?.some((row: { id: string }) => row.id !== id)) slug += `-${crypto.randomUUID().slice(0, 8)}`;
+            const price = Number(f.get('price'));
+            if (!Number.isSafeInteger(price) || price < 0 || price > 1000000000) throw new Error('Giá phải từ 0 đến 1.000.000.000 VNĐ.');
             const values = {
               title: text(f, 'title'),
-              slug: text(f, 'slug'),
+              slug,
               summary: text(f, 'summary'),
               description: text(f, 'description'),
-              instructor: text(f, 'instructor'),
+              instructor,
               category: text(f, 'category'),
               level: text(f, 'level'),
-              price: Number(f.get('price')),
+              price,
               thumbnail_url: thumb,
               published: f.get('published') === 'on',
             };
@@ -343,30 +391,7 @@ function CourseEditor() {
           }}
         >
           <div className="form-grid">
-            <Field name="title" label="Tên khóa học" value={c?.title} required />
-            <Field
-              name="slug"
-              label="Đường dẫn (chữ thường, không dấu)"
-              value={c?.slug}
-              required
-              hint="Ví dụ: unreal-engine-co-ban"
-            />
-            <Field name="category" label="Danh mục" value={c?.category || 'Khóa học'} required />
-            <Field name="level" label="Trình độ" value={c?.level || 'Từ cơ bản'} />
-            <Field
-              name="instructor"
-              label="Giảng viên"
-              value={c?.instructor || 'Học viện Online'}
-              required
-            />
-            <Field
-              name="price"
-              label="Giá (VND)"
-              type="number"
-              min={0}
-              value={c?.price || 0}
-              required
-            />
+            <CourseBasics course={c} instructor={instructor} />
             <Field name="summary" label="Mô tả ngắn" value={c?.summary} multiline />
             <Field
               name="description"
@@ -1211,3 +1236,4 @@ function AuditPage() {
     </>
   );
 }
+

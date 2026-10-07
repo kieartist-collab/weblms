@@ -2016,3 +2016,7 @@ footer {
     transition: none;
   }
 }
+
+.course-price-input { position: relative; display: block; }
+.course-price-input input { padding-right: 64px; }
+.course-price-input > span { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
