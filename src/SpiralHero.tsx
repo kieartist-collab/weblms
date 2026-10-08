@@ -20,6 +20,17 @@ const spiral = Array.from({ length: 361 }, (_, i) => {
 export function SpiralHero() {
   const scene = useRef<HTMLDivElement>(null);
   const progress = useRef(0);
+  const animationTime = useRef(0);
+  const sizeTracks = useRef<
+    { from: number; to: number; start: number; duration: number; next: number }[]
+  >([]);
+  const selectedVideos = useRef<number[]>([]);
+  if (!sizeTracks.current.length) {
+    sizeTracks.current = artworks.map(() => {
+      const size = 0.7 + Math.random() * 0.95;
+      return { from: size, to: size, start: 0, duration: 5, next: 3 + Math.random() * 12 };
+    });
+  }
   const [paused, setPaused] = useState(false);
   const [reduced, setReduced] = useState(
     () => matchMedia('(prefers-reduced-motion: reduce)').matches,
@@ -44,23 +55,41 @@ export function SpiralHero() {
       cards.forEach((card, i) => {
         const t = (i / cards.length + progress.current) % 1;
         const p = position(t);
-        const scale = 0.36 + t * 0.78;
-        // Fade at either end so cycling through the spiral never jumps visibly.
-        const opacity = Math.min(1, t * 12, (1 - t) * 15);
+        const track = sizeTracks.current[i];
+        const now = animationTime.current;
+        if (now >= track.next) {
+          track.from = track.to;
+          track.to = 0.7 + Math.random() * 0.95;
+          track.start = now;
+          track.duration = 4 + Math.random() * 3;
+          track.next = now + track.duration + 5 + Math.random() * 8;
+        }
+        const blend = Math.min(1, Math.max(0, (now - track.start) / track.duration));
+        const eased = blend * blend * (3 - 2 * blend);
+        const scale = (0.36 + t * 0.78) * (track.from + (track.to - track.from) * eased);
+        // Fully invisible around the wrap; smooth fades also have zero endpoint velocity.
+        const fade = Math.max(0, Math.min(1, (t - 0.035) / 0.09, (0.965 - t) / 0.09));
+        const opacity = fade * fade * (3 - 2 * fade);
         card.style.transform = `translate3d(${p.x}px,${p.y}px,0) translate(-50%,-50%) scale(${scale})`;
         card.style.opacity = String(opacity * 0.86);
       });
     const selectVideos = () => {
       if (!visible || document.hidden || paused || reduced) {
-        setActiveVideos([]);
+        selectedVideos.current = [];
+        setActiveVideos((old) => (old.length ? [] : old));
         return;
       }
       const hero = node.parentElement!.getBoundingClientRect();
       const copy = node.parentElement!.querySelector('.spiral-copy')!.getBoundingClientRect();
       const candidates = cards
-        .map((card, index) => ({ index, rect: card.getBoundingClientRect() }))
+        .map((card, index) => ({
+          index,
+          rect: card.getBoundingClientRect(),
+          opacity: Number(card.style.opacity),
+        }))
         .filter(
-          ({ rect }) =>
+          ({ rect, opacity }) =>
+            opacity > 0.08 &&
             rect.width > 0 &&
             rect.right > 0 &&
             rect.left < innerWidth &&
@@ -73,15 +102,24 @@ export function SpiralHero() {
               rect.bottom < copy.bottom
             ),
         )
-        .sort((a, b) => b.rect.width - a.rect.width)
+        // Keep visible players mounted when random sizes change their ranking.
+        .sort(
+          (a, b) =>
+            Number(selectedVideos.current.includes(b.index)) -
+              Number(selectedVideos.current.includes(a.index)) || b.rect.width - a.rect.width,
+        )
         .slice(0, innerWidth < 600 ? 3 : 6)
         .map((item) => item.index)
         .sort((a, b) => a - b);
+      selectedVideos.current = candidates;
       setActiveVideos((old) => (old.join(',') === candidates.join(',') ? old : candidates));
     };
     const tick = (now: number) => {
-      if (previous)
-        progress.current = (progress.current + Math.min(now - previous, 50) / 180000) % 1;
+      if (previous) {
+        const elapsed = Math.min(now - previous, 50);
+        animationTime.current += elapsed / 1000;
+        progress.current = (progress.current + elapsed / 180000) % 1;
+      }
       previous = now;
       paint();
       frame = requestAnimationFrame(tick);
