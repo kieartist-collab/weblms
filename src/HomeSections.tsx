@@ -86,7 +86,7 @@ export function HomeSections() {
           </div>
         </div>
         <div className="review-toolbar">
-          <span>Kéo để khám phá · Giảng viên 3D Kistein Do</span>
+          <span>Kéo để khám phá · CG Generalist Kistein Do</span>
           <div>
             <button
               className="icon-button"

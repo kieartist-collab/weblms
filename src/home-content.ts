@@ -1,7 +1,7 @@
 // Replace the explicitly labeled preview content with verified author/review details.
 export const author = {
   name: 'Kistein Do',
-  role: 'Giảng viên 3D · Thiết kế · Làm phim',
+  role: 'CG Generalist',
   bio: 'Chia sẻ cách làm, từ ý tưởng đầu tiên đến sản phẩm hoàn chỉnh. Mỗi bài học tập trung vào một kỹ năng bạn có thể thực hành ngay.',
   isSample: true,
 };
