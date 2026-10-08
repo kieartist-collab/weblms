@@ -51,7 +51,11 @@ export function SpiralHero() {
     let visible = true,
       frame = 0,
       previous = 0;
-    const paint = () =>
+    const glowPaths = Array.from(node.querySelectorAll<SVGPathElement>('.spiral-glow-trail'));
+    const paint = () => {
+      glowPaths.forEach((path, i) => {
+        path.style.strokeDashoffset = String(-(animationTime.current * 22 + i * 330) % 1000);
+      });
       cards.forEach((card, i) => {
         const t = (i / cards.length + progress.current) % 1;
         const p = position(t);
@@ -73,6 +77,7 @@ export function SpiralHero() {
         card.style.transform = `translate3d(${p.x}px,${p.y}px,0) translate(-50%,-50%) scale(${scale})`;
         card.style.opacity = String(opacity * 0.86);
       });
+    };
     const selectVideos = () => {
       if (!visible || document.hidden || paused || reduced) {
         selectedVideos.current = [];
@@ -158,6 +163,21 @@ export function SpiralHero() {
           <path d={spiral} transform="rotate(12)" className="spiral-line-fine" />
           <path d={spiral} transform="rotate(-12)" className="spiral-line-dashed" />
         </svg>
+        <svg className="spiral-lines spiral-glow-lines" viewBox="-1000 -670 2000 1340" fill="none">
+          <path d={spiral} pathLength="1000" className="spiral-glow-trail" />
+          <path
+            d={spiral}
+            pathLength="1000"
+            transform="rotate(12)"
+            className="spiral-glow-trail spiral-glow-violet"
+          />
+          <path
+            d={spiral}
+            pathLength="1000"
+            transform="rotate(-12)"
+            className="spiral-glow-trail spiral-glow-fine"
+          />
+        </svg>
         {artworks.map((video, i) => (
           <div
             className="spiral-art"
@@ -169,12 +189,22 @@ export function SpiralHero() {
               const y = (event.clientY - rect.top) / rect.height - 0.5;
               event.currentTarget.style.setProperty('--tilt-x', `${-y * 22}deg`);
               event.currentTarget.style.setProperty('--tilt-y', `${x * 26}deg`);
-              event.currentTarget.style.setProperty('--warp', `${x * 7}deg`);
+              event.currentTarget.style.setProperty('--warp', `${x * 13}deg`);
+              event.currentTarget.style.setProperty('--dent-x', `${Math.abs(x) * 9}%`);
+              event.currentTarget.style.setProperty('--dent-y', `${Math.abs(y) * 12}%`);
+              event.currentTarget.style.setProperty('--shine-x', `${(x + 0.5) * 100}%`);
+              event.currentTarget.style.setProperty('--shine-y', `${(y + 0.5) * 100}%`);
             }}
             onPointerLeave={(event) => {
-              ['--tilt-x', '--tilt-y', '--warp'].forEach((key) =>
-                event.currentTarget.style.removeProperty(key),
-              );
+              [
+                '--tilt-x',
+                '--tilt-y',
+                '--warp',
+                '--dent-x',
+                '--dent-y',
+                '--shine-x',
+                '--shine-y',
+              ].forEach((key) => event.currentTarget.style.removeProperty(key));
             }}
           >
             <div className="spiral-art-surface">
