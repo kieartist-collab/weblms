@@ -1,5 +1,5 @@
+import { InformationPage } from './InformationPage';
 import { RichEditor } from './RichEditor';
-import { RichText } from './RichText';
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import { Bug, MessageCircle, X, Send, ImagePlus, FileText } from 'lucide-react';
@@ -236,31 +236,28 @@ export function PublicPage() {
       ) as Page | null,
     [slug],
   );
-  return (
-    <article className="container page information-page">
-      <Link className="text-link" to="/">
-        ← Trang chủ
-      </Link>
-      {loading ? (
+  if (loading)
+    return (
+      <div className="container page">
         <Loading />
-      ) : error ? (
+      </div>
+    );
+  if (error)
+    return (
+      <div className="container page">
         <Notice error>{error}</Notice>
-      ) : data ? (
-        <>
-          <h1>{data.title}</h1>
-          <RichText value={data.body} />
-          <p>
-            <a href="https://web.facebook.com/kieartist/" target="_blank" rel="noopener noreferrer">
-              Liên hệ Kistein Do trên Facebook ↗
-            </a>
-          </p>
-        </>
-      ) : (
+      </div>
+    );
+  if (!data)
+    return (
+      <div className="container page">
         <h1>Không tìm thấy trang</h1>
-      )}
-    </article>
-  );
+        <Link to="/">Về trang chủ</Link>
+      </div>
+    );
+  return <InformationPage page={data} />;
 }
+
 export function AdminPages() {
   const { data, loading, error, refresh } = useLoad(
     async () => check(await db().from('site_pages').select('*').order('slug')) as Page[],
