@@ -35,11 +35,11 @@ const mentors = [
   },
 ];
 
-export function MentorTeam() {
+export function MentorTeam({ embedded = false }: { embedded?: boolean }) {
   return (
     <section
       id="author"
-      className="mentor-team container home-section"
+      className={`mentor-team home-section ${embedded ? 'mentor-team-embedded' : 'container'}`}
       aria-labelledby="mentor-team-title"
     >
       <header className="mentor-team-heading">

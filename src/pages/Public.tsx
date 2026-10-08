@@ -1,4 +1,4 @@
-import { CourseInstructors } from '../CourseInstructors';
+import { MentorTeam } from '../MentorTeam';
 import { RichText } from '../RichText';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { ArrowUpRight, Play, BookOpen, Clock, ChevronRight } from 'lucide-react';
@@ -230,7 +230,6 @@ export function CourseDetail() {
               <p className="muted">Chương trình đang được cập nhật.</p>
             )}
           </section>
-          <CourseInstructors />
         </div>
         <aside className="purchase-card">
           <CourseImage course={course} />
@@ -271,6 +270,7 @@ export function CourseDetail() {
           </div>
         </aside>
       </div>
+      <MentorTeam embedded />
     </div>
   );
 }
