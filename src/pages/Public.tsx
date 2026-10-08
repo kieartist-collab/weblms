@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { HomeSections } from '../HomeSections';
 import { MotionSurface } from '../MotionSurface';
 import { SpiralHero } from '../SpiralHero';
+import { CourseAudience } from '../CourseAudience';
 import { useAuth } from '../auth';
 import {
   Action,
@@ -101,6 +102,7 @@ export function Home({ catalog = false }: { catalog?: boolean }) {
           <Empty title="Khóa học đang được chuẩn bị" />
         )}
       </section>
+      {!catalog && <CourseAudience />}
       {!catalog && <HomeSections />}
       {!catalog && (
         <section className="closing-cta">

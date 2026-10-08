@@ -1,0 +1,263 @@
+.course-audience {
+  padding: 88px 0 66px;
+  background: radial-gradient(ellipse at 10% 0%, #83c7d00b, transparent 55%), #111418;
+  border-block: 1px solid #ffffff0c;
+}
+.audience-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 40px;
+  margin-bottom: 38px;
+}
+.audience-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #8fcbd5;
+}
+.audience-heading h2 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(40px, 4.5vw, 64px);
+  text-transform: uppercase;
+  line-height: 1.06;
+  margin: 18px 0 0;
+}
+.audience-heading h2 em {
+  color: #86c7d0;
+  font-style: normal;
+}
+.audience-heading > p {
+  max-width: 370px;
+  margin: 0 0 4px;
+  font-size: 14px;
+  line-height: 1.9;
+  color: #aeb6c2;
+}
+.audience-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+.audience-card {
+  --audience-accent: #8bd1dc;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding: 28px;
+  overflow: hidden;
+  border: 1px solid #ffffff16;
+  border-radius: 16px;
+  background: linear-gradient(150deg, #ffffff04, transparent 60%), #171b21;
+  transition:
+    transform 0.3s,
+    border-color 0.3s,
+    box-shadow 0.3s;
+}
+.audience-card:nth-child(2) {
+  --audience-accent: #bcaae9;
+}
+.audience-card:nth-child(3) {
+  --audience-accent: #99d7bb;
+}
+.audience-card::before {
+  content: '';
+  position: absolute;
+  left: 28px;
+  right: 28px;
+  top: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--audience-accent), transparent);
+  opacity: 0.7;
+}
+.audience-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+.audience-icon {
+  display: grid;
+  place-items: center;
+  width: 57px;
+  height: 57px;
+  border: 1px solid color-mix(in srgb, var(--audience-accent) 25%, transparent);
+  border-radius: 15px;
+  color: var(--audience-accent);
+  background: color-mix(in srgb, var(--audience-accent) 7%, transparent);
+}
+.audience-number {
+  font:
+    600 64px/1 'Barlow Condensed',
+    sans-serif;
+  color: #ffffff10;
+  letter-spacing: -2px;
+}
+.audience-label {
+  color: var(--audience-accent);
+  font:
+    10px/1.6 'JetBrains Mono',
+    monospace;
+  letter-spacing: 1.1px;
+}
+.audience-card h3 {
+  color: #f0f2f4;
+  font:
+    600 28px/1.2 'Barlow Condensed',
+    sans-serif;
+  margin: 12px 0 16px;
+}
+.audience-card > p {
+  font-size: 13px;
+  line-height: 1.95;
+  color: #b3bac5;
+  margin: 0 0 25px;
+}
+.audience-card ul {
+  display: flex;
+  gap: 9px;
+  flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  margin: auto 0 26px;
+}
+.audience-card li {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  padding: 6px 8px;
+  color: #c5ced6;
+  border-radius: 5px;
+  background: #ffffff05;
+  border: 1px solid #ffffff0c;
+}
+.audience-card li svg {
+  color: var(--audience-accent);
+  flex-shrink: 0;
+}
+.audience-destination {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding-top: 20px;
+  border-top: 1px solid #ffffff12;
+  color: #c7cdd5;
+  font-size: 11px;
+  line-height: 1.6;
+}
+.audience-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--audience-accent);
+  flex-shrink: 0;
+}
+.audience-guidance {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  margin-top: 28px;
+  padding: 21px 0 0;
+}
+.audience-guidance p {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #aeb7c3;
+  font-size: 12px;
+  margin: 0;
+  line-height: 1.8;
+}
+.audience-guidance p svg {
+  color: #85c7d1;
+  flex-shrink: 0;
+}
+.audience-guidance a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  color: #8bd1dc;
+  font-size: 12px;
+  text-decoration: none;
+  padding: 8px 0;
+}
+.audience-guidance a svg {
+  transition: transform 0.25s;
+}
+.audience-guidance a:hover svg {
+  transform: translate(3px, -3px);
+}
+.audience-guidance a:focus-visible {
+  outline: 2px solid #8bd1dc;
+  outline-offset: 5px;
+}
+@media (hover: hover) {
+  .audience-card:hover {
+    transform: translateY(-5px);
+    border-color: color-mix(in srgb, var(--audience-accent) 45%, transparent);
+    box-shadow: 0 18px 38px #0003;
+  }
+}
+@media (max-width: 1000px) {
+  .audience-card {
+    padding: 23px;
+  }
+  .audience-grid {
+    gap: 14px;
+  }
+  .audience-heading {
+    gap: 25px;
+  }
+  .audience-heading > p {
+    max-width: 310px;
+  }
+}
+@media (max-width: 760px) {
+  .course-audience {
+    padding: 55px 0 40px;
+  }
+  .audience-heading {
+    display: block;
+  }
+  .audience-heading > p {
+    max-width: 100%;
+    margin-top: 20px;
+  }
+  .audience-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .audience-card-top {
+    margin-bottom: 20px;
+  }
+  .audience-card > p {
+    font-size: 14px;
+  }
+  .audience-card h3 {
+    font-size: 29px;
+  }
+  .audience-card li {
+    font-size: 12px;
+  }
+  .audience-destination {
+    font-size: 12px;
+  }
+  .audience-guidance {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .audience-card,
+  .audience-guidance a svg {
+    transition: none;
+  }
+  .audience-card:hover,
+  .audience-guidance a:hover svg {
+    transform: none;
+  }
+}
