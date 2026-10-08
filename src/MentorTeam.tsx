@@ -15,7 +15,7 @@ const mentors = [
   },
   {
     name: 'ThaiNam',
-    role: 'Đạo diễn',
+    role: 'Director',
     initials: 'TN',
     image: '',
     specialties: ['Đạo diễn', 'Kể chuyện bằng hình ảnh'],
