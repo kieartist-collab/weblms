@@ -235,3 +235,92 @@
     will-change: auto;
   }
 }
+/* The outer element follows the orbit; the inner surface responds to the cursor. */
+.spiral-art {
+  overflow: visible;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  pointer-events: auto;
+  perspective: 700px;
+}
+.spiral-art-surface {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid #ffffff30;
+  border-radius: 10px;
+  background: #172126;
+  box-shadow: 0 12px 48px #0006;
+  transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) skewY(var(--warp, 0deg));
+  transition:
+    transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-radius 0.6s,
+    border-color 0.4s,
+    box-shadow 0.4s;
+}
+.spiral-art:hover .spiral-art-surface {
+  border-radius: 19px 7px 20px 8px;
+  border-color: #94d6df99;
+  box-shadow:
+    0 18px 65px #0009,
+    0 0 28px #85c8d224;
+}
+.spiral-video {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.8s;
+  pointer-events: none;
+}
+.spiral-video.is-playing {
+  opacity: 1;
+}
+.spiral-video iframe {
+  position: absolute;
+  width: 480px;
+  height: 270px;
+  max-width: none;
+  border: 0;
+  left: 0;
+  top: 0;
+  transform: scale(0.5625);
+  transform-origin: top left;
+  pointer-events: none;
+}
+.spiral-art-title {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 22px 12px 10px;
+  background: linear-gradient(transparent, #000c);
+  font-size: 12px;
+  color: white;
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 0.3s,
+    transform 0.3s;
+}
+.spiral-art:hover .spiral-art-title {
+  opacity: 1;
+  transform: translateY(0);
+}
+.spiral-copy {
+  pointer-events: none;
+}
+.spiral-copy a {
+  pointer-events: auto;
+}
+.spiral-hero.is-still .spiral-art-surface {
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .spiral-art-surface,
+  .spiral-art-title,
+  .spiral-video {
+    transition: none;
+  }
+}

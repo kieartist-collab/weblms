@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowDown, ArrowUpRight, Pause, Play } from 'lucide-react';
 import videos from './student-videos.json';
+import { SpiralVideo } from './SpiralVideo';
 import './spiral-hero.css';
 
 const artworks = videos.slice(0, 20);
@@ -20,7 +21,10 @@ export function SpiralHero() {
   const scene = useRef<HTMLDivElement>(null);
   const progress = useRef(0);
   const [paused, setPaused] = useState(false);
-  const [reduced, setReduced] = useState(false);
+  const [reduced, setReduced] = useState(
+    () => matchMedia('(prefers-reduced-motion: reduce)').matches,
+  );
+  const [activeVideos, setActiveVideos] = useState<number[]>([]);
   useEffect(() => {
     const query = matchMedia('(prefers-reduced-motion: reduce)');
     const update = () => setReduced(query.matches);
@@ -46,6 +50,35 @@ export function SpiralHero() {
         card.style.transform = `translate3d(${p.x}px,${p.y}px,0) translate(-50%,-50%) scale(${scale})`;
         card.style.opacity = String(opacity * 0.86);
       });
+    const selectVideos = () => {
+      if (!visible || document.hidden || paused || reduced) {
+        setActiveVideos([]);
+        return;
+      }
+      const hero = node.parentElement!.getBoundingClientRect();
+      const copy = node.parentElement!.querySelector('.spiral-copy')!.getBoundingClientRect();
+      const candidates = cards
+        .map((card, index) => ({ index, rect: card.getBoundingClientRect() }))
+        .filter(
+          ({ rect }) =>
+            rect.width > 0 &&
+            rect.right > 0 &&
+            rect.left < innerWidth &&
+            rect.bottom > Math.max(0, hero.top) &&
+            rect.top < Math.min(innerHeight, hero.bottom) &&
+            !(
+              rect.left > copy.left &&
+              rect.right < copy.right &&
+              rect.top > copy.top &&
+              rect.bottom < copy.bottom
+            ),
+        )
+        .sort((a, b) => b.rect.width - a.rect.width)
+        .slice(0, innerWidth < 600 ? 3 : 6)
+        .map((item) => item.index)
+        .sort((a, b) => a - b);
+      setActiveVideos((old) => (old.join(',') === candidates.join(',') ? old : candidates));
+    };
     const tick = (now: number) => {
       if (previous)
         progress.current = (progress.current + Math.min(now - previous, 50) / 180000) % 1;
@@ -56,6 +89,7 @@ export function SpiralHero() {
     const sync = () => {
       cancelAnimationFrame(frame);
       previous = 0;
+      selectVideos();
       if (visible && !document.hidden && !paused && !reduced) frame = requestAnimationFrame(tick);
     };
     const observer = new IntersectionObserver(([entry]) => {
@@ -66,15 +100,20 @@ export function SpiralHero() {
     document.addEventListener('visibilitychange', sync);
     paint();
     sync();
+    const selectionTimer = window.setInterval(selectVideos, 1000);
     return () => {
       cancelAnimationFrame(frame);
       observer.disconnect();
+      window.clearInterval(selectionTimer);
       document.removeEventListener('visibilitychange', sync);
     };
   }, [paused, reduced]);
 
   return (
-    <section className="spiral-hero" aria-labelledby="welcome-title">
+    <section
+      className={`spiral-hero ${paused || reduced ? 'is-still' : ''}`}
+      aria-labelledby="welcome-title"
+    >
       <div className="spiral-scene" ref={scene} aria-hidden="true">
         <svg className="spiral-lines" viewBox="-1000 -670 2000 1340" fill="none">
           <path d={spiral} />
@@ -82,15 +121,36 @@ export function SpiralHero() {
           <path d={spiral} transform="rotate(-12)" className="spiral-line-dashed" />
         </svg>
         {artworks.map((video, i) => (
-          <div className="spiral-art" key={video.id}>
-            <img
-              src={video.thumbnail}
-              alt=""
-              width="320"
-              height="180"
-              decoding="async"
-              fetchPriority={i < 4 ? 'high' : 'low'}
-            />
+          <div
+            className="spiral-art"
+            key={video.id}
+            onPointerMove={(event) => {
+              if (reduced || paused || event.pointerType === 'touch') return;
+              const rect = event.currentTarget.getBoundingClientRect();
+              const x = (event.clientX - rect.left) / rect.width - 0.5;
+              const y = (event.clientY - rect.top) / rect.height - 0.5;
+              event.currentTarget.style.setProperty('--tilt-x', `${-y * 22}deg`);
+              event.currentTarget.style.setProperty('--tilt-y', `${x * 26}deg`);
+              event.currentTarget.style.setProperty('--warp', `${x * 7}deg`);
+            }}
+            onPointerLeave={(event) => {
+              ['--tilt-x', '--tilt-y', '--warp'].forEach((key) =>
+                event.currentTarget.style.removeProperty(key),
+              );
+            }}
+          >
+            <div className="spiral-art-surface">
+              <img
+                src={video.thumbnail}
+                alt=""
+                width="320"
+                height="180"
+                decoding="async"
+                fetchPriority={i < 4 ? 'high' : 'low'}
+              />
+              <SpiralVideo id={video.id} active={activeVideos.includes(i)} />
+              <span className="spiral-art-title">{video.title}</span>
+            </div>
           </div>
         ))}
       </div>
