@@ -14,7 +14,7 @@ const mentors = [
     demo: false,
   },
   {
-    name: 'ThaiNam',
+    name: 'Thai Nam',
     role: 'Director',
     initials: 'TN',
     image: '',
