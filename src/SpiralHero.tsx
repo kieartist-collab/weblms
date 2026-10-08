@@ -159,7 +159,24 @@ export function SpiralHero() {
           <path d={spiral} transform="rotate(-12)" className="spiral-line-dashed" />
         </svg>
         {artworks.map((video, i) => (
-          <div className="spiral-art" key={video.id}>
+          <div
+            className="spiral-art"
+            key={video.id}
+            onPointerMove={(event) => {
+              if (reduced || paused || event.pointerType === 'touch') return;
+              const rect = event.currentTarget.getBoundingClientRect();
+              const x = (event.clientX - rect.left) / rect.width - 0.5;
+              const y = (event.clientY - rect.top) / rect.height - 0.5;
+              event.currentTarget.style.setProperty('--tilt-x', `${-y * 22}deg`);
+              event.currentTarget.style.setProperty('--tilt-y', `${x * 26}deg`);
+              event.currentTarget.style.setProperty('--warp', `${x * 7}deg`);
+            }}
+            onPointerLeave={(event) => {
+              ['--tilt-x', '--tilt-y', '--warp'].forEach((key) =>
+                event.currentTarget.style.removeProperty(key),
+              );
+            }}
+          >
             <div className="spiral-art-surface">
               <img
                 src={video.thumbnail}
