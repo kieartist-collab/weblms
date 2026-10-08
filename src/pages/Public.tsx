@@ -4,7 +4,7 @@ import { ArrowUpRight, Play, BookOpen, Clock, ChevronRight } from 'lucide-react'
 import { useEffect } from 'react';
 import { HomeSections } from '../HomeSections';
 import { MotionSurface } from '../MotionSurface';
-import { HeroVideo } from '../HeroVideo';
+import { SpiralHero } from '../SpiralHero';
 import { useAuth } from '../auth';
 import {
   Action,
@@ -33,56 +33,10 @@ async function courses() {
 }
 export function Home({ catalog = false }: { catalog?: boolean }) {
   const { data, error, loading, refresh } = useLoad(courses);
-  const featured = data?.[0];
+
   return (
     <MotionSurface ready={!loading}>
-      {!catalog && (
-        <section className="hero container dark-hero cinematic-hero">
-          <div className="hero-copy">
-            <span className="eyebrow hero-tag">LEARN / CREATE / REPEAT</span>
-            <h1>
-              Biến ý tưởng thành
-              <br />
-              <em>thế giới của bạn.</em>
-            </h1>
-            <p>Làm chủ 3D, thiết kế và làm phim qua từng dự án thực hành.</p>
-            <div className="hero-cta">
-              <Link to="/courses" className="button">
-                Khám phá khóa học
-              </Link>
-              <Link to="/#author" className="button secondary">
-                Về tác giả
-              </Link>
-            </div>
-            <div className="hero-points">
-              <span>
-                <BookOpen size={16} /> Học qua thực hành
-              </span>
-              <span>
-                <Clock size={16} /> Theo nhịp của bạn
-              </span>
-            </div>
-          </div>
-          <div className="hero-visual">
-            <HeroVideo />
-            {featured ? (
-              <>
-                <div className="image-caption">
-                  <span className="light-eyebrow">KHÓA HỌC NỔI BẬT</span>
-                  <h2>{featured.category}</h2>
-                  <Link
-                    to={`/courses/${featured.slug}`}
-                    className="round-link"
-                    aria-label={`Khám phá ${featured.title}`}
-                  >
-                    <Play size={20} />
-                  </Link>
-                </div>
-              </>
-            ) : null}
-          </div>
-        </section>
-      )}
+      {!catalog && <SpiralHero />}
       {!catalog && (
         <div className="workflow-band">
           <div className="container">

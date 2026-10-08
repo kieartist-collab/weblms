@@ -1,0 +1,140 @@
+import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { ArrowDown, ArrowUpRight, Pause, Play } from 'lucide-react';
+import videos from './student-videos.json';
+import './spiral-hero.css';
+
+const artworks = videos.slice(0, 20);
+const turns = Math.PI * 5;
+function position(t: number) {
+  const angle = t * turns - 1.3;
+  const radius = 145 + t * 810;
+  return { x: Math.cos(angle) * radius, y: Math.sin(angle) * radius * 0.67 };
+}
+const spiral = Array.from({ length: 361 }, (_, i) => {
+  const p = position(i / 360);
+  return `${i ? 'L' : 'M'}${p.x.toFixed(2)},${p.y.toFixed(2)}`;
+}).join(' ');
+
+export function SpiralHero() {
+  const scene = useRef<HTMLDivElement>(null);
+  const progress = useRef(0);
+  const [paused, setPaused] = useState(false);
+  const [reduced, setReduced] = useState(false);
+  useEffect(() => {
+    const query = matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => setReduced(query.matches);
+    update();
+    query.addEventListener('change', update);
+    return () => query.removeEventListener('change', update);
+  }, []);
+
+  useEffect(() => {
+    const node = scene.current;
+    if (!node) return;
+    const cards = Array.from(node.querySelectorAll<HTMLElement>('.spiral-art'));
+    let visible = true,
+      frame = 0,
+      previous = 0;
+    const paint = () =>
+      cards.forEach((card, i) => {
+        const t = (i / cards.length + progress.current) % 1;
+        const p = position(t);
+        const scale = 0.36 + t * 0.78;
+        // Fade at either end so cycling through the spiral never jumps visibly.
+        const opacity = Math.min(1, t * 12, (1 - t) * 15);
+        card.style.transform = `translate3d(${p.x}px,${p.y}px,0) translate(-50%,-50%) scale(${scale})`;
+        card.style.opacity = String(opacity * 0.86);
+      });
+    const tick = (now: number) => {
+      if (previous)
+        progress.current = (progress.current + Math.min(now - previous, 50) / 180000) % 1;
+      previous = now;
+      paint();
+      frame = requestAnimationFrame(tick);
+    };
+    const sync = () => {
+      cancelAnimationFrame(frame);
+      previous = 0;
+      if (visible && !document.hidden && !paused && !reduced) frame = requestAnimationFrame(tick);
+    };
+    const observer = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      sync();
+    });
+    observer.observe(node);
+    document.addEventListener('visibilitychange', sync);
+    paint();
+    sync();
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+      document.removeEventListener('visibilitychange', sync);
+    };
+  }, [paused, reduced]);
+
+  return (
+    <section className="spiral-hero" aria-labelledby="welcome-title">
+      <div className="spiral-scene" ref={scene} aria-hidden="true">
+        <svg className="spiral-lines" viewBox="-1000 -670 2000 1340" fill="none">
+          <path d={spiral} />
+          <path d={spiral} transform="rotate(12)" className="spiral-line-fine" />
+          <path d={spiral} transform="rotate(-12)" className="spiral-line-dashed" />
+        </svg>
+        {artworks.map((video, i) => (
+          <div className="spiral-art" key={video.id}>
+            <img
+              src={video.thumbnail}
+              alt=""
+              width="320"
+              height="180"
+              decoding="async"
+              fetchPriority={i < 4 ? 'high' : 'low'}
+            />
+          </div>
+        ))}
+      </div>
+      <div className="spiral-shade" aria-hidden="true" />
+      <div className="spiral-copy">
+        <span className="spiral-kicker">
+          <span /> KISTEIN DO · CG GENERALIST
+        </span>
+        <h1 id="welcome-title">
+          Biến ý tưởng thành
+          <br />
+          <em>thế giới của bạn.</em>
+        </h1>
+        <p>
+          Làm chủ 3D, thiết kế và làm phim
+          <br className="spiral-desktop-break" /> qua từng dự án thực hành.
+        </p>
+        <div className="spiral-actions">
+          <Link to="/courses" className="button">
+            Khám phá khóa học <ArrowUpRight size={18} />
+          </Link>
+          <Link to="/#student-work" className="button secondary">
+            Sản phẩm học viên <Play size={15} />
+          </Link>
+        </div>
+        <span className="spiral-signature">LEARN / CREATE / REPEAT</span>
+      </div>
+      <div className="spiral-bottom">
+        <Link to="/#courses" className="spiral-scroll">
+          <ArrowDown size={16} /> Cuộn để khám phá
+        </Link>
+        {!reduced && (
+          <button
+            type="button"
+            className="spiral-pause"
+            onClick={() => setPaused((value) => !value)}
+            aria-label={paused ? 'Tiếp tục hiệu ứng' : 'Tạm dừng hiệu ứng'}
+            aria-pressed={paused}
+          >
+            {paused ? <Play size={15} /> : <Pause size={15} />}
+            <span>{paused ? 'Tiếp tục' : 'Tạm dừng'}</span>
+          </button>
+        )}
+      </div>
+    </section>
+  );
+}

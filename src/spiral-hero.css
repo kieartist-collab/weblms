@@ -1,0 +1,237 @@
+.spiral-hero {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  min-height: 740px;
+  height: calc(100svh - 73px);
+  max-height: 1200px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: #0e1114;
+  color: #f4f3ee;
+}
+.spiral-scene {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.spiral-lines {
+  position: absolute;
+  width: 2000px;
+  height: 1340px;
+  max-width: none;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  stroke: #8ac9d0;
+  stroke-width: 1;
+  opacity: 0.24;
+}
+.spiral-line-fine {
+  opacity: 0.36;
+  stroke-width: 0.7;
+}
+.spiral-line-dashed {
+  stroke-dasharray: 3 13;
+  opacity: 0.65;
+}
+.spiral-art {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 270px;
+  aspect-ratio: 16/9;
+  border-radius: 9px;
+  overflow: hidden;
+  border: 1px solid #ffffff26;
+  background: #1b252c;
+  box-shadow: 0 12px 48px #0006;
+  will-change: transform;
+}
+.spiral-art img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+.spiral-shade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse 37% 40% at 50% 48%,
+      #0e1114 15%,
+      #0e1114f5 50%,
+      #0e111499 76%,
+      transparent 100%
+    ),
+    linear-gradient(0deg, #0e1114 0%, transparent 18%, transparent 86%, #0e111455);
+}
+.spiral-copy {
+  position: relative;
+  text-align: center;
+  padding: 60px 24px 90px;
+  z-index: 1;
+}
+.spiral-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #9abec2;
+  font:
+    11px 'JetBrains Mono',
+    monospace;
+  letter-spacing: 2.2px;
+}
+.spiral-kicker > span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #88d1dc;
+  box-shadow: 0 0 15px #88d1dc80;
+}
+.spiral-hero h1 {
+  font-family: 'Barlow Condensed', sans-serif;
+  text-transform: uppercase;
+  font-size: clamp(56px, 6vw, 94px);
+  line-height: 1.02;
+  letter-spacing: -1.2px;
+  margin: 27px 0 22px;
+}
+.spiral-hero h1 em {
+  color: #85c8d2;
+  font-style: normal;
+}
+.spiral-copy > p {
+  color: #b5bdc4;
+  font-size: 16px;
+  line-height: 1.8;
+  margin: 0 0 28px;
+}
+.spiral-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.spiral-actions .button {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+}
+.spiral-actions .secondary {
+  background: #10161ae6;
+}
+.spiral-signature {
+  display: block;
+  margin-top: 28px;
+  font:
+    10px 'JetBrains Mono',
+    monospace;
+  letter-spacing: 3px;
+  color: #829397;
+}
+.spiral-bottom {
+  position: absolute;
+  z-index: 2;
+  bottom: 26px;
+  left: 40px;
+  right: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.spiral-scroll,
+.spiral-pause {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  color: #b4c5c9;
+  text-decoration: none;
+}
+.spiral-pause {
+  border: 1px solid #aacbd22b;
+  border-radius: 30px;
+  padding: 10px 15px;
+  background: #0e1114b3;
+  cursor: pointer;
+}
+.spiral-scroll:hover,
+.spiral-pause:hover {
+  color: #fff;
+}
+.spiral-hero a:focus-visible,
+.spiral-pause:focus-visible {
+  outline: 2px solid #85c8d2;
+  outline-offset: 5px;
+}
+@media (min-width: 1800px) {
+  .spiral-scene {
+    transform: scale(1.2);
+  }
+}
+@media (max-width: 900px) {
+  .spiral-hero {
+    min-height: 680px;
+  }
+  .spiral-scene {
+    transform: scale(0.8);
+  }
+  .spiral-shade {
+    background:
+      radial-gradient(ellipse 60% 42% at 50% 47%, #0e1114 30%, #0e1114ee 62%, transparent 100%),
+      linear-gradient(0deg, #0e1114, transparent 25%);
+  }
+}
+@media (max-width: 600px) {
+  .spiral-hero {
+    min-height: 650px;
+    height: calc(100svh - 65px);
+  }
+  .spiral-scene {
+    transform: scale(0.64);
+  }
+  .spiral-art:nth-of-type(even) {
+    display: none;
+  }
+  .spiral-copy {
+    padding: 70px 18px;
+  }
+  .spiral-hero h1 {
+    font-size: clamp(43px, 10.8vw, 63px);
+    letter-spacing: -0.6px;
+  }
+  .spiral-kicker {
+    font-size: 9px;
+    letter-spacing: 1.2px;
+  }
+  .spiral-copy > p {
+    font-size: 14px;
+  }
+  .spiral-actions {
+    gap: 10px;
+  }
+  .spiral-actions .button {
+    font-size: 12px;
+    padding: 12px 15px;
+  }
+  .spiral-bottom {
+    left: 20px;
+    right: 20px;
+    bottom: 22px;
+  }
+  .spiral-shade {
+    background:
+      radial-gradient(ellipse 85% 39% at 50% 48%, #0e1114 20%, #0e1114ef 65%, transparent 100%),
+      linear-gradient(0deg, #0e1114, transparent 25%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .spiral-art {
+    will-change: auto;
+  }
+}
