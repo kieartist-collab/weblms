@@ -1,6 +1,7 @@
+import { MentorTeam } from './MentorTeam';
 import { useEffect, useRef } from 'react';
-import { BookOpen, Quote, Plus, UserRound, ArrowLeft, ArrowRight } from 'lucide-react';
-import { author, faqs, reviews } from './home-content';
+import { Quote, Plus, ArrowLeft, ArrowRight } from 'lucide-react';
+import { faqs, reviews } from './home-content';
 import { StudentShowcase } from './StudentShowcase';
 import { MessageSquareQuote, CircleHelp } from 'lucide-react';
 
@@ -185,33 +186,7 @@ export function HomeSections() {
           ))}
         </div>
       </section>
-      <section id="author" className="container home-section author-section">
-        <div className="author-mark">
-          <span className="eyebrow">NGƯỜI ĐỨNG SAU BÀI HỌC</span>
-          <div className="author-avatar">
-            <UserRound size={64} strokeWidth={1} />
-          </div>
-          <span className="sample-label">Ảnh & hồ sơ tác giả đang cập nhật</span>
-        </div>
-        <div className="author-copy">
-          <span className="eyebrow section-kicker">
-            <UserRound size={18} aria-hidden="true" /> VỀ TÁC GIẢ
-          </span>
-          <h2>
-            Học từ cách làm.
-            <br />
-            <em>Hiểu qua thực hành.</em>
-          </h2>
-          <p>{author.bio}</p>
-          <div className="author-signature">
-            <BookOpen size={22} />
-            <div>
-              <strong>{author.name}</strong>
-              <span>{author.role}</span>
-            </div>
-          </div>
-        </div>
-      </section>
+      <MentorTeam />
       <section id="faq" className="container home-section faq-section">
         <div>
           <span className="eyebrow section-kicker">
