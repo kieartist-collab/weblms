@@ -14,23 +14,23 @@ const mentors = [
     demo: false,
   },
   {
-    name: 'Minh Anh',
-    role: '3D Artist · Hồ sơ mẫu',
-    initials: 'MA',
+    name: 'ThaiNam',
+    role: 'Đạo diễn',
+    initials: 'TN',
     image: '',
-    specialties: ['Modeling', 'Digital sculpting'],
+    specialties: ['Đạo diễn', 'Kể chuyện bằng hình ảnh'],
     quote:
-      'Một sản phẩm tốt bắt đầu từ việc quan sát. Hiểu hình khối, thử nhiều cách thể hiện và kiên nhẫn với từng chi tiết sẽ giúp bạn tiến bộ qua mỗi dự án.',
+      'Mỗi khung hình đều cần có lý do để xuất hiện. Tôi muốn giúp bạn kể câu chuyện bằng bố cục, nhịp điệu và cảm xúc, để ý tưởng trở thành những thước phim chạm đến người xem.',
     demo: true,
   },
   {
-    name: 'Hoàng Nam',
-    role: 'Motion Designer · Hồ sơ mẫu',
-    initials: 'HN',
+    name: 'NamChu',
+    role: '3D Artist',
+    initials: 'NC',
     image: '',
-    specialties: ['Motion & Editing', 'AI workflow'],
+    specialties: ['Modeling', 'Digital sculpting'],
     quote:
-      'Công cụ có thể thay đổi, nhưng cảm xúc và câu chuyện luôn là điều giữ người xem ở lại. Tôi thích kết hợp tư duy dựng phim với những thử nghiệm mới cùng AI.',
+      'Một sản phẩm 3D tốt bắt đầu từ việc quan sát. Hiểu hình khối, nắm vững công cụ và kiên nhẫn với từng chi tiết sẽ giúp bạn biến ý tưởng thành tác phẩm có cá tính riêng.',
     demo: true,
   },
 ];
