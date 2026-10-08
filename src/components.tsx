@@ -11,14 +11,11 @@ import {
   AlertCircle,
   Check,
   GraduationCap,
-  Compass,
-  Headphones,
 } from 'lucide-react';
 import { useAuth } from './auth';
 import { db, demo, errorText, money, safeUrl } from './lib';
 import type { Course } from './types';
-import { SupportLinks } from './Support';
-import { ContactInfo } from './ContactInfo';
+import { SiteFooter } from './SiteFooter';
 
 export function useLoad<T>(fn: () => Promise<T>, deps: DependencyList = []) {
   const [data, setData] = useState<T>();
@@ -216,49 +213,7 @@ export function Layout({ children }: { children: ReactNode }) {
         </div>
       )}
       <main id="main">{children}</main>
-      <footer>
-        <div className="container footer-grid">
-          <div className="footer-brand">
-            <Link to="/" className="brand">
-              <span className="brand-icon">
-                <GraduationCap size={23} />
-              </span>
-              <span>
-                học viện<span className="brand-sub">ONLINE</span>
-              </span>
-            </Link>
-            <p>Học kỹ năng. Tạo giá trị.</p>
-            <span className="footer-note">Khóa học online về 3D, thiết kế và làm phim.</span>
-          </div>
-          <div>
-            <h3>
-              <Compass size={18} aria-hidden="true" /> Khám phá
-            </h3>
-            <Link to="/courses">Khóa học</Link>
-            <Link to="/#author">Về tác giả</Link>
-            <Link to="/#reviews">Đánh giá</Link>
-          </div>
-          <div>
-            <h3>
-              <BookOpen size={18} aria-hidden="true" /> Học tập
-            </h3>
-            <Link to="/my-learning">Góc học tập</Link>
-            <Link to="/login">Đăng nhập</Link>
-            <SupportLinks />
-            <Link to="/#faq">Câu hỏi thường gặp</Link>
-          </div>
-          <div>
-            <h3>
-              <Headphones size={18} aria-hidden="true" /> Liên hệ
-            </h3>
-            <ContactInfo />
-          </div>
-        </div>
-        <div className="container footer-bottom">
-          <span>© {new Date().getFullYear()} Học viện Online</span>
-          <span>Học theo nhịp của bạn.</span>
-        </div>
-      </footer>
+      <SiteFooter />
     </>
   );
 }

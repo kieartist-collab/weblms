@@ -2425,3 +2425,35 @@ select:disabled {
 @media(max-width:900px) { .info-layout { grid-template-columns: 200px minmax(0,1fr); gap: 28px; }.info-contact-grid { grid-template-columns: 1fr; }.info-hero { grid-template-columns: 1.5fr 1fr; gap: 10px; }.info-visual { height: 260px; }.orbit-one { width: 210px; height: 210px; }.orbit-two { width: 160px; height: 160px; } }
 @media(max-width:640px) { .info-shell { padding: 0 20px; }.info-hero { grid-template-columns: 1fr; padding: 12px 0 30px; }.info-visual { display: none; }.info-hero h1 { font-size: 44px; }.info-hero h2 { font-size: 16px; }.info-layout { grid-template-columns: 1fr; padding-top: 26px; }.info-navigation { position: static; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }.info-navigation .info-side-label,.info-navigation .info-side-divider,.info-navigation > a[href^="#"] { display: none; }.info-navigation a { font-size: 11px; }.info-content-card { gap: 14px; padding: 20px 16px; }.info-card-icon { width: 36px; height: 36px; border-radius: 9px; }.info-content-card .rich-content { font-size: 13px; }.info-contact,.info-authored { padding: 22px 18px; }.info-steps .is-step:not(:last-child)::after { left: 33px; } }
 @media(prefers-reduced-motion:reduce) { .info-experience * { transition: none !important; } }
+
+/* Shared footer with separate discovery, policy and contact columns. */
+footer.premium-footer { background: #0b0d11; border-top: 1px solid #2b303a; padding: 0; color: #a3abba; }
+.pf-shell { max-width: 1280px; padding: 0 40px; margin: auto; }
+.pf-invitation { display: flex; align-items: center; justify-content: space-between; gap: 30px; padding: 42px 0; border-bottom: 1px solid #282d36; }
+.pf-eyebrow { color: #84c4d0; font: 9px 'JetBrains Mono',monospace; letter-spacing: .18em; }
+.pf-invitation h2 { color: #e8ebf2; font-size: clamp(25px,3vw,36px); margin: 10px 0 0; line-height: 1.25; }
+.pf-course-button { display: inline-flex; align-items: center; gap: 20px; flex-shrink: 0; padding: 13px 18px; border: 1px solid #567782; border-radius: 6px; color: #b5e4ec; font-size: 12px; font-weight: 600; background: #132129; }
+.pf-grid { display: grid; grid-template-columns: 1.35fr .85fr 1.1fr 1.2fr; gap: 40px; padding: 52px 0; }
+.pf-grid > * { min-width: 0; }
+.pf-brand-column .brand { color: #f0f2f6; }.pf-brand-column .brand-icon { background: #182b32; border-color: #334d58; color: #92cdd9; }
+.pf-brand-column p { color: #dce0e9; margin: 23px 0 10px; font-size: 13px; }
+.pf-description { display: block; font-size: 12px; color: #8f99aa; line-height: 1.9; max-width: 265px; }
+.pf-socials { display: flex; gap: 9px; margin-top: 22px; }
+.pf-socials a { display: grid; place-items: center; width: 37px; height: 37px; border: 1px solid #303844; border-radius: 8px; color: #b1bbcd; }
+.pf-grid h3 { display: flex; align-items: center; gap: 9px; font: 600 12px 'Be Vietnam Pro',sans-serif; color: #e0e5ef; letter-spacing: 0; text-transform: none; margin: 5px 0 22px; }
+.pf-grid h3 svg { color: #86bdcc; }
+.pf-links > a { display: block; width: fit-content; font-size: 12px; line-height: 1.7; padding: 6px 0; color: #97a2b5; text-decoration-color: transparent; text-underline-offset: 5px; }
+.pf-contact { font-style: normal; }.pf-contact > strong { display: block; font-size: 15px; color: #e0e7f3; }
+.pf-role { display: block; font-size: 10px; line-height: 1.7; color: #818d9f; margin: 6px 0 18px; }
+.pf-contact > a:not(.pf-zalo) { display: flex; align-items: center; gap: 12px; font-size: 12px; line-height: 1.6; margin: 12px 0; color: #c5cedd; overflow-wrap: anywhere; }
+.pf-contact a svg { flex-shrink: 0; color: #81b8c8; }.pf-contact small { display: block; font-size: 9px; color: #8490a3; margin-bottom: 2px; }
+.pf-zalo { display: inline-flex; align-items: center; gap: 22px; font-size: 11px; color: #a0dbe6; margin-top: 6px; }
+.pf-bottom { display: flex; align-items: center; gap: 20px; border-top: 1px solid #252b34; padding: 22px 0; font-size: 10px; line-height: 1.8; color: #818c9e; }
+.pf-signoff { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; }
+.pf-bottom button { display: inline-flex; align-items: center; gap: 8px; border: 0; border-left: 1px solid #303743; background: none; color: #a4b0c2; padding: 5px 0 5px 20px; cursor: pointer; font-size: 10px; }
+.premium-footer a, .pf-bottom button { transition: color .2s, background .2s, border-color .2s, transform .2s; }
+.premium-footer a:hover, .pf-bottom button:hover { color: #bcf0fa; }.pf-links > a:hover { text-decoration: underline; }.pf-socials a:hover { transform: translateY(-3px); background: #192a33; border-color: #608997; }.pf-course-button:hover { background: #203941; border-color: #92cdd9; }
+.premium-footer a:focus-visible,.pf-bottom button:focus-visible { outline: 2px solid #8ed5e0; outline-offset: 5px; }
+@media(max-width:1000px) { .pf-grid { grid-template-columns: 1fr 1fr; gap: 36px 60px; }.pf-invitation h2 { max-width: 420px; } }
+@media(max-width:600px) { .pf-shell { padding: 0 24px; }.pf-invitation { align-items: flex-start; flex-direction: column; gap: 22px; padding: 32px 0; }.pf-grid { gap: 28px 20px; padding: 34px 0; }.pf-brand-column,.pf-contact { grid-column: 1 / -1; }.pf-brand-column { padding-bottom: 24px; border-bottom: 1px solid #252b34; }.pf-description { max-width: none; }.pf-grid h3 { font-size: 11px; }.pf-links > a { font-size: 11px; }.pf-contact { padding-top: 24px; border-top: 1px solid #252b34; }.pf-bottom { flex-wrap: wrap; padding-bottom: 80px; }.pf-signoff { margin-left: 0; }.pf-bottom > span:first-child { width: 100%; }.pf-bottom button { margin-left: auto; } }
+@media(prefers-reduced-motion:reduce) { .premium-footer a,.pf-bottom button { transition: none; } }
