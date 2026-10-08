@@ -338,16 +338,7 @@
   opacity: 0.65;
 }
 .spiral-art-surface {
-  clip-path: polygon(
-    0 0,
-    50% var(--dent-y, 0%),
-    100% 0,
-    calc(100% - var(--dent-x, 0%)) 50%,
-    100% 100%,
-    50% calc(100% - var(--dent-y, 0%)),
-    0 100%,
-    var(--dent-x, 0%) 50%
-  );
+  clip-path: inset(0 round 22px);
   transition:
     transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
     clip-path 0.45s ease,
@@ -389,5 +380,95 @@
   }
   .spiral-glow-lines {
     opacity: 0.3;
+  }
+}
+
+/* Clip the actual video compositor, not only a decorative border. */
+.spiral-art-surface {
+  height: auto;
+  aspect-ratio: 16/9;
+  border-radius: 22px;
+  isolation: isolate;
+  overflow: hidden;
+}
+.spiral-media {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  transform: skewX(var(--warp, 0deg)) scale(var(--stretch-x, 1), var(--stretch-y, 1));
+  transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.spiral-video {
+  overflow: hidden;
+  border-radius: inherit;
+}
+.spiral-art-surface::after {
+  border-radius: inherit;
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .spiral-hero:not(.is-still) .spiral-art:hover .spiral-art-surface {
+    border-radius: 38px 18px 42px 20px;
+    clip-path: inset(0 round 38px 18px 42px 20px);
+  }
+}
+.spiral-glow-lines {
+  opacity: 1;
+}
+.spiral-glow-trail {
+  stroke: #d2fbff;
+  stroke-width: 4;
+  stroke-dasharray: 65 935;
+  filter: drop-shadow(0 0 5px #a3f7ff) drop-shadow(0 0 14px #4bd6ff) drop-shadow(0 0 28px #35b6ff);
+}
+.spiral-glow-violet {
+  stroke: #d8bcff;
+  stroke-width: 3;
+  stroke-dasharray: 45 955;
+  filter: drop-shadow(0 0 7px #c9a1ff) drop-shadow(0 0 20px #9e64ff);
+}
+.spiral-glow-fine {
+  stroke-width: 2;
+  opacity: 0.9;
+  stroke-dasharray: 25 975;
+}
+.spiral-stars {
+  position: absolute;
+  inset: -5%;
+  overflow: hidden;
+  pointer-events: none;
+}
+.spiral-star {
+  position: absolute;
+  border-radius: 50%;
+  background: #d5f5ff;
+  box-shadow:
+    0 0 6px #a5e6ff,
+    0 0 14px #68bdff80;
+  pointer-events: none;
+}
+.spiral-star.is-spark::before,
+.spiral-star.is-spark::after {
+  content: '';
+  position: absolute;
+  background: linear-gradient(transparent, #e5faff, transparent);
+  left: 50%;
+  top: 50%;
+  width: 1px;
+  height: 14px;
+  transform: translate(-50%, -50%);
+}
+.spiral-star.is-spark::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+.spiral-hero.is-still .spiral-media {
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .spiral-media {
+    transition: none;
+  }
+  .spiral-glow-lines {
+    opacity: 0.4;
   }
 }

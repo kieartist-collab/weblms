@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowDown, ArrowUpRight, Pause, Play } from 'lucide-react';
 import videos from './student-videos.json';
@@ -6,6 +6,12 @@ import { SpiralVideo } from './SpiralVideo';
 import './spiral-hero.css';
 
 const artworks = videos.slice(0, 20);
+const stars = Array.from({ length: 64 }, (_, i) => ({
+  x: (i * 61.803 + 9) % 100,
+  y: (i * 37.719 + 13) % 100,
+  depth: 0.25 + (i % 5) * 0.19,
+  size: i % 9 === 0 ? 4 : 1 + (i % 3) * 0.6,
+}));
 const turns = Math.PI * 5;
 function position(t: number) {
   const angle = t * turns - 1.3;
@@ -18,6 +24,7 @@ const spiral = Array.from({ length: 361 }, (_, i) => {
 }).join(' ');
 
 export function SpiralHero() {
+  const pointer = useRef({ x: 0, y: 0, currentX: 0, currentY: 0 });
   const scene = useRef<HTMLDivElement>(null);
   const progress = useRef(0);
   const animationTime = useRef(0);
@@ -51,8 +58,20 @@ export function SpiralHero() {
     let visible = true,
       frame = 0,
       previous = 0;
+    const starNodes = Array.from(node.parentElement!.querySelectorAll<HTMLElement>('.spiral-star'));
     const glowPaths = Array.from(node.querySelectorAll<SVGPathElement>('.spiral-glow-trail'));
     const paint = () => {
+      const cursor = pointer.current;
+      cursor.currentX += (cursor.x - cursor.currentX) * 0.055;
+      cursor.currentY += (cursor.y - cursor.currentY) * 0.055;
+      starNodes.forEach((star, i) => {
+        const depth = stars[i].depth;
+        const drift = reduced ? 0 : Math.sin(animationTime.current * 0.45 + i) * 7;
+        star.style.transform = `translate3d(${cursor.currentX * depth * 65 + drift}px,${cursor.currentY * depth * 45 + drift * 0.7}px,0)`;
+        star.style.opacity = String(
+          0.35 + 0.5 * (reduced ? 0.5 : (Math.sin(animationTime.current * 0.8 + i * 2) + 1) / 2),
+        );
+      });
       glowPaths.forEach((path, i) => {
         path.style.strokeDashoffset = String(-(animationTime.current * 22 + i * 330) % 1000);
       });
@@ -156,7 +175,33 @@ export function SpiralHero() {
     <section
       className={`spiral-hero ${paused || reduced ? 'is-still' : ''}`}
       aria-labelledby="welcome-title"
+      onPointerMove={(event) => {
+        if (paused || reduced || event.pointerType === 'touch') return;
+        const rect = event.currentTarget.getBoundingClientRect();
+        pointer.current.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+        pointer.current.y = ((event.clientY - rect.top) / rect.height) * 2 - 1;
+      }}
+      onPointerLeave={() => {
+        pointer.current.x = 0;
+        pointer.current.y = 0;
+      }}
     >
+      <div className="spiral-stars" aria-hidden="true">
+        {stars.map((star, i) => (
+          <span
+            key={i}
+            className={`spiral-star ${i % 9 === 0 ? 'is-spark' : ''}`}
+            style={
+              {
+                left: `${star.x}%`,
+                top: `${star.y}%`,
+                width: star.size,
+                height: star.size,
+              } as CSSProperties
+            }
+          />
+        ))}
+      </div>
       <div className="spiral-scene" ref={scene} aria-hidden="true">
         <svg className="spiral-lines" viewBox="-1000 -670 2000 1340" fill="none">
           <path d={spiral} />
@@ -189,9 +234,9 @@ export function SpiralHero() {
               const y = (event.clientY - rect.top) / rect.height - 0.5;
               event.currentTarget.style.setProperty('--tilt-x', `${-y * 22}deg`);
               event.currentTarget.style.setProperty('--tilt-y', `${x * 26}deg`);
-              event.currentTarget.style.setProperty('--warp', `${x * 13}deg`);
-              event.currentTarget.style.setProperty('--dent-x', `${Math.abs(x) * 9}%`);
-              event.currentTarget.style.setProperty('--dent-y', `${Math.abs(y) * 12}%`);
+              event.currentTarget.style.setProperty('--warp', `${x * 18}deg`);
+              event.currentTarget.style.setProperty('--stretch-x', String(1 + Math.abs(x) * 0.26));
+              event.currentTarget.style.setProperty('--stretch-y', String(1 - Math.abs(y) * 0.2));
               event.currentTarget.style.setProperty('--shine-x', `${(x + 0.5) * 100}%`);
               event.currentTarget.style.setProperty('--shine-y', `${(y + 0.5) * 100}%`);
             }}
@@ -200,23 +245,25 @@ export function SpiralHero() {
                 '--tilt-x',
                 '--tilt-y',
                 '--warp',
-                '--dent-x',
-                '--dent-y',
+                '--stretch-x',
+                '--stretch-y',
                 '--shine-x',
                 '--shine-y',
               ].forEach((key) => event.currentTarget.style.removeProperty(key));
             }}
           >
             <div className="spiral-art-surface">
-              <img
-                src={video.thumbnail}
-                alt=""
-                width="320"
-                height="180"
-                decoding="async"
-                fetchPriority={i < 4 ? 'high' : 'low'}
-              />
-              <SpiralVideo id={video.id} active={activeVideos.includes(i)} />
+              <div className="spiral-media">
+                <img
+                  src={video.thumbnail}
+                  alt=""
+                  width="320"
+                  height="180"
+                  decoding="async"
+                  fetchPriority={i < 4 ? 'high' : 'low'}
+                />
+                <SpiralVideo id={video.id} active={activeVideos.includes(i)} />
+              </div>
             </div>
           </div>
         ))}
