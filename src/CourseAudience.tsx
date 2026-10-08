@@ -5,33 +5,33 @@ import './course-audience.css';
 const audiences = [
   {
     number: '01',
-    label: 'BẮT ĐẦU TỪ NỀN TẢNG',
+    label: 'HỌC ĐỂ LÀM ĐƯỢC',
     icon: GraduationCap,
-    title: 'Sinh viên & người mới',
+    title: 'Sinh viên ngành sáng tạo',
     description:
-      'Bạn muốn bước vào thế giới 3D, VFX và CGI nhưng chưa biết bắt đầu từ đâu? Xây dựng nền tảng theo từng bước, học qua thực hành và từng bước định hình hướng đi của mình.',
-    focus: ['Lộ trình rõ ràng', 'Nền tảng vững chắc'],
-    destination: 'Từ chưa biết đến sản phẩm đầu tiên',
+      'Dành cho sinh viên muốn củng cố kiến thức, thực hành đồ án và xây dựng portfolio. Khám phá dựng hình với Maya, điêu khắc số với ZBrush và thiết kế chuyển động với Cinema 4D để từng bước biến ý tưởng thành sản phẩm của riêng mình.',
+    focus: ['Thực hành đồ án', 'Xây dựng portfolio'],
+    destination: 'Từ kiến thức trên lớp đến sản phẩm thực tế',
   },
   {
     number: '02',
-    label: 'NÂNG TẦM TÁC PHẨM',
+    label: 'BẮT ĐẦU TỪ CON SỐ 0',
     icon: Clapperboard,
-    title: 'Artist muốn tiến xa hơn',
+    title: 'Người mới bắt đầu',
     description:
-      'Bạn đã có kiến thức 3D và muốn nâng cao chất lượng tác phẩm? Trau dồi tư duy hình ảnh, ánh sáng và bố cục để tạo nên những thước phim mang phong cách cinematic.',
-    focus: ['Tư duy điện ảnh', 'Hoàn thiện kỹ năng'],
-    destination: 'Từ kỹ thuật đến dấu ấn sáng tạo',
+      'Bạn yêu thích 3D, thiết kế hoặc dựng phim nhưng chưa biết bắt đầu từ đâu? Làm quen từng bước với công cụ và tư duy sáng tạo; học dựng, biên tập video bằng Premiere Pro, CapCut, DaVinci Resolve và khám phá nền tảng 3D theo mục tiêu của bạn.',
+    focus: ['Nền tảng dễ tiếp cận', 'Học từng bước'],
+    destination: 'Từ lần đầu mở phần mềm đến tự tay sáng tạo',
   },
   {
     number: '03',
-    label: 'KỂ CHUYỆN BẰNG HÌNH ẢNH',
+    label: 'NÂNG KỸ NĂNG · MỞ KHẢ NĂNG',
     icon: Layers3,
-    title: 'Người học Blender',
+    title: 'Người muốn nâng cao kỹ năng',
     description:
-      'Bạn đang dùng Blender ở trình độ sơ cấp hoặc trung cấp và muốn video của mình cuốn hút hơn? Kết nối kỹ năng 3D với cách kể chuyện, nhịp dựng và cảm xúc trong từng khung hình.',
-    focus: ['Kỹ năng kể chuyện', 'Dự án thực hành'],
-    destination: 'Từ khung hình đến câu chuyện',
+      'Dành cho người đã có nền tảng và muốn nâng chất lượng tác phẩm, hoàn thiện quy trình làm việc. Đào sâu kỹ năng 3D, motion và hậu kỳ, đồng thời khám phá các ứng dụng AI mới nhất để hỗ trợ lên ý tưởng, thử nghiệm và sản xuất nội dung.',
+    focus: ['Hoàn thiện quy trình', 'Ứng dụng AI'],
+    destination: 'Từ kỹ năng sẵn có đến khả năng sáng tạo mới',
   },
 ];
 
@@ -51,9 +51,10 @@ export function CourseAudience() {
             </h2>
           </div>
           <p>
-            Mỗi người có một điểm xuất phát.
+            Từ nền tảng đến nâng cao, từ 3D đến dựng phim.
             <br />
-            Chọn kiến thức phù hợp để tiến thêm một bước trên hành trình sáng tạo của bạn.
+            Học Maya, ZBrush, Cinema 4D, Premiere Pro, CapCut, DaVinci Resolve và khám phá các ứng
+            dụng AI mới nhất theo mục tiêu của bạn.
           </p>
         </header>
         <div className="audience-grid">
