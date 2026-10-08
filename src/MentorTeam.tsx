@@ -24,7 +24,7 @@ const mentors = [
     demo: true,
   },
   {
-    name: 'NamChu',
+    name: 'Nam Chu',
     role: '3D Artist',
     initials: 'NC',
     image: '',
