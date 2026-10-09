@@ -16,7 +16,7 @@ const software = [
   ['EmberGen', 'embergen.svg', false],
   ['Gaea', 'gaea.png', false],
   ['Cascadeur', 'cascadeur.png', false],
-  ['Plasticity', 'plasticity.png', false],
+  ['Plasticity', 'plasticity.webp', false],
 ] as const;
 
 export function SoftwareStrip() {
@@ -66,7 +66,13 @@ export function SoftwareStrip() {
                     alt=""
                     width="42"
                     height="42"
-                    className={invert ? 'software-symbol' : ''}
+                    className={
+                      invert
+                        ? 'software-symbol'
+                        : name === 'Gaea' || name === 'Plasticity'
+                          ? 'software-color-hover'
+                          : ''
+                    }
                     loading="eager"
                     decoding="async"
                   />

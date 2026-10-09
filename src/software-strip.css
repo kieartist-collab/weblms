@@ -154,4 +154,18 @@
 .software-brand-wordmark span {
   display: none;
 }
-
+.software-brand img.software-color-hover {
+  filter: saturate(0);
+  transition:
+    filter 300ms ease,
+    opacity 300ms ease;
+}
+.software-brand:hover img.software-color-hover {
+  filter: saturate(1);
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .software-brand img.software-color-hover {
+    transition: none;
+  }
+}
