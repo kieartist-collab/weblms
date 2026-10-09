@@ -9,6 +9,6 @@ Maya, Cinema 4D, Blender, Premiere Pro, After Effects, DaVinci Resolve: Simple I
 - capcut.ico: https://sf16-web-tos-buz.capcutstatic.com/obj/capcut-web-buz-sg/common/images/lv_web-2.ico
 - speedtree.png: https://docs9.speedtree.com/modeler/lib/exe/fetch.php?media=wiki:logo.png
 - embergen.svg: https://jangafx.com/media/images/logos/embergen.svg
-- gaea.ico: https://docs.gaea.app/assets/favicon.ico
+- gaea.png: https://docs.gaea.app/assets/favicon.ico (PNG conversion of the official Gaea icon)
 - cascadeur.png: https://cascadeur.com/favicon/favicon_144.png
 - plasticity.png: https://www.plasticity.xyz/apple-touch-icon.png

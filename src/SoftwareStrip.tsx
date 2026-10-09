@@ -14,7 +14,7 @@ const software = [
   ['DaVinci Resolve', 'davinciresolve.svg', true],
   ['SpeedTree', 'speedtree.png', false],
   ['EmberGen', 'embergen.svg', false],
-  ['Gaea', 'gaea.ico', false],
+  ['Gaea', 'gaea.png', false],
   ['Cascadeur', 'cascadeur.png', false],
   ['Plasticity', 'plasticity.png', false],
 ] as const;
@@ -56,14 +56,18 @@ export function SoftwareStrip() {
           {[0, 1].map((copy) => (
             <ul className="software-group" key={copy} aria-hidden={copy === 1 ? true : undefined}>
               {software.map(([name, file, invert]) => (
-                <li className="software-brand" key={name}>
+                <li
+                  className={`software-brand ${name === 'SpeedTree' ? 'software-brand-wordmark' : ''}`}
+                  key={name}
+                  aria-label={name}
+                >
                   <img
                     src={`/images/software/${file}`}
                     alt=""
                     width="42"
                     height="42"
                     className={invert ? 'software-symbol' : ''}
-                    loading="lazy"
+                    loading="eager"
                     decoding="async"
                   />
                   <span>{name}</span>
