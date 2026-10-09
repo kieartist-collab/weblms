@@ -4,6 +4,16 @@ import './mentor-team.css';
 
 const mentors = [
   {
+    name: 'Thai Nam',
+    role: 'Director',
+    initials: 'TN',
+    image: '/images/thai-nam.png',
+    specialties: ['Đạo diễn', 'Kể chuyện bằng hình ảnh'],
+    quote:
+      'Mỗi khung hình đều cần có lý do để xuất hiện. Tôi muốn giúp bạn kể câu chuyện bằng bố cục, nhịp điệu và cảm xúc, để ý tưởng trở thành những thước phim chạm đến người xem.',
+    demo: true,
+  },
+  {
     name: 'Kistein Do',
     role: 'CG Generalist',
     initials: 'KD',
@@ -12,16 +22,6 @@ const mentors = [
     quote:
       'Tôi muốn mỗi bài học giúp bạn hiểu cách làm, không chỉ nhớ thao tác. Hãy bắt đầu từ một ý tưởng nhỏ, thực hành đến cùng và biến nó thành sản phẩm mang dấu ấn của bạn.',
     demo: false,
-  },
-  {
-    name: 'Thai Nam',
-    role: 'Director',
-    initials: 'TN',
-    image: '',
-    specialties: ['Đạo diễn', 'Kể chuyện bằng hình ảnh'],
-    quote:
-      'Mỗi khung hình đều cần có lý do để xuất hiện. Tôi muốn giúp bạn kể câu chuyện bằng bố cục, nhịp điệu và cảm xúc, để ý tưởng trở thành những thước phim chạm đến người xem.',
-    demo: true,
   },
   {
     name: 'Nam Chu',
@@ -73,7 +73,7 @@ export function MentorTeam({ embedded = false }: { embedded?: boolean }) {
               {mentor.image ? (
                 <img
                   src={mentor.image}
-                  alt="Kistein Do — CG Generalist"
+                  alt={`${mentor.name} — ${mentor.role}`}
                   width="1300"
                   height="1210"
                   loading="lazy"
