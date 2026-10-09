@@ -2,7 +2,13 @@
 
 Brand marks remain the property of their respective owners. Used to identify course software.
 
-Maya, Cinema 4D, Blender, Premiere Pro, After Effects, DaVinci Resolve: Simple Icons v11 (CC0), https://github.com/simple-icons/simple-icons/tree/11.0.0/icons
+Full-color logos (displayed desaturated until hover):
+- autodeskmaya.svg: https://raw.githubusercontent.com/devicons/devicon/master/icons/maya/maya-original.svg
+- cinema4d.svg: https://mxwebnuxtprod01.blob.core.windows.net/media/images/Products/Cinema-4D/C4D_icon.svg
+- blender.svg: https://raw.githubusercontent.com/pheralb/svgl/main/static/library/blender.svg
+- adobepremierepro.svg: https://raw.githubusercontent.com/pheralb/svgl/main/static/library/premiere.svg
+- adobeaftereffects.svg: https://raw.githubusercontent.com/pheralb/svgl/main/static/library/after-effects.svg
+- davinciresolve.svg: https://commons.wikimedia.org/wiki/File:DaVinci_Resolve_17_logo.svg
 
 - painter.svg: https://raw.githubusercontent.com/pheralb/svgl/main/static/library/substance-3d-painter.svg
 - zbrush.svg: https://mxwebnuxtprod01.blob.core.windows.net/media/images/Products/ZBrush/ZBrush_icon.svg

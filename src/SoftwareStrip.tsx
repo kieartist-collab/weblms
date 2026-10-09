@@ -3,20 +3,20 @@ import { Pause, Play, Layers3 } from 'lucide-react';
 import './software-strip.css';
 
 const software = [
-  ['Autodesk Maya', 'autodeskmaya.svg', true],
-  ['Substance 3D Painter', 'painter.svg', false],
-  ['Cinema 4D', 'cinema4d.svg', true],
-  ['Blender', 'blender.svg', true],
-  ['ZBrush', 'zbrush.svg', false],
-  ['CapCut', 'capcut.ico', false],
-  ['Premiere Pro', 'adobepremierepro.svg', true],
-  ['After Effects', 'adobeaftereffects.svg', true],
-  ['DaVinci Resolve', 'davinciresolve.svg', true],
-  ['SpeedTree', 'speedtree.png', false],
-  ['EmberGen', 'embergen.svg', false],
-  ['Gaea', 'gaea.png', false],
-  ['Cascadeur', 'cascadeur.png', false],
-  ['Plasticity', 'plasticity.webp', false],
+  ['Autodesk Maya', 'autodeskmaya.svg'],
+  ['Substance 3D Painter', 'painter.svg'],
+  ['Cinema 4D', 'cinema4d.svg'],
+  ['Blender', 'blender.svg'],
+  ['ZBrush', 'zbrush.svg'],
+  ['CapCut', 'capcut.ico'],
+  ['Premiere Pro', 'adobepremierepro.svg'],
+  ['After Effects', 'adobeaftereffects.svg'],
+  ['DaVinci Resolve', 'davinciresolve.svg'],
+  ['SpeedTree', 'speedtree.png'],
+  ['EmberGen', 'embergen.svg'],
+  ['Gaea', 'gaea.png'],
+  ['Cascadeur', 'cascadeur.png'],
+  ['Plasticity', 'plasticity.webp'],
 ] as const;
 
 export function SoftwareStrip() {
@@ -55,7 +55,7 @@ export function SoftwareStrip() {
         <div className="software-belt">
           {[0, 1].map((copy) => (
             <ul className="software-group" key={copy} aria-hidden={copy === 1 ? true : undefined}>
-              {software.map(([name, file, invert]) => (
+              {software.map(([name, file]) => (
                 <li
                   className={`software-brand ${name === 'SpeedTree' ? 'software-brand-wordmark' : ''}`}
                   key={name}
@@ -66,13 +66,6 @@ export function SoftwareStrip() {
                     alt=""
                     width="42"
                     height="42"
-                    className={
-                      invert
-                        ? 'software-symbol'
-                        : name === 'Gaea' || name === 'Plasticity'
-                          ? 'software-color-hover'
-                          : ''
-                    }
                     loading="eager"
                     decoding="async"
                   />
