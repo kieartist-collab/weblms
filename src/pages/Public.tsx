@@ -1,3 +1,4 @@
+import { SoftwareStrip } from '../SoftwareStrip';
 import { MentorTeam } from '../MentorTeam';
 import { RichText } from '../RichText';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
@@ -104,6 +105,7 @@ export function Home({ catalog = false }: { catalog?: boolean }) {
         )}
       </section>
       {!catalog && <CourseAudience />}
+      {!catalog && <SoftwareStrip />}
       {!catalog && <HomeSections />}
       {!catalog && (
         <section className="closing-cta">

@@ -1,0 +1,146 @@
+.software-strip {
+  padding: 39px 0 40px;
+  background: #111418;
+  border-bottom: 1px solid #ffffff0d;
+  overflow: hidden;
+}
+.software-heading-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.software-heading-row .eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #85bac4;
+  font-size: 9px;
+  letter-spacing: 1.7px;
+}
+.software-heading-row h2 {
+  font-family: 'Be Vietnam Pro', sans-serif;
+  text-transform: none;
+  font-size: clamp(17px, 2vw, 23px);
+  line-height: 1.5;
+  margin: 12px 0 0;
+  color: #dae0e6;
+  font-weight: 500;
+}
+.software-toggle {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid #ffffff20;
+  background: transparent;
+  color: #aebec8;
+  cursor: pointer;
+}
+.software-toggle:hover {
+  border-color: #8acbd5;
+  color: #defaff;
+}
+.software-toggle:focus-visible {
+  outline: 2px solid #8acbd5;
+  outline-offset: 4px;
+}
+.software-window {
+  margin-top: 30px;
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+}
+.software-belt {
+  display: flex;
+  width: max-content;
+  animation: software-loop 80s linear infinite;
+  will-change: transform;
+}
+.software-group {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.software-brand {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+  width: 245px;
+  height: 78px;
+  padding: 0 24px;
+  border-right: 1px solid #ffffff0b;
+  color: #aebbc5;
+}
+.software-brand img {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  object-fit: contain;
+  filter: grayscale(1);
+  opacity: 0.85;
+}
+.software-brand img.software-symbol {
+  filter: invert(1);
+  opacity: 0.7;
+}
+.software-brand span {
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.software-strip.is-paused .software-belt {
+  animation-play-state: paused;
+}
+@keyframes software-loop {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@media (max-width: 600px) {
+  .software-strip {
+    padding: 30px 0;
+  }
+  .software-brand {
+    width: 215px;
+    gap: 11px;
+  }
+  .software-brand img {
+    width: 34px;
+    height: 34px;
+  }
+  .software-brand span {
+    font-size: 12px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .software-belt {
+    animation: none;
+    width: 100%;
+    will-change: auto;
+  }
+  .software-group {
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+  }
+  .software-group[aria-hidden='true'] {
+    display: none;
+  }
+  .software-window {
+    mask-image: none;
+  }
+  .software-toggle {
+    display: none;
+  }
+  .software-brand {
+    width: 50%;
+    min-width: 160px;
+  }
+}
