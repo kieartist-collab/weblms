@@ -144,3 +144,5 @@
     min-width: 160px;
   }
 }
+
+.software-brand img[src*='speedtree'] { width: 100px; }

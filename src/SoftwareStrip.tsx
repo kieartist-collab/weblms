@@ -12,7 +12,7 @@ const software = [
   ['Premiere Pro', 'adobepremierepro.svg', true],
   ['After Effects', 'adobeaftereffects.svg', true],
   ['DaVinci Resolve', 'davinciresolve.svg', true],
-  ['SpeedTree', 'speedtree.ico', false],
+  ['SpeedTree', 'speedtree.png', false],
   ['EmberGen', 'embergen.svg', false],
   ['Gaea', 'gaea.ico', false],
   ['Cascadeur', 'cascadeur.png', false],
