@@ -1,1 +1,11 @@
-/* /index.html 200
+/courses /index.html 200
+/courses/* /index.html 200
+/login /index.html 200
+/auth/callback /index.html 200
+/pages/* /index.html 200
+/setup /index.html 200
+/my-learning /index.html 200
+/orders/* /index.html 200
+/learn/* /index.html 200
+/admin /index.html 200
+/admin/* /index.html 200
