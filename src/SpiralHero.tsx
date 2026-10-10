@@ -34,7 +34,7 @@ export function SpiralHero() {
   const selectedVideos = useRef<number[]>([]);
   if (!sizeTracks.current.length) {
     sizeTracks.current = artworks.map(() => {
-      const size = 0.85 + Math.random() * 0.25;
+      const size = 0.82 + Math.random() * 0.48;
       return { from: size, to: size, start: 0, duration: 5, next: 3 + Math.random() * 12 };
     });
   }
@@ -76,24 +76,46 @@ export function SpiralHero() {
       glowPaths.forEach((path, i) => {
         path.style.strokeDashoffset = String(-(animationTime.current * 22 + i * 330) % 1000);
       });
-      cards.forEach((card, i) => {
+      const placements = cards.map((_, i) => {
         const t = (i / cards.length + progress.current) % 1;
         const p = position(t);
         const track = sizeTracks.current[i];
         const now = animationTime.current;
         if (now >= track.next) {
           track.from = track.to;
-          track.to = 0.85 + Math.random() * 0.25;
+          track.to = 0.82 + Math.random() * 0.48;
           track.start = now;
           track.duration = 4 + Math.random() * 3;
           track.next = now + track.duration + 5 + Math.random() * 8;
         }
         const blend = Math.min(1, Math.max(0, (now - track.start) / track.duration));
         const eased = blend * blend * (3 - 2 * blend);
-        const scale = Math.min(0.85, (0.32 + t * 0.5) * (track.from + (track.to - track.from) * eased));
+        const scale = Math.min(1.05, (0.4 + t * 0.58) * (track.from + (track.to - track.from) * eased));
         // Fully invisible around the wrap; smooth fades also have zero endpoint velocity.
         const fade = Math.max(0, Math.min(1, (t - 0.035) / 0.09, (0.965 - t) / 0.09));
         const opacity = fade * fade * (3 - 2 * fade);
+        return { p, scale, opacity };
+      });
+      // Reserve room for the tilted surface and cursor displacement as well as a gutter.
+      // Work in scene coordinates so the same spacing survives responsive scene scaling.
+      for (let a = 0; a < placements.length; a++) {
+        for (let b = a + 1; b < placements.length; b++) {
+          const first = placements[a], second = placements[b];
+          if (first.opacity < .05 || second.opacity < .05) continue;
+          const width = 155 * (first.scale + second.scale);
+          const height = 100 * (first.scale + second.scale);
+          const fit = Math.max(
+            (Math.abs(first.p.x - second.p.x) - 20) / width,
+            (Math.abs(first.p.y - second.p.y) - 20) / height,
+          );
+          if (fit < 1) {
+            first.scale *= Math.max(.1, fit);
+            second.scale *= Math.max(.1, fit);
+          }
+        }
+      }
+      cards.forEach((card, i) => {
+        const { p, scale, opacity } = placements[i];
         card.style.transform = `translate3d(${p.x}px,${p.y}px,0) translate(-50%,-50%) scale(${scale})`;
         card.style.opacity = String(opacity * 0.9);
         // Hit-test the stable outer card; deform the media surface inside it.
