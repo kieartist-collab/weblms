@@ -472,3 +472,25 @@
     opacity: 0.4;
   }
 }
+/* Denser gallery with a compact center and elastic media, following the reference. */
+.spiral-hero { min-height: 560px; max-height: none; }
+.spiral-copy { max-width: 620px; padding: 36px 22px; }
+.spiral-hero h1 { font-size: clamp(42px, 4.2vw, 68px); }
+.spiral-copy > p { font-size: 14px; }
+.spiral-shade { background: radial-gradient(ellipse 27% 32% at 50% 49%, #0e1114 15%, #0e1114ed 48%, #0e111455 78%, transparent 100%); }
+.spiral-art-surface,
+.spiral-hero:not(.is-still) .spiral-art:hover .spiral-art-surface {
+  border-radius: 12px;
+  clip-path: inset(0 round 12px);
+  transform: translate3d(var(--bend-x, 0px), var(--bend-y, 0px), 0) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  filter: saturate(calc(1 + var(--energy, 0) * .65)) brightness(calc(1 + var(--energy, 0) * .12));
+  transition: border-color .3s, box-shadow .3s;
+}
+.spiral-media { transition: none; }
+.spiral-hero.is-still .spiral-art-surface { transform: none; filter: none; }
+@media (max-width: 600px) {
+  .spiral-hero { min-height: 560px; }
+  .spiral-hero h1 { font-size: clamp(36px, 9vw, 50px); }
+  .spiral-copy { max-width: 92%; }
+  .spiral-shade { background: radial-gradient(ellipse 60% 35% at 50% 48%, #0e1114 20%, #0e1114dd 65%, transparent 100%); }
+}

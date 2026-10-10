@@ -5,7 +5,7 @@ import videos from './student-videos.json';
 import { SpiralVideo } from './SpiralVideo';
 import './spiral-hero.css';
 
-const artworks = videos.slice(0, 20);
+const artworks = videos.slice(0, 40);
 const stars = Array.from({ length: 64 }, (_, i) => ({
   x: (i * 61.803 + 9) % 100,
   y: (i * 37.719 + 13) % 100,
@@ -24,7 +24,7 @@ const spiral = Array.from({ length: 361 }, (_, i) => {
 }).join(' ');
 
 export function SpiralHero() {
-  const pointer = useRef({ x: 0, y: 0, currentX: 0, currentY: 0 });
+  const pointer = useRef({ x: 0, y: 0, currentX: 0, currentY: 0, screenX: -10000, screenY: -10000 });
   const scene = useRef<HTMLDivElement>(null);
   const progress = useRef(0);
   const animationTime = useRef(0);
@@ -59,6 +59,7 @@ export function SpiralHero() {
       frame = 0,
       previous = 0;
     const starNodes = Array.from(node.parentElement!.querySelectorAll<HTMLElement>('.spiral-star'));
+    const motion = cards.map(() => ({ x: 0, y: 0, tilt: 0 }));
     const glowPaths = Array.from(node.querySelectorAll<SVGPathElement>('.spiral-glow-trail'));
     const paint = () => {
       const cursor = pointer.current;
@@ -94,7 +95,25 @@ export function SpiralHero() {
         const fade = Math.max(0, Math.min(1, (t - 0.035) / 0.09, (0.965 - t) / 0.09));
         const opacity = fade * fade * (3 - 2 * fade);
         card.style.transform = `translate3d(${p.x}px,${p.y}px,0) translate(-50%,-50%) scale(${scale})`;
-        card.style.opacity = String(opacity * 0.86);
+        card.style.opacity = String(opacity * 0.9);
+        // Hit-test the stable outer card; deform the media surface inside it.
+        const rect = card.getBoundingClientRect();
+        const dx = cursor.screenX - (rect.left + rect.width / 2);
+        const dy = cursor.screenY - (rect.top + rect.height / 2);
+        const reach = Math.max(100, rect.width * .85);
+        const influence = reduced || paused ? 0 : Math.max(0, 1 - Math.hypot(dx, dy) / reach);
+        const state = motion[i];
+        state.x += (dx * influence * .22 - state.x) * .09;
+        state.y += (dy * influence * .18 - state.y) * .09;
+        state.tilt += (influence - state.tilt) * .08;
+        card.style.setProperty('--bend-x', `${state.x}px`);
+        card.style.setProperty('--bend-y', `${state.y}px`);
+        card.style.setProperty('--tilt-x', `${-state.y * .8}deg`);
+        card.style.setProperty('--tilt-y', `${state.x * .8}deg`);
+        card.style.setProperty('--warp', `${state.x * .32}deg`);
+        card.style.setProperty('--stretch-x', String(1 + state.tilt * .1));
+        card.style.setProperty('--stretch-y', String(1 - state.tilt * .08));
+        card.style.setProperty('--energy', String(state.tilt));
       });
     };
     const selectVideos = () => {
@@ -132,7 +151,7 @@ export function SpiralHero() {
             Number(selectedVideos.current.includes(b.index)) -
               Number(selectedVideos.current.includes(a.index)) || b.rect.width - a.rect.width,
         )
-        .slice(0, innerWidth < 600 ? 3 : 6)
+        .slice(0, innerWidth < 600 ? 3 : 8)
         .map((item) => item.index)
         .sort((a, b) => a - b);
       selectedVideos.current = candidates;
@@ -178,10 +197,14 @@ export function SpiralHero() {
       onPointerMove={(event) => {
         if (paused || reduced || event.pointerType === 'touch') return;
         const rect = event.currentTarget.getBoundingClientRect();
+        pointer.current.screenX = event.clientX;
+        pointer.current.screenY = event.clientY;
         pointer.current.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
         pointer.current.y = ((event.clientY - rect.top) / rect.height) * 2 - 1;
       }}
       onPointerLeave={() => {
+        pointer.current.screenX = -10000;
+        pointer.current.screenY = -10000;
         pointer.current.x = 0;
         pointer.current.y = 0;
       }}
@@ -227,30 +250,6 @@ export function SpiralHero() {
           <div
             className="spiral-art"
             key={video.id}
-            onPointerMove={(event) => {
-              if (reduced || paused || event.pointerType === 'touch') return;
-              const rect = event.currentTarget.getBoundingClientRect();
-              const x = (event.clientX - rect.left) / rect.width - 0.5;
-              const y = (event.clientY - rect.top) / rect.height - 0.5;
-              event.currentTarget.style.setProperty('--tilt-x', `${-y * 22}deg`);
-              event.currentTarget.style.setProperty('--tilt-y', `${x * 26}deg`);
-              event.currentTarget.style.setProperty('--warp', `${x * 18}deg`);
-              event.currentTarget.style.setProperty('--stretch-x', String(1 + Math.abs(x) * 0.26));
-              event.currentTarget.style.setProperty('--stretch-y', String(1 - Math.abs(y) * 0.2));
-              event.currentTarget.style.setProperty('--shine-x', `${(x + 0.5) * 100}%`);
-              event.currentTarget.style.setProperty('--shine-y', `${(y + 0.5) * 100}%`);
-            }}
-            onPointerLeave={(event) => {
-              [
-                '--tilt-x',
-                '--tilt-y',
-                '--warp',
-                '--stretch-x',
-                '--stretch-y',
-                '--shine-x',
-                '--shine-y',
-              ].forEach((key) => event.currentTarget.style.removeProperty(key));
-            }}
           >
             <div className="spiral-art-surface">
               <div className="spiral-media">
