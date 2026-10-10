@@ -5,7 +5,7 @@ import videos from './student-videos.json';
 import { SpiralVideo } from './SpiralVideo';
 import './spiral-hero.css';
 
-const artworks = videos.slice(0, 40);
+const artworks = videos.slice(0, 15);
 const stars = Array.from({ length: 64 }, (_, i) => ({
   x: (i * 61.803 + 9) % 100,
   y: (i * 37.719 + 13) % 100,
@@ -108,11 +108,11 @@ export function SpiralHero() {
         state.tilt += (influence - state.tilt) * .08;
         card.style.setProperty('--bend-x', `${state.x}px`);
         card.style.setProperty('--bend-y', `${state.y}px`);
-        card.style.setProperty('--tilt-x', `${-state.y * .8}deg`);
-        card.style.setProperty('--tilt-y', `${state.x * .8}deg`);
-        card.style.setProperty('--warp', `${state.x * .32}deg`);
-        card.style.setProperty('--stretch-x', String(1 + state.tilt * .1));
-        card.style.setProperty('--stretch-y', String(1 - state.tilt * .08));
+        const drift = reduced || paused ? 0 : animationTime.current * .35 + i * 1.7;
+        const clampTilt = (value: number) => Math.max(-9, Math.min(9, value));
+        card.style.setProperty('--tilt-x', `${clampTilt(-state.y * .3 + Math.sin(drift) * 3)}deg`);
+        card.style.setProperty('--tilt-y', `${clampTilt(state.x * .3 + Math.cos(drift * .8) * 4)}deg`);
+        card.style.setProperty('--tilt-z', `${Math.sin(drift * .7) * 2}deg`);
         card.style.setProperty('--energy', String(state.tilt));
       });
     };

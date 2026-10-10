@@ -482,7 +482,7 @@
 .spiral-hero:not(.is-still) .spiral-art:hover .spiral-art-surface {
   border-radius: 12px;
   clip-path: inset(0 round 12px);
-  transform: translate3d(var(--bend-x, 0px), var(--bend-y, 0px), 0) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transform: translate3d(var(--bend-x, 0px), var(--bend-y, 0px), 0) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) rotateZ(var(--tilt-z, 0deg));
   filter: saturate(calc(1 + var(--energy, 0) * .65)) brightness(calc(1 + var(--energy, 0) * .12));
   transition: border-color .3s, box-shadow .3s;
 }
@@ -494,3 +494,12 @@
   .spiral-copy { max-width: 92%; }
   .spiral-shade { background: radial-gradient(ellipse 60% 35% at 50% 48%, #0e1114 20%, #0e1114dd 65%, transparent 100%); }
 }
+
+/* Borderless video planes with a gentle three-axis tilt. */
+.spiral-art-surface,
+.spiral-hero:not(.is-still) .spiral-art:hover .spiral-art-surface {
+  border: 0;
+  box-shadow: none;
+}
+.spiral-art-surface::after { display: none; }
+.spiral-media { transform: none; }
