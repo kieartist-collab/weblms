@@ -10,6 +10,7 @@ export type Course = {
   price: number;
   thumbnail_url: string;
   published: boolean;
+  under_construction: boolean;
   created_at: string;
 };
 export type Module = { id: string; course_id: string; title: string; position: number };

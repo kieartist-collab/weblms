@@ -13,6 +13,7 @@ export const demoCourses: Course[] = [
     price: 599000,
     thumbnail_url: '/images/architecture.jpg',
     published: true,
+    under_construction: false,
     created_at: '2026-10-04',
   },
   {
@@ -28,6 +29,7 @@ export const demoCourses: Course[] = [
     price: 399000,
     thumbnail_url: '',
     published: true,
+    under_construction: false,
     created_at: '2026-10-04',
   },
   {
@@ -43,6 +45,7 @@ export const demoCourses: Course[] = [
     price: 499000,
     thumbnail_url: '/images/film.jpg',
     published: true,
+    under_construction: false,
     created_at: '2026-10-04',
   },
 ];

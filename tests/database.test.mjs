@@ -556,3 +556,20 @@ test('Excel import is atomic, admin-only and requires thumbnail before publicati
   await assert.rejects(as(admin,'select public.admin_import_course(null,$1,$2)',['rollback-import',invalid]));
   assert.equal((await as(admin,"select * from public.courses where slug='rollback-import'")).rows.length,0);
 });
+
+test('construction courses stay public but block checkout until released', async () => {
+  await db.exec('reset role');
+  await db.exec(await readFile(new URL('../supabase/migrations/009_course_construction.sql', import.meta.url), 'utf8'));
+  const id=(await as(admin,"insert into public.courses(slug,title,published,under_construction,thumbnail_url) values('building-test','Building',true,true,'https://example.test/cover.png') returning id")).rows[0].id;
+  assert.equal((await as(null,'select id from public.courses where id=$1',[id])).rows.length,1);
+  assert.equal((await as(alice,'update public.courses set under_construction=false where id=$1 returning id',[id])).rows.length,0);
+  await assert.rejects(as(alice,'select public.create_order($1)',[id]),/đang được xây dựng/);
+  assert.equal((await as(admin,'select id from public.orders where course_id=$1',[id])).rows.length,0);
+  await as(admin,'update public.courses set under_construction=false where id=$1',[id]);
+  await as(alice,'select public.create_order($1)',[id]);
+  await as(admin,'update public.courses set under_construction=true where id=$1',[id]);
+  await assert.rejects(as(alice,'select public.create_order($1)',[id]),/đang được xây dựng/);
+  assert.equal((await as(admin,'select id from public.orders where course_id=$1',[id])).rows.length,1);
+  await as(admin,'update public.courses set published=false where id=$1',[id]);
+  assert.equal((await as(null,'select id from public.courses where id=$1',[id])).rows.length,0);
+});

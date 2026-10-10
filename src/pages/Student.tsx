@@ -188,7 +188,10 @@ export function OrderDetail() {
     );
   if (!data) return <Empty title="Không tìm thấy đơn hàng" />;
   const { order: o, course: c, settings: s, enrollment: e } = data;
-  const qr = ['pending', 'reported'].includes(o.status) ? safeUrl(s.bank_qr_url) : '';
+  const qr =
+    !c?.under_construction && ['pending', 'reported'].includes(o.status)
+      ? safeUrl(s.bank_qr_url)
+      : '';
   return (
     <div className="container page checkout-page">
       <Link className="text-link" to="/my-learning">
@@ -205,7 +208,13 @@ export function OrderDetail() {
           <p>
             Email nhận quyền: <strong>{user?.email}</strong>
           </p>
-          {['pending', 'reported'].includes(o.status) && (
+          {c?.under_construction && ['pending', 'reported'].includes(o.status) && (
+            <Notice>
+              Khóa học đang được xây dựng, hiện chưa nhận thanh toán. Nếu bạn đã chuyển khoản trước
+              đó, vui lòng liên hệ giảng viên để được đối soát.
+            </Notice>
+          )}
+          {!c?.under_construction && ['pending', 'reported'].includes(o.status) && (
             <>
               <div className="bank-details">
                 <div>

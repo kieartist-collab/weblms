@@ -187,6 +187,11 @@ export function CourseDetail() {
             {course.category} · {course.level}
           </span>
           <h1 className="page-title">{course.title}</h1>
+          {course.under_construction && (
+            <p>
+              <span className="badge course-building">Đang được xây dựng</span>
+            </p>
+          )}
           <RichText className="lead" value={course.summary} />
           <div className="detail-meta">
             <span>
@@ -242,6 +247,10 @@ export function CourseDetail() {
               <Link className="button full" to={`/learn/${course.id}`}>
                 Vào học <Play size={17} />
               </Link>
+            ) : course.under_construction ? (
+              <button type="button" className="button full course-purchase-disabled" disabled>
+                Đăng ký khóa học
+              </button>
             ) : (
               <Action
                 className="button full"
@@ -261,7 +270,11 @@ export function CourseDetail() {
                 Đăng ký khóa học <ArrowUpRight size={18} />
               </Action>
             )}
-            <p className="purchase-hint">Chuyển khoản · Admin xác nhận và cấp quyền</p>
+            <p className="purchase-hint">
+              {course.under_construction
+                ? 'Đang được xây dựng · Chưa mở đăng ký'
+                : 'Chuyển khoản · Admin xác nhận và cấp quyền'}
+            </p>
             <div className="divider" />
             <CheckItem>Học theo thời gian của bạn</CheckItem>
             <CheckItem>Lưu tiến độ từng bài học</CheckItem>

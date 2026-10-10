@@ -675,3 +675,6 @@ progress::-moz-progress-bar {
 .button.lesson-completed-button { background: #4ade80; color: #092818; border-color: #4ade80; }
 .button.lesson-completed-button:hover { background: #86efac; border-color: #86efac; }
 .lesson-main { align-self: start; margin-top: 0; }
+
+.badge.course-building { background: #514629; color: #f5d998; margin-bottom: 12px; }
+.button.course-purchase-disabled { background: #30343b; color: #9299a3; border-color: #424852; cursor: not-allowed; opacity: .65; }

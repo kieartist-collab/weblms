@@ -221,7 +221,11 @@ function AdminCourses() {
                   <td>{money(c.price)}</td>
                   <td>
                     <span className={`badge ${c.published ? 'fulfilled' : 'pending'}`}>
-                      {c.published ? 'Đã xuất bản' : 'Bản nháp'}
+                      {c.published
+                        ? c.under_construction
+                          ? 'Đang được xây dựng'
+                          : 'Đã xuất bản'
+                        : 'Bản nháp'}
                     </span>
                   </td>
                   <td>
@@ -240,13 +244,35 @@ function AdminCourses() {
                           check(
                             await db()
                               .from('courses')
-                              .update({ published: !c.published })
+                              .update({
+                                published: c.under_construction || !c.published,
+                                under_construction: false,
+                              })
                               .eq('id', c.id),
                           );
                           refresh();
                         }}
                       >
-                        {c.published ? 'Ẩn khóa học' : 'Xuất bản'}
+                        {c.published && !c.under_construction ? 'Ẩn khóa học' : 'Xuất bản'}
+                      </Action>
+                      <Action
+                        className="button secondary small"
+                        disabled={c.published && c.under_construction}
+                        onClick={async () => {
+                          if (!safeUrl(c.thumbnail_url))
+                            throw new Error(
+                              'Vui lòng thêm ảnh đại diện trước khi hiển thị khóa học đang xây dựng.',
+                            );
+                          check(
+                            await db()
+                              .from('courses')
+                              .update({ published: true, under_construction: true })
+                              .eq('id', c.id),
+                          );
+                          refresh();
+                        }}
+                      >
+                        Đang xây dựng
                       </Action>
                       <Action
                         className="button danger small"
@@ -452,7 +478,7 @@ function CourseEditor() {
           onSave={async (f) => {
             const thumb = text(f, 'thumbnail_url');
             if (thumb && !safeUrl(thumb)) throw new Error('Ảnh cần sử dụng URL HTTPS.');
-            if (f.get('published') === 'on' && !safeUrl(thumb))
+            if (f.get('status') !== 'draft' && !safeUrl(thumb))
               throw new Error('Vui lòng thêm ảnh đại diện trước khi xuất bản khóa học.');
             if (!text(f, 'title')) throw new Error('Vui lòng nhập tên khóa học.');
             if (!instructor)
@@ -474,7 +500,8 @@ function CourseEditor() {
               level: text(f, 'level'),
               price,
               thumbnail_url: thumb,
-              published: f.get('published') === 'on',
+              published: f.get('status') !== 'draft',
+              under_construction: f.get('status') === 'building',
             };
             if (isNew) {
               const row = check(await db().from('courses').insert(values).select().single());
@@ -493,10 +520,18 @@ function CourseEditor() {
             />
             <Thumbnail value={c?.thumbnail_url || ''} />
           </div>
-          <label className="checkbox">
-            <input type="checkbox" name="published" defaultChecked={c?.published} />
-            Xuất bản khóa học (bỏ chọn để lưu nháp)
-          </label>
+          <Field name="status" label="Trạng thái khóa học">
+            <select
+              name="status"
+              defaultValue={
+                !c?.published ? 'draft' : c.under_construction ? 'building' : 'published'
+              }
+            >
+              <option value="draft">Bản nháp — không hiển thị công khai</option>
+              <option value="building">Đang xây dựng — hiển thị, chưa cho mua</option>
+              <option value="published">Xuất bản — mở đăng ký</option>
+            </select>
+          </Field>
         </EditorForm>
       </section>
       {!isNew && (

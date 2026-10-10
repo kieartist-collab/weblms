@@ -256,6 +256,9 @@ export function CourseCard({ course }: { course: Course }) {
       <div className="card-body">
         <span className="eyebrow muted">{course.level}</span>
         <h3>{course.title}</h3>
+        {course.under_construction && (
+          <span className="badge course-building">Đang được xây dựng</span>
+        )}
         <div className="card-footer">
           <strong>{money(course.price)}</strong>
           <span>
