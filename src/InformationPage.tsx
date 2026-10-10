@@ -105,13 +105,16 @@ export function InformationPage({ page }: { page: { slug: string; title: string;
               <ArrowRight size={17} />
             </a>
           </div>
-          <figure className="info-visual info-portrait-visual">
-            <div className="info-portrait-stage">
+          <figure className="info-portrait-figure">
+            <div className="info-visual info-portrait-visual">
+              <div className="info-orbit orbit-one" aria-hidden="true" />
+              <div className="info-orbit orbit-two" aria-hidden="true" />
               <img className="info-portrait" src="/images/kistein-do.png" alt="Chân dung Kistein Do" width="1300" height="1210" />
+              <span className="info-dot dot-one" aria-hidden="true" />
+              <span className="info-dot dot-two" aria-hidden="true" />
             </div>
             <figcaption className="info-portrait-caption">
-              <span className="info-portrait-monogram" aria-hidden="true">KD</span>
-              <div><strong>Kistein Do</strong><span>CG Generalist</span></div>
+              <strong>Kistein Do</strong><span>CG Generalist</span>
             </figcaption>
           </figure>
         </header>
