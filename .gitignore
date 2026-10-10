@@ -6,5 +6,6 @@ dist/
 *.tsbuildinfo
 *.log
 .supabase/
+supabase/.temp/
 test-results/
 .pnpm-store/

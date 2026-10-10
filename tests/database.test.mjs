@@ -538,3 +538,21 @@ test('course deletion is admin-only, cascades curriculum and protects purchase h
     assert.equal((await as(admin, 'select id from public.courses where id=$1', [protectedId])).rows.length, 1);
   }
 });
+
+test('Excel import is atomic, admin-only and requires thumbnail before publication', async () => {
+  await db.exec('reset role');
+  await db.exec(await readFile(new URL('../supabase/migrations/008_course_import.sql', import.meta.url), 'utf8'));
+  const payload={course:{title:'Imported',category:'3D',level:'Cơ bản',price:200000,summary:'Intro',description:'Body'},modules:[{code:'C1',title:'Chapter'}],lessons:[{code:'B1',module:'C1',title:'Lesson',duration:10,video:'',body:'Text'}],resources:[{lesson:'B1',title:'File',url:'https://drive.google.com/file/d/ABC/view'}]};
+  await assert.rejects(as(alice,'select public.admin_import_course(null,$1,$2)', ['student-import',payload]),/quản trị/);
+  const id=(await as(admin,'select public.admin_import_course(null,$1,$2) as id',['excel-import',payload])).rows[0].id;
+  assert.equal((await as(admin,'select published from public.courses where id=$1',[id])).rows[0].published,false);
+  assert.equal((await as(admin,'select * from public.modules where course_id=$1',[id])).rows.length,1);
+  await assert.rejects(as(admin,'update public.courses set published=true where id=$1',[id]),/ảnh đại diện/);
+  await as(admin,"update public.courses set thumbnail_url='https://example.test/cover.png',published=true where id=$1",[id]);
+  await assert.rejects(as(admin,"update public.courses set thumbnail_url='' where id=$1",[id]),/ảnh đại diện/);
+  await as(admin,'update public.courses set published=false where id=$1',[id]);
+  await assert.rejects(as(admin,'select public.admin_import_course($1,$2,$3)',[id,'unused',payload]),/đã có chương/);
+  const invalid=structuredClone(payload);invalid.lessons[0].module='missing';
+  await assert.rejects(as(admin,'select public.admin_import_course(null,$1,$2)',['rollback-import',invalid]));
+  assert.equal((await as(admin,"select * from public.courses where slug='rollback-import'")).rows.length,0);
+});

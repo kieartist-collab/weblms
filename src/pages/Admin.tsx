@@ -1,4 +1,5 @@
 import { RichEditor } from '../RichEditor';
+import { CourseImportPanel } from '../CourseImportPanel';
 import { useEffect, useRef, useState } from 'react';
 import type { FormEvent, ReactNode } from 'react';
 import { Link, NavLink, Route, Routes, useNavigate, useParams } from 'react-router-dom';
@@ -232,6 +233,10 @@ function AdminCourses() {
                       <Action
                         className="button secondary small"
                         onClick={async () => {
+                          if (!c.published && !safeUrl(c.thumbnail_url))
+                            throw new Error(
+                              'Vui lòng thêm ảnh đại diện HTTPS trong phần Sửa trước khi xuất bản.',
+                            );
                           check(
                             await db()
                               .from('courses')
@@ -433,6 +438,13 @@ function CourseEditor() {
         <ChevronLeft size={16} />
         Danh sách khóa học
       </Link>
+      <CourseImportPanel
+        courseId={isNew ? undefined : id}
+        onImported={(courseId) => {
+          if (courseId === id) refresh();
+          else navigate(`/admin/courses/${courseId}`);
+        }}
+      />
       <section className="panel content-section">
         <h2>{isNew ? 'Tạo khóa học' : c?.title}</h2>
         <EditorForm
@@ -440,6 +452,8 @@ function CourseEditor() {
           onSave={async (f) => {
             const thumb = text(f, 'thumbnail_url');
             if (thumb && !safeUrl(thumb)) throw new Error('Ảnh cần sử dụng URL HTTPS.');
+            if (f.get('published') === 'on' && !safeUrl(thumb))
+              throw new Error('Vui lòng thêm ảnh đại diện trước khi xuất bản khóa học.');
             if (!text(f, 'title')) throw new Error('Vui lòng nhập tên khóa học.');
             if (!instructor)
               throw new Error('Chưa tải được tên tài khoản. Vui lòng tải lại trang.');
