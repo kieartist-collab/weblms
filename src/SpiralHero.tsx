@@ -34,7 +34,7 @@ export function SpiralHero() {
   const selectedVideos = useRef<number[]>([]);
   if (!sizeTracks.current.length) {
     sizeTracks.current = artworks.map(() => {
-      const size = 0.7 + Math.random() * 0.95;
+      const size = 0.85 + Math.random() * 0.25;
       return { from: size, to: size, start: 0, duration: 5, next: 3 + Math.random() * 12 };
     });
   }
@@ -83,14 +83,14 @@ export function SpiralHero() {
         const now = animationTime.current;
         if (now >= track.next) {
           track.from = track.to;
-          track.to = 0.7 + Math.random() * 0.95;
+          track.to = 0.85 + Math.random() * 0.25;
           track.start = now;
           track.duration = 4 + Math.random() * 3;
           track.next = now + track.duration + 5 + Math.random() * 8;
         }
         const blend = Math.min(1, Math.max(0, (now - track.start) / track.duration));
         const eased = blend * blend * (3 - 2 * blend);
-        const scale = (0.36 + t * 0.78) * (track.from + (track.to - track.from) * eased);
+        const scale = Math.min(0.85, (0.32 + t * 0.5) * (track.from + (track.to - track.from) * eased));
         // Fully invisible around the wrap; smooth fades also have zero endpoint velocity.
         const fade = Math.max(0, Math.min(1, (t - 0.035) / 0.09, (0.965 - t) / 0.09));
         const opacity = fade * fade * (3 - 2 * fade);
@@ -116,6 +116,10 @@ export function SpiralHero() {
         card.style.setProperty('--tilt-y', `${clampTilt(state.x * .3 + Math.cos(drift * .8) * 4 + rock * 2.5)}deg`);
         card.style.setProperty('--tilt-z', `${Math.sin(drift * .7) * 2 + rock * 2}deg`);
         card.style.setProperty('--energy', String(state.tilt));
+        if (inside) {
+          card.style.setProperty('--shine-x', `${Math.max(0, Math.min(100, (dx / rect.width + .5) * 100))}%`);
+          card.style.setProperty('--shine-y', `${Math.max(0, Math.min(100, (dy / rect.height + .5) * 100))}%`);
+        }
       });
     };
     const selectVideos = () => {

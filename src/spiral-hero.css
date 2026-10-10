@@ -503,3 +503,15 @@
 }
 .spiral-art-surface::after { display: none; }
 .spiral-media { transform: none; }
+
+/* Cursor light stays inside the video plane; no outline or border glow. */
+.spiral-art-surface::after {
+  display: block;
+  background: radial-gradient(circle 85px at var(--shine-x, 50%) var(--shine-y, 50%), #b5f0ff66, #85dced22 45%, transparent 100%);
+  box-shadow: none;
+  opacity: var(--energy, 0);
+  pointer-events: none;
+  z-index: 2;
+}
+.spiral-hero:not(.is-still) .spiral-art:hover .spiral-art-surface::after { opacity: var(--energy, 0); }
+.spiral-hero.is-still .spiral-art-surface::after { opacity: 0; }
