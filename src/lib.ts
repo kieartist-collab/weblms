@@ -18,10 +18,8 @@ if (!demo) {
 export const supabase = client;
 export const money = (value: number) =>
   new Intl.NumberFormat('vi-VN', {
-    style: 'currency',
-    currency: 'VND',
     maximumFractionDigits: 0,
-  }).format(value);
+  }).format(value) + ' VNĐ';
 export const date = (value: string) =>
   new Intl.DateTimeFormat('vi-VN', { dateStyle: 'medium' }).format(new Date(value));
 export const orderLabels = {
