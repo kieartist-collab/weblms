@@ -216,9 +216,6 @@ function AdminCourses() {
           key: string;
           name: string;
           total: number;
-          published: number;
-          building: number;
-          draft: number;
         }
       >
     >((stats, c) => {
@@ -226,14 +223,8 @@ function AdminCourses() {
         key: c.creatorKey,
         name: c.creatorName,
         total: 0,
-        published: 0,
-        building: 0,
-        draft: 0,
       });
       row.total++;
-      if (!c.published) row.draft++;
-      else if (c.under_construction) row.building++;
-      else row.published++;
       return stats;
     }, {}),
   );
@@ -248,48 +239,14 @@ function AdminCourses() {
         </Link>
       </div>
       {!!data?.length && !loading && !error && (
-        <section className="content-section">
-          <h3>Thống kê theo người tạo</h3>
-          <p className="muted">
-            Tổng cộng {data.length} khóa học. Mọi quản trị viên đều có thể chỉnh sửa tất cả khóa
-            học. Tên người tạo được ghi tại thời điểm tạo khóa học.
-          </p>
-          <div className="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Người tạo</th>
-                  <th>Tổng khóa học</th>
-                  <th>Đã xuất bản</th>
-                  <th>Đang xây dựng</th>
-                  <th>Bản nháp</th>
-                </tr>
-              </thead>
-              <tbody>
-                {creatorStats.map((s) => (
-                  <tr key={s.key}>
-                    <td>{s.name}</td>
-                    <td>{s.total}</td>
-                    <td>{s.published}</td>
-                    <td>{s.building}</td>
-                    <td>{s.draft}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          {creatorStats.some((s) => s.key === 'unknown') && (
-            <p className="muted">
-              “Chưa ghi nhận” là các khóa học cũ chưa lưu thông tin người tạo.
-            </p>
-          )}
+        <section className="course-creator-toolbar" aria-label="Lọc khóa học">
           <label htmlFor="creator-filter">Lọc theo người tạo</label>
           <select
             id="creator-filter"
             value={creatorFilter}
             onChange={(e) => setCreatorFilter(e.target.value)}
           >
-            <option value="">Tất cả người tạo</option>
+            <option value="">Tất cả người tạo ({data.length} khóa học)</option>
             {creatorStats.map((s) => (
               <option key={s.key} value={s.key}>
                 {s.name} ({s.total})
@@ -308,10 +265,10 @@ function AdminCourses() {
             <thead>
               <tr>
                 <th>Khóa học</th>
-                <th>Người tạo</th>
                 <th>Giá</th>
                 <th>Trạng thái</th>
                 <th>Thao tác</th>
+                <th>Người tạo</th>
               </tr>
             </thead>
             <tbody>
@@ -321,7 +278,6 @@ function AdminCourses() {
                     <strong>{c.title}</strong>
                     <small>{c.category}</small>
                   </td>
-                  <td>{c.creatorName}</td>
                   <td>{money(c.price)}</td>
                   <td>
                     <span className={`badge ${c.published ? 'fulfilled' : 'pending'}`}>
@@ -410,6 +366,7 @@ function AdminCourses() {
                       </Action>
                     </div>
                   </td>
+                  <td>{c.creatorName}</td>
                 </tr>
               ))}
             </tbody>
