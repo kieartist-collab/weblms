@@ -9,7 +9,9 @@
   .landing-page > .course-section.container { padding-inline: 18px; }
 }
 .course-grid > * { min-width: 0; }
-.info-portrait-figure { margin: 0; width: 100%; min-width: 0; }
+.info-hero { padding-bottom: 0; }
+.info-hero-copy { padding-bottom: 58px; }
+.info-portrait-figure { margin: 0; width: 100%; min-width: 0; align-self: end; }
 .info-portrait-visual { height: 350px; }
 .info-portrait-visual .info-portrait {
   position: relative;
@@ -20,15 +22,8 @@
   object-fit: contain;
   object-position: center bottom;
 }
-.info-portrait-caption {
-  position: relative;
-  text-align: center;
-  padding-top: 18px;
-}
-.info-portrait-caption strong { display: block; color: var(--info-accent); font: 13px 'JetBrains Mono', monospace; letter-spacing: .15em; text-transform: uppercase; }
-.info-portrait-caption > span { display: block; color: #b0bac6; font-size: 12px; margin-top: 7px; }
 @media (max-width: 900px) { .info-portrait-visual { height: 280px; } }
-@media (max-width: 640px) { .info-portrait-figure { display: none; } }
+@media (max-width: 640px) { .info-portrait-figure { display: none; } .info-hero-copy { padding-bottom: 30px; } }
 .course-card .card-cover {
   height: auto;
   aspect-ratio: 16 / 9;

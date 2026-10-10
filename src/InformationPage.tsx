@@ -113,9 +113,6 @@ export function InformationPage({ page }: { page: { slug: string; title: string;
               <span className="info-dot dot-one" aria-hidden="true" />
               <span className="info-dot dot-two" aria-hidden="true" />
             </div>
-            <figcaption className="info-portrait-caption">
-              <strong>Kistein Do</strong><span>CG Generalist</span>
-            </figcaption>
           </figure>
         </header>
         <div className="info-layout">
