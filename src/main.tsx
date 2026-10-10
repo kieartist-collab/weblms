@@ -22,6 +22,7 @@ import './styles.css';
 import './dark.css';
 import './cinematic.css';
 import './navigation-cta.css';
+import './admin-workspace.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

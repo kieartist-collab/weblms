@@ -1,0 +1,63 @@
+.admin-site-header .nav-wrap {
+  width: auto;
+  margin-inline: clamp(16px, 2vw, 40px);
+}
+.admin-workspace {
+  width: 100%;
+  min-height: calc(100dvh - 72px);
+  padding: 28px clamp(16px, 2vw, 40px) 48px;
+  display: grid;
+  grid-template-columns: 208px minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
+  gap: 24px 32px;
+  align-items: start;
+}
+.admin-workspace-heading { grid-column: 1 / -1; }
+.admin-workspace-heading .page-title { font-size: clamp(28px, 2.5vw, 40px); margin: 8px 0 0; }
+.admin-workspace .admin-tabs {
+  position: sticky;
+  top: 96px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  gap: 4px;
+  padding: 12px 0;
+  margin: 0;
+  border: 1px solid var(--line);
+  background: #14171d;
+}
+.admin-workspace .admin-tabs a { border-radius: 0; padding: 14px 18px; }
+.admin-workspace .admin-tabs a svg { flex-shrink: 0; }
+.admin-workspace-content { min-width: 0; }
+.admin-workspace-content > :first-child { margin-top: 0; }
+.admin-workspace .panel-heading { flex-wrap: wrap; gap: 16px; }
+.admin-workspace .table-wrap { width: 100%; max-width: 100%; overflow-x: auto; }
+.admin-workspace td .inline { flex-wrap: wrap; }
+.admin-workspace .form-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.admin-workspace .field { min-width: 0; }
+.admin-workspace .field input, .admin-workspace .field select { min-width: 0; max-width: 100%; }
+.admin-workspace .admin-filters { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.admin-workspace .narrow { width: 100%; max-width: 1000px; margin-inline: 0; }
+.admin-workspace .module-lesson { flex-wrap: wrap; }
+.admin-workspace .module-lesson > span { min-width: 160px; overflow-wrap: anywhere; }
+.admin-workspace .lesson-sort-actions { flex-wrap: wrap; }
+@media (min-width: 1800px) {
+  .admin-workspace { grid-template-columns: 232px minmax(0, 1fr); gap: 28px 40px; }
+  .admin-workspace th, .admin-workspace td { padding: 18px 24px; }
+}
+@media (max-width: 1100px) {
+  .admin-workspace { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .admin-workspace .admin-tabs { position: static; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); padding: 6px; }
+  .admin-workspace .admin-tabs a { padding: 12px 10px; font-size: 12px; }
+  .admin-workspace .admin-search { grid-column: auto; }
+}
+@media (max-width: 640px) {
+  .admin-workspace { padding: 20px 14px 40px; }
+  .admin-workspace .admin-tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .admin-workspace .form-grid, .admin-workspace .admin-filters { grid-template-columns: minmax(0, 1fr); }
+  .admin-workspace .panel { padding: 18px 14px; }
+  .admin-workspace .table-wrap table { min-width: 680px; }
+  .admin-workspace .admin-pagination { align-items: flex-start; flex-direction: column; }
+  .admin-workspace .modal { width: calc(100vw - 24px); max-height: calc(100dvh - 24px); padding: 18px; }
+  .admin-workspace .lesson-sort-actions { width: 100%; }
+}

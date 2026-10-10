@@ -39,9 +39,11 @@ import type {
 
 export function Admin() {
   return (
-    <div className="container page">
-      <span className="eyebrow">KHÔNG GIAN GIẢNG VIÊN</span>
-      <h1 className="page-title">Quản trị học viện</h1>
+    <div className="admin-workspace">
+      <header className="admin-workspace-heading">
+        <span className="eyebrow">KHÔNG GIAN GIẢNG VIÊN</span>
+        <h1 className="page-title">Quản trị học viện</h1>
+      </header>
       <nav className="admin-tabs" aria-label="Quản trị">
         <NavLink to="/admin" end>
           <BookOpen size={17} />
@@ -76,6 +78,7 @@ export function Admin() {
           Nhật ký
         </NavLink>
       </nav>
+      <div className="admin-workspace-content">
       <Routes>
         <Route index element={<AdminCourses />} />
         <Route path="courses/:id" element={<CourseEditor />} />
@@ -88,6 +91,7 @@ export function Admin() {
         <Route path="audit" element={<AuditPage />} />
         <Route path="*" element={<Empty title="Không tìm thấy trang quản trị" />} />
       </Routes>
+      </div>
     </div>
   );
 }

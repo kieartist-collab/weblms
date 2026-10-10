@@ -155,7 +155,7 @@ export function Layout({ children }: { children: ReactNode }) {
       <a className="skip-link" href="#main">
         Đến nội dung chính
       </a>
-      <header className="site-header">
+      <header className={`site-header ${location.pathname.startsWith('/admin') ? 'admin-site-header' : ''}`}>
         <div className="nav-wrap">
           <Link to="/" className="brand">
             <span className="brand-icon">
@@ -221,7 +221,7 @@ export function Layout({ children }: { children: ReactNode }) {
         </div>
       )}
       <main id="main">{children}</main>
-      <SiteFooter />
+      {!location.pathname.startsWith('/admin') && <SiteFooter />}
     </>
   );
 }
