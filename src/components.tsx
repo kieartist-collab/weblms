@@ -11,6 +11,7 @@ import {
   AlertCircle,
   Check,
   GraduationCap,
+  Film, Star, Users, CircleHelp, LayoutDashboard, LibraryBig,
 } from 'lucide-react';
 import { useAuth } from './auth';
 import { db, demo, errorText, money, safeUrl } from './lib';
@@ -173,13 +174,20 @@ export function Layout({ children }: { children: ReactNode }) {
             {open ? <X /> : <Menu />}
           </button>
           <nav className={open ? 'nav open' : 'nav'} aria-label="Điều hướng chính">
-            <Link to="/#courses">Khóa học</Link>
-            <Link to="/#student-work">Sản phẩm học viên</Link>
-            <Link to="/#reviews">Đánh giá</Link>
-            <Link to="/#author">Tác giả</Link>
-            <Link to="/#faq">FAQ</Link>
-            <NavLink to="/my-learning">Góc học tập</NavLink>
-            {profile?.is_admin && <NavLink to="/admin">Quản trị</NavLink>}
+            {[
+              { hash: 'courses', label: 'Khóa học', Icon: BookOpen },
+              { hash: 'student-work', label: 'Sản phẩm học viên', Icon: Film },
+              { hash: 'reviews', label: 'Đánh giá', Icon: Star },
+              { hash: 'author', label: 'Tác giả', Icon: Users },
+              { hash: 'faq', label: 'FAQ', Icon: CircleHelp },
+            ].map(({ hash, label, Icon }) => {
+              const selected = (location.pathname === '/' && location.hash === `#${hash}`) || (hash === 'courses' && location.pathname.startsWith('/courses'));
+              return <Link key={hash} to={`/#${hash}`} className={selected ? 'active' : undefined} aria-current={selected ? 'location' : undefined}>
+                <Icon size={16} aria-hidden="true" /><span>{label}</span>
+              </Link>;
+            })}
+            <NavLink to="/my-learning"><LibraryBig size={16} aria-hidden="true" /><span>Góc học tập</span></NavLink>
+            {profile?.is_admin && <NavLink to="/admin"><LayoutDashboard size={16} aria-hidden="true" /><span>Quản trị</span></NavLink>}
             <div className="nav-auth">
               {user ? (
                 <>

@@ -21,6 +21,7 @@ import '@fontsource/jetbrains-mono/latin-400.css';
 import './styles.css';
 import './dark.css';
 import './cinematic.css';
+import './navigation-cta.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

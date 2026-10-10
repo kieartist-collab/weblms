@@ -3,7 +3,7 @@ import { SoftwareStrip } from '../SoftwareStrip';
 import { MentorTeam } from '../MentorTeam';
 import { RichText } from '../RichText';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { ArrowUpRight, Play, BookOpen, Clock, ChevronRight } from 'lucide-react';
+import { ArrowUpRight, Play, BookOpen, Clock, ChevronRight, Sparkles, Lightbulb } from 'lucide-react';
 import { useEffect } from 'react';
 import { HomeSections } from '../HomeSections';
 import { MotionSurface } from '../MotionSurface';
@@ -64,6 +64,23 @@ export function Home({ catalog = false }: { catalog?: boolean }) {
             </div>
           </div>
         </div>
+      )}
+      {!catalog && (
+        <section className="idea-cta" aria-labelledby="idea-cta-title">
+          <div className="container idea-cta-inner">
+            <div className="idea-cta-art" aria-hidden="true">
+              <span className="idea-orbit idea-orbit-one" /><span className="idea-orbit idea-orbit-two" />
+              <span className="idea-core"><Lightbulb size={44} strokeWidth={1.2} /></span>
+              <span className="idea-spark"><Sparkles size={20} /></span>
+            </div>
+            <div className="idea-cta-copy">
+              <span className="eyebrow"><Sparkles size={15} aria-hidden="true" /> TƯ DUY TRƯỚC. CÔNG CỤ SAU.</span>
+              <h2 id="idea-cta-title"><span>Chúng tôi không đào tạo người sử dụng công cụ.</span> Chúng tôi đào tạo người <em>làm chủ ý tưởng.</em></h2>
+              <p>Từ ý tưởng đầu tiên đến sản phẩm của riêng bạn. Bắt đầu với khóa học phù hợp và học qua từng dự án thực hành.</p>
+              <Link to="/#courses" className="button idea-cta-button">Chọn khóa học của bạn <ArrowUpRight size={20} aria-hidden="true" /></Link>
+            </div>
+          </div>
+        </section>
       )}
       <section className="container course-section" id="courses">
         <div className="section-heading">
