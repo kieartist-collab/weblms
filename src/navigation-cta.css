@@ -3,10 +3,10 @@
 .landing-page > .course-section.container {
   width: 100%;
   max-width: none;
-  padding-inline: clamp(20px, 3vw, 64px);
+  padding-inline: max(48px, calc((100% - 1600px) / 2));
 }
-@media (max-width: 600px) {
-  .landing-page > .course-section.container { padding-inline: 16px; }
+@media (max-width: 650px) {
+  .landing-page > .course-section.container { padding-inline: 18px; }
 }
 .course-grid > * { min-width: 0; }
 @media (max-width: 1199px) { .course-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
