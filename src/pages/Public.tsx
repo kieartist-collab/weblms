@@ -1,3 +1,4 @@
+import { curriculumLabels } from '../curriculum-labels';
 import { SoftwareStrip } from '../SoftwareStrip';
 import { MentorTeam } from '../MentorTeam';
 import { RichText } from '../RichText';
@@ -137,7 +138,7 @@ export function CourseDetail() {
     const modules = demo
       ? demoModules.filter((m) => m.course_id === course.id)
       : (check(
-          await db().from('modules').select('*').eq('course_id', course.id).order('position'),
+          await db().from('modules').select('*').eq('course_id', course.id).order('position').order('id'),
         ) as Module[]);
     const lessons = demo
       ? demoLessons.filter((l) => modules.some((m) => m.id === l.module_id))
@@ -150,7 +151,7 @@ export function CourseDetail() {
                 'module_id',
                 modules.map((m) => m.id),
               )
-              .order('position'),
+              .order('position').order('id'),
           ) as Lesson[])
         : [];
     const access = user
@@ -174,6 +175,7 @@ export function CourseDetail() {
     );
   if (!data) return <Empty title="Không tìm thấy khóa học" />;
   const { course, modules, lessons, access } = data;
+  const labels = curriculumLabels(modules, lessons);
   return (
     <div className="container page">
       <div className="breadcrumb">
@@ -218,8 +220,7 @@ export function CourseDetail() {
               modules.map((m, i) => (
                 <details className="curriculum" key={m.id} open={i === 0}>
                   <summary>
-                    <span>0{i + 1}</span>
-                    {m.title}
+                    {labels.chapters.get(m.id)}
                     <small>{lessons.filter((l) => l.module_id === m.id).length} bài</small>
                   </summary>
                   {lessons
@@ -227,7 +228,7 @@ export function CourseDetail() {
                     .map((l) => (
                       <div className="curriculum-lesson" key={l.id}>
                         <Play size={15} />
-                        <span>{l.title}</span>
+                        <span>{labels.lessons.get(l.id)}</span>
                         <small>{l.duration_minutes} phút</small>
                       </div>
                     ))}

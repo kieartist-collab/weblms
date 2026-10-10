@@ -1,3 +1,4 @@
+import { curriculumLabels, titleWithoutNumber } from '../curriculum-labels';
 import { RichEditor } from '../RichEditor';
 import { CourseImportPanel } from '../CourseImportPanel';
 import { useEffect, useRef, useState } from 'react';
@@ -758,12 +759,13 @@ function CurriculumEditor({ courseId }: { courseId: string; onChange: () => void
   }, [courseId]);
   if (loading) return <Loading />;
   if (error) return <Notice error>{error}</Notice>;
+  const labels = curriculumLabels(data?.modules || [], data?.lessons || []);
   return (
     <section className="content-section">
       <h2>Chương và bài học</h2>
       <p className="muted">
         Kéo tay nắm ⋮⋮ để sắp xếp. Thả bài lên một bài khác để chèn trước, hoặc xuống cuối chương để
-        chuyển chương. Thay đổi được tự lưu.
+        chuyển chương. Thay đổi được tự lưu. Chỉ nhập tên chương và tên bài; số chương và số bài được thêm tự động. Bài học được đánh số liên tục trong toàn khóa học.
       </p>
       {moveNotice && <Notice>{moveNotice}</Notice>}
       {moving && <p role="status">Đang lưu thứ tự…</p>}
@@ -795,7 +797,7 @@ function CurriculumEditor({ courseId }: { courseId: string; onChange: () => void
         >
           <div className="inline curriculum-sort-bar">
             {grip('module', m.id, m.title)}
-            <strong>Chương {mi + 1}</strong>
+            <strong>{labels.chapters.get(m.id)}</strong>
             <button
               className="button secondary small"
               disabled={moving || mi === 0}
@@ -826,7 +828,7 @@ function CurriculumEditor({ courseId }: { courseId: string; onChange: () => void
             }}
           >
             <div className="form-grid">
-              <Field label="Tên chương" name="title" value={m.title} required />
+              <Field label="Tên chương" name="title" value={titleWithoutNumber(m.title, 'Chương')} required />
             </div>
           </EditorForm>
           <div className="module-lessons">
@@ -857,7 +859,7 @@ function CurriculumEditor({ courseId }: { courseId: string; onChange: () => void
                 >
                   {grip('lesson', l.id, l.title)}
                   <span>
-                    {li + 1}. {l.title}
+                    {labels.lessons.get(l.id)}
                     <small>{l.duration_minutes} phút</small>
                   </span>
                   <div className="inline lesson-sort-actions">
@@ -892,7 +894,7 @@ function CurriculumEditor({ courseId }: { courseId: string; onChange: () => void
                     >
                       {data.modules.map((ch) => (
                         <option key={ch.id} value={ch.id}>
-                          {ch.title}
+                          {labels.chapters.get(ch.id)}
                         </option>
                       ))}
                     </select>
@@ -971,7 +973,7 @@ function CurriculumEditor({ courseId }: { courseId: string; onChange: () => void
         </div>
       ))}
       <div className="panel">
-        <h3>Thêm chương mới</h3>
+        <h3>Thêm chương { (data?.modules.length || 0) + 1 }</h3>
         <EditorForm
           key={`new-${data?.modules.length}`}
           label="Thêm chương"
@@ -995,6 +997,7 @@ function CurriculumEditor({ courseId }: { courseId: string; onChange: () => void
         <LessonEditor
           key={edit?.id || `new-${newModule}`}
           lesson={edit}
+          number={edit ? [...labels.lessons.keys()].indexOf(edit.id) + 1 : (data?.modules.slice(0, data.modules.findIndex((m) => m.id === newModule) + 1).reduce((sum, m) => sum + data.lessons.filter((l) => l.module_id === m.id).length, 0) || 0) + 1}
           moduleId={edit?.module_id || newModule}
           position={
             Math.max(
@@ -1013,11 +1016,13 @@ function CurriculumEditor({ courseId }: { courseId: string; onChange: () => void
   );
 }
 function LessonEditor({
+  number,
   lesson,
   moduleId,
   position,
   close,
 }: {
+  number: number;
   lesson: Lesson | null;
   moduleId: string;
   position: number;
@@ -1125,7 +1130,7 @@ function LessonEditor({
             }}
           >
             <div className="form-grid">
-              <Field label="Tên bài học" name="title" value={lesson?.title} required />
+              <Field label={`Tên bài học — Bài ${number}`} name="title" value={lesson ? titleWithoutNumber(lesson.title, 'Bài') : ''} required />
               <Field
                 label="Thời lượng (phút)"
                 name="duration_minutes"

@@ -1,3 +1,4 @@
+import { curriculumLabels } from '../curriculum-labels';
 import { RichText } from '../RichText';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -41,7 +42,7 @@ export function MyLearning() {
       db().from('courses').select('*'),
       db().from('progress').select('*').eq('user_id', user!.id),
       db().from('modules').select('*'),
-      db().from('lessons').select('*').order('position'),
+      db().from('lessons').select('*').order('position').order('id'),
     ]);
     return {
       enrollments: check(enrollments) as Enrollment[],
@@ -336,7 +337,7 @@ function LearningCourse() {
     ) as Enrollment | null;
     if (!course || (!access?.active && !profile?.is_admin)) return null;
     const modules = check(
-      await db().from('modules').select('*').eq('course_id', courseId!).order('position'),
+      await db().from('modules').select('*').eq('course_id', courseId!).order('position').order('id'),
     ) as Module[];
     const lessons = modules.length
       ? (check(
@@ -347,7 +348,7 @@ function LearningCourse() {
               'module_id',
               modules.map((m) => m.id),
             )
-            .order('position'),
+            .order('position').order('id'),
         ) as Lesson[])
       : [];
     const progress = check(
@@ -428,6 +429,7 @@ function LearningCourse() {
       </div>
     );
   const { course, modules, lessons } = data;
+  const labels = curriculumLabels(modules, lessons);
   const done = lessons.filter((l) => isCompleted(l.id)).length;
   const completed = lesson ? isCompleted(lesson.id) : false;
   const video = driveId(content?.video_url || '');
@@ -463,10 +465,10 @@ function LearningCourse() {
           </strong>
         </div>
         <progress value={done} max={lessons.length || 1} />
-        {modules.map((m, i) => (
+        {modules.map((m) => (
           <div className="lesson-group" key={m.id}>
             <h3>
-              {i + 1}. {m.title}
+              {labels.chapters.get(m.id)}
             </h3>
             {lessons
               .filter((l) => l.module_id === m.id)
@@ -479,7 +481,7 @@ function LearningCourse() {
                 >
                   {isCompleted(l.id) ? <CheckCircle2 size={17} /> : <Play size={16} />}
                   <span>
-                    {l.title}
+                    {labels.lessons.get(l.id)}
                     <small>{l.duration_minutes} phút</small>
                   </span>
                 </Link>
@@ -506,7 +508,7 @@ function LearningCourse() {
                 <iframe
                   key={`${lesson.id}:${video}`}
                   src={`https://drive.google.com/file/d/${video}/preview`}
-                  title={lesson.title}
+                  title={labels.lessons.get(lesson.id)}
                   allow="autoplay; fullscreen"
                   allowFullScreen
                 />
@@ -519,9 +521,9 @@ function LearningCourse() {
             </div>
             <div className="learning-details">
               <span className="eyebrow">
-                {modules.find((m) => m.id === lesson.module_id)?.title}
+                {labels.chapters.get(lesson.module_id)}
               </span>
-              <h1>{lesson.title}</h1>
+              <h1>{labels.lessons.get(lesson.id)}</h1>
               <div className="video-help">
                 <span>
                   Đăng nhập Google bằng <strong>{user?.email}</strong> để xem video bài học.
