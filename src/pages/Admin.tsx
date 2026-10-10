@@ -181,21 +181,118 @@ function EditorForm({
 }
 const text = (f: FormData, k: string) => String(f.get(k) || '').trim();
 function AdminCourses() {
-  const { data, loading, error, refresh } = useLoad(
-    async () =>
-      check(
-        await db().from('courses').select('*').order('created_at', { ascending: false }),
-      ) as Course[],
+  const [creatorFilter, setCreatorFilter] = useState('');
+  const { data, loading, error, refresh } = useLoad(async () => {
+    const [courses, creators] = await Promise.all([
+      db().from('courses').select('*').order('created_at', { ascending: false }),
+      db().from('course_creators').select('course_id,user_id,creator_name'),
+    ]);
+    if (creators.error?.code === 'PGRST205' || creators.error?.code === '42P01')
+      throw new Error('Cần chạy 010_course_creators.sql trong Supabase để xem người tạo khóa học.');
+    const creatorRows = check(creators) as {
+      course_id: string;
+      user_id: string | null;
+      creator_name: string;
+    }[];
+    return (check(courses) as Course[]).map((course) => {
+      const creator = creatorRows.find((row) => row.course_id === course.id);
+      return {
+        ...course,
+        creatorKey: creator ? creator.user_id || `deleted:${creator.creator_name}` : 'unknown',
+        creatorName: creator?.creator_name || 'Chưa ghi nhận',
+      };
+    });
+  });
+  const creatorStats = Object.values(
+    (data || []).reduce<
+      Record<
+        string,
+        {
+          key: string;
+          name: string;
+          total: number;
+          published: number;
+          building: number;
+          draft: number;
+        }
+      >
+    >((stats, c) => {
+      const row = (stats[c.creatorKey] ||= {
+        key: c.creatorKey,
+        name: c.creatorName,
+        total: 0,
+        published: 0,
+        building: 0,
+        draft: 0,
+      });
+      row.total++;
+      if (!c.published) row.draft++;
+      else if (c.under_construction) row.building++;
+      else row.published++;
+      return stats;
+    }, {}),
   );
+  const filtered = data?.filter((c) => !creatorFilter || c.creatorKey === creatorFilter);
   return (
     <>
       <div className="section-heading">
-        <h2>Khóa học của bạn</h2>
+        <h2>Tất cả khóa học</h2>
         <Link to="/admin/courses/new" className="button">
           <Plus size={18} />
           Tạo khóa học
         </Link>
       </div>
+      {!!data?.length && !loading && !error && (
+        <section className="content-section">
+          <h3>Thống kê theo người tạo</h3>
+          <p className="muted">
+            Tổng cộng {data.length} khóa học. Mọi quản trị viên đều có thể chỉnh sửa tất cả khóa
+            học. Tên người tạo được ghi tại thời điểm tạo khóa học.
+          </p>
+          <div className="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Người tạo</th>
+                  <th>Tổng khóa học</th>
+                  <th>Đã xuất bản</th>
+                  <th>Đang xây dựng</th>
+                  <th>Bản nháp</th>
+                </tr>
+              </thead>
+              <tbody>
+                {creatorStats.map((s) => (
+                  <tr key={s.key}>
+                    <td>{s.name}</td>
+                    <td>{s.total}</td>
+                    <td>{s.published}</td>
+                    <td>{s.building}</td>
+                    <td>{s.draft}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {creatorStats.some((s) => s.key === 'unknown') && (
+            <p className="muted">
+              “Chưa ghi nhận” là các khóa học cũ chưa lưu thông tin người tạo.
+            </p>
+          )}
+          <label htmlFor="creator-filter">Lọc theo người tạo</label>
+          <select
+            id="creator-filter"
+            value={creatorFilter}
+            onChange={(e) => setCreatorFilter(e.target.value)}
+          >
+            <option value="">Tất cả người tạo</option>
+            {creatorStats.map((s) => (
+              <option key={s.key} value={s.key}>
+                {s.name} ({s.total})
+              </option>
+            ))}
+          </select>
+        </section>
+      )}
       {loading ? (
         <Loading />
       ) : error ? (
@@ -206,18 +303,20 @@ function AdminCourses() {
             <thead>
               <tr>
                 <th>Khóa học</th>
+                <th>Người tạo</th>
                 <th>Giá</th>
                 <th>Trạng thái</th>
                 <th>Thao tác</th>
               </tr>
             </thead>
             <tbody>
-              {data.map((c) => (
+              {filtered?.map((c) => (
                 <tr key={c.id}>
                   <td>
                     <strong>{c.title}</strong>
                     <small>{c.category}</small>
                   </td>
+                  <td>{c.creatorName}</td>
                   <td>{money(c.price)}</td>
                   <td>
                     <span className={`badge ${c.published ? 'fulfilled' : 'pending'}`}>
@@ -417,8 +516,12 @@ function CourseBasics({ course, instructor }: { course?: Course | null; instruct
           <option>Nâng cao</option>
         </select>
       </Field>
-      <Field name="instructor" label="Giảng viên" hint="Tên tài khoản admin đang đăng nhập.">
-        <input name="instructor" value={instructor} readOnly />
+      <Field
+        name="instructor"
+        label="Giảng viên"
+        hint="Khóa học mới lấy tên admin tạo khóa học; sửa khóa học giữ nguyên tên giảng viên."
+      >
+        <input name="instructor" value={course?.instructor || instructor} readOnly />
       </Field>
       <Field name="price_display" label="Giá (VNĐ)">
         <span className="course-price-input">
@@ -495,7 +598,7 @@ function CourseEditor() {
               slug,
               summary: text(f, 'summary'),
               description: text(f, 'description'),
-              instructor,
+              instructor: c?.instructor || instructor,
               category: text(f, 'category'),
               level: text(f, 'level'),
               price,

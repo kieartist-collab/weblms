@@ -573,3 +573,25 @@ test('construction courses stay public but block checkout until released', async
   await as(admin,'update public.courses set published=false where id=$1',[id]);
   assert.equal((await as(null,'select id from public.courses where id=$1',[id])).rows.length,0);
 });
+
+test('creator attribution is admin-only, immutable and allows cross-admin editing and import', async () => {
+  await db.exec('reset role');
+  await db.exec(await readFile(new URL('../supabase/migrations/010_course_creators.sql', import.meta.url), 'utf8'));
+  await db.query('update public.profiles set is_admin=true where id=$1',[bob]);
+  const id=(await as(admin,"insert into public.courses(slug,title,instructor) values('creator-test','Original','Original Teacher') returning id")).rows[0].id;
+  assert.equal((await as(admin,'select user_id from public.course_creators where course_id=$1',[id])).rows[0].user_id,admin);
+  assert.equal((await as(bob,"update public.courses set title='Edited by another admin' where id=$1 returning id",[id])).rows.length,1);
+  const payload={course:{title:'Imported',category:'3D',level:'Cơ bản',price:0,summary:'',description:''},modules:[{code:'C1',title:'Chapter'}],lessons:[{code:'B1',module:'C1',title:'Lesson',duration:0,video:'',body:''}],resources:[]};
+  await as(bob,'select public.admin_import_course($1,$2,$3)',[id,'unused',payload]);
+  assert.equal((await as(bob,'select instructor from public.courses where id=$1',[id])).rows[0].instructor,'Original Teacher');
+  assert.equal((await as(bob,'select user_id from public.course_creators where course_id=$1',[id])).rows[0].user_id,admin);
+  const imported=(await as(bob,'select public.admin_import_course(null,$1,$2) as id',['creator-import',payload])).rows[0].id;
+  assert.equal((await as(admin,'select user_id from public.course_creators where course_id=$1',[imported])).rows[0].user_id,bob);
+  await assert.rejects(as(bob,'update public.course_creators set user_id=$1 where course_id=$2',[bob,id]),/permission denied/);
+  assert.equal((await as(alice,'select * from public.course_creators')).rows.length,0);
+  await assert.rejects(as(null,'select * from public.course_creators'),/permission denied/);
+  assert.equal((await as(admin,'select * from public.course_creators where course_id=$1',[course])).rows.length,0);
+  await db.exec('reset role');
+  await db.query('update public.profiles set is_admin=false where id=$1',[bob]);
+  assert.equal((await as(admin,'select user_id from public.course_creators where course_id=$1',[imported])).rows[0].user_id,bob);
+});
