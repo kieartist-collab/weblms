@@ -27,7 +27,7 @@ const mentors = [
     name: 'Nam Chu',
     role: '3D Artist',
     initials: 'NC',
-    image: '',
+    image: '/images/nam-chu.png',
     specialties: ['Modeling', 'Digital sculpting'],
     quote:
       'Một sản phẩm 3D tốt bắt đầu từ việc quan sát. Hiểu hình khối, nắm vững công cụ và kiên nhẫn với từng chi tiết sẽ giúp bạn biến ý tưởng thành tác phẩm có cá tính riêng.',
@@ -85,9 +85,6 @@ export function MentorTeam({ embedded = false }: { embedded?: boolean }) {
                   <small>CHÂN DUNG ĐANG CẬP NHẬT</small>
                 </div>
               )}
-              <span className="mentor-portrait-label">
-                {mentor.demo ? 'HỒ SƠ MINH HỌA' : 'KISTEIN DO'}
-              </span>
             </div>
             <div className="mentor-profile-copy">
               <h3>{mentor.name}</h3>

@@ -104,17 +104,6 @@
   object-fit: contain;
   object-position: center bottom;
 }
-.mentor-portrait-label {
-  position: absolute;
-  bottom: 16px;
-  left: 21px;
-  z-index: 2;
-  font:
-    9px 'JetBrains Mono',
-    monospace;
-  letter-spacing: 2px;
-  color: #d5e0e8;
-}
 .mentor-placeholder {
   position: absolute;
   inset: 48px 0 30px;
