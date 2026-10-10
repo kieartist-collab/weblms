@@ -5,7 +5,7 @@ import videos from './student-videos.json';
 import { SpiralVideo } from './SpiralVideo';
 import './spiral-hero.css';
 
-const artworks = videos.slice(0, 15);
+const artworks = videos.slice(0, 20);
 const stars = Array.from({ length: 64 }, (_, i) => ({
   x: (i * 61.803 + 9) % 100,
   y: (i * 37.719 + 13) % 100,
@@ -101,18 +101,20 @@ export function SpiralHero() {
         const dx = cursor.screenX - (rect.left + rect.width / 2);
         const dy = cursor.screenY - (rect.top + rect.height / 2);
         const reach = Math.max(100, rect.width * .85);
+        const inside = Math.abs(dx) <= rect.width / 2 && Math.abs(dy) <= rect.height / 2;
         const influence = reduced || paused ? 0 : Math.max(0, 1 - Math.hypot(dx, dy) / reach);
         const state = motion[i];
         state.x += (dx * influence * .22 - state.x) * .09;
         state.y += (dy * influence * .18 - state.y) * .09;
-        state.tilt += (influence - state.tilt) * .08;
+        state.tilt += ((inside && !reduced && !paused ? 1 : 0) - state.tilt) * .08;
         card.style.setProperty('--bend-x', `${state.x}px`);
         card.style.setProperty('--bend-y', `${state.y}px`);
         const drift = reduced || paused ? 0 : animationTime.current * .35 + i * 1.7;
+        const rock = Math.sin(animationTime.current * 3.2) * state.tilt;
         const clampTilt = (value: number) => Math.max(-9, Math.min(9, value));
-        card.style.setProperty('--tilt-x', `${clampTilt(-state.y * .3 + Math.sin(drift) * 3)}deg`);
-        card.style.setProperty('--tilt-y', `${clampTilt(state.x * .3 + Math.cos(drift * .8) * 4)}deg`);
-        card.style.setProperty('--tilt-z', `${Math.sin(drift * .7) * 2}deg`);
+        card.style.setProperty('--tilt-x', `${clampTilt(-state.y * .3 + Math.sin(drift) * 3 + rock * 2)}deg`);
+        card.style.setProperty('--tilt-y', `${clampTilt(state.x * .3 + Math.cos(drift * .8) * 4 + rock * 2.5)}deg`);
+        card.style.setProperty('--tilt-z', `${Math.sin(drift * .7) * 2 + rock * 2}deg`);
         card.style.setProperty('--energy', String(state.tilt));
       });
     };

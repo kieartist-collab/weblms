@@ -483,7 +483,7 @@
   border-radius: 12px;
   clip-path: inset(0 round 12px);
   transform: translate3d(var(--bend-x, 0px), var(--bend-y, 0px), 0) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) rotateZ(var(--tilt-z, 0deg));
-  filter: saturate(calc(1 + var(--energy, 0) * .65)) brightness(calc(1 + var(--energy, 0) * .12));
+  filter: none;
   transition: border-color .3s, box-shadow .3s;
 }
 .spiral-media { transition: none; }
