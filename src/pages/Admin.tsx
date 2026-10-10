@@ -378,7 +378,7 @@ function AdminCourses() {
                         onClick={async () => {
                           if (
                             !window.confirm(
-                              `Xóa vĩnh viễn khóa học “${c.title}” cùng tất cả chương, bài học, nội dung và liên kết tài liệu? Thao tác này không thể hoàn tác. File trên Google Drive không bị xóa. Khóa học có đơn hàng hoặc quyền học sẽ không thể xóa.`,
+                              `Xóa vĩnh viễn khóa học “${c.title}”? Tất cả chương, bài học, tài liệu liên kết, tiến độ học, quyền học và đơn hàng/lịch sử mua của khóa học này sẽ bị xóa, kể cả khi đã có học viên. Không thể hoàn tác. Tài khoản học viên và các khóa học khác được giữ lại. File và quyền chia sẻ trên Google Drive cần xử lý riêng.`,
                             )
                           )
                             return;
@@ -389,7 +389,7 @@ function AdminCourses() {
                             .select('id');
                           if (result.error?.code === '23503') {
                             throw new Error(
-                              'Không thể xóa khóa học đã có đơn hàng hoặc quyền học, kể cả lịch sử đã hủy/thu hồi.',
+                              'Database chưa hỗ trợ xóa dữ liệu liên quan. Hãy chạy migration 011_course_delete_cascade.sql rồi thử lại.',
                             );
                           }
                           const deleted = check(result);

@@ -595,3 +595,28 @@ test('creator attribution is admin-only, immutable and allows cross-admin editin
   await db.query('update public.profiles set is_admin=false where id=$1',[bob]);
   assert.equal((await as(admin,'select user_id from public.course_creators where course_id=$1',[imported])).rows[0].user_id,bob);
 });
+
+test('course deletion removes purchases, access and progress only for the selected course', async () => {
+  await db.exec('reset role');
+  await db.exec(await readFile(new URL('../supabase/migrations/011_course_delete_cascade.sql', import.meta.url), 'utf8'));
+  const id=(await as(admin,"insert into public.courses(slug,title) values('cascade-delete','Delete all') returning id")).rows[0].id;
+  const m=(await as(admin,"insert into public.modules(course_id,title) values($1,'Chapter') returning id",[id])).rows[0].id;
+  const l=(await as(admin,"insert into public.lessons(module_id,title) values($1,'Lesson') returning id",[m])).rows[0].id;
+  await db.exec('reset role');
+  for (const status of ['pending','reported','paid','fulfilled','cancelled']) {
+    // Separate fulfilled/cancelled history plus one open order at a time.
+    await db.query("insert into public.orders(user_id,course_id,amount,transfer_code,status) values($1,$2,200000,$3,$4)",[alice,id,'CASCADE_'+status,status]);
+    if (['pending','reported','paid'].includes(status)) await db.query("update public.orders set status='cancelled' where transfer_code=$1",['CASCADE_'+status]);
+  }
+  await db.query("insert into public.enrollments(user_id,course_id,drive_status,drive_email) values($1,$2,'shared','alice@example.test')",[alice,id]);
+  await db.query("insert into public.progress(user_id,lesson_id,completed) values($1,$2,true)",[alice,l]);
+  const before=(await db.query('select count(*)::int as n from public.orders where course_id<>$1',[id])).rows[0].n;
+  assert.equal((await as(alice,'delete from public.courses where id=$1 returning id',[id])).rows.length,0);
+  assert.equal((await as(admin,'select * from public.orders where course_id=$1',[id])).rows.length,5);
+  assert.equal((await as(admin,'delete from public.courses where id=$1 returning id',[id])).rows.length,1);
+  for (const table of ['orders','enrollments','course_creators','modules']) assert.equal((await as(admin,`select * from public.${table} where course_id=$1`,[id])).rows.length,0);
+  assert.equal((await as(admin,'select * from public.progress where lesson_id=$1',[l])).rows.length,0);
+  assert.equal((await as(admin,'select count(*)::int as n from public.orders where course_id<>$1',[id])).rows[0].n,before);
+  assert.equal((await as(admin,'select id from public.profiles where id=$1',[alice])).rows.length,1);
+  assert.equal((await as(admin,'select id from public.courses where id=$1',[course])).rows.length,1);
+});
