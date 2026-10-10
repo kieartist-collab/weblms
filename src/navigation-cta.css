@@ -9,6 +9,21 @@
   .landing-page > .course-section.container { padding-inline: 18px; }
 }
 .course-grid > * { min-width: 0; }
+.info-portrait-visual { height: 350px; }
+.info-portrait-visual .info-portrait {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: calc(100% - 48px);
+  object-fit: contain;
+  object-position: center bottom;
+  align-self: start;
+}
+.info-portrait-visual .info-visual-label { z-index: 2; bottom: 0; }
+@media (min-width: 651px) and (max-width: 900px) {
+  .info-portrait-visual { height: 280px; }
+}
 .course-card .card-cover {
   height: auto;
   aspect-ratio: 16 / 9;
