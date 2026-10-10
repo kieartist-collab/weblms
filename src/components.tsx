@@ -227,9 +227,8 @@ export function Layout({ children }: { children: ReactNode }) {
 }
 export function CourseImage({ course, className = '' }: { course: Course; className?: string }) {
   const [failed, setFailed] = useState(false);
-  return course.thumbnail_url && !failed ? (
+  return <div className={`course-thumbnail ${className}`}>{course.thumbnail_url && !failed ? (
     <img
-      className={className}
       src={
         course.thumbnail_url.startsWith('/') ? course.thumbnail_url : safeUrl(course.thumbnail_url)
       }
@@ -238,7 +237,7 @@ export function CourseImage({ course, className = '' }: { course: Course; classN
       loading="lazy"
     />
   ) : (
-    <div className={`course-placeholder ${className}`}>
+    <div className="course-placeholder">
       <span>{course.category}</span>
       <strong>
         Học.
@@ -249,7 +248,7 @@ export function CourseImage({ course, className = '' }: { course: Course; classN
       </strong>
       <BookOpen size={36} />
     </div>
-  );
+  )}</div>;
 }
 export function CourseCard({ course }: { course: Course }) {
   return (
