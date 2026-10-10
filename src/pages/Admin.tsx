@@ -243,6 +243,36 @@ function AdminCourses() {
                       >
                         {c.published ? 'Ẩn khóa học' : 'Xuất bản'}
                       </Action>
+                      <Action
+                        className="button danger small"
+                        onClick={async () => {
+                          if (
+                            !window.confirm(
+                              `Xóa vĩnh viễn khóa học “${c.title}” cùng tất cả chương, bài học, nội dung và liên kết tài liệu? Thao tác này không thể hoàn tác. File trên Google Drive không bị xóa. Khóa học có đơn hàng hoặc quyền học sẽ không thể xóa.`,
+                            )
+                          )
+                            return;
+                          const result = await db()
+                            .from('courses')
+                            .delete()
+                            .eq('id', c.id)
+                            .select('id');
+                          if (result.error?.code === '23503') {
+                            throw new Error(
+                              'Không thể xóa khóa học đã có đơn hàng hoặc quyền học, kể cả lịch sử đã hủy/thu hồi.',
+                            );
+                          }
+                          const deleted = check(result);
+                          if (!deleted?.length)
+                            throw new Error(
+                              'Khóa học không còn tồn tại hoặc bạn không có quyền xóa. Hãy cập nhật lại trang.',
+                            );
+                          refresh();
+                        }}
+                      >
+                        <Trash2 size={15} />
+                        Xóa khóa học
+                      </Action>
                     </div>
                   </td>
                 </tr>

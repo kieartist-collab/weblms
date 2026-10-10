@@ -515,3 +515,26 @@ test('support pages and reports enforce public reading, admin editing and privat
   assert.equal((await as(bob,"select * from storage.objects where bucket_id='bug-reports'")).rows.length,0);
   assert.equal((await as(admin,"select * from storage.objects where bucket_id='bug-reports'")).rows.length,1);
 });
+
+test('course deletion is admin-only, cascades curriculum and protects purchase history', async () => {
+  const c = (await as(admin, "insert into public.courses(slug,title,published) values('delete-test','Delete test',true) returning id")).rows[0].id;
+  const m = (await as(admin, "insert into public.modules(course_id,title) values($1,'Module') returning id", [c])).rows[0].id;
+  const l = (await as(admin, "insert into public.lessons(module_id,title) values($1,'Lesson') returning id", [m])).rows[0].id;
+  await as(admin, "insert into public.lesson_contents(lesson_id,body) values($1,'Body')", [l]);
+  assert.equal((await as(alice, 'delete from public.courses where id=$1 returning id', [c])).rows.length, 0);
+  assert.equal((await as(admin, 'delete from public.courses where id=$1 returning id', [c])).rows.length, 1);
+  assert.equal((await as(admin, 'select * from public.modules where id=$1', [m])).rows.length, 0);
+  assert.equal((await as(admin, 'select * from public.lessons where id=$1', [l])).rows.length, 0);
+  assert.equal((await as(admin, 'select * from public.lesson_contents where lesson_id=$1', [l])).rows.length, 0);
+  for (const relation of ['orders', 'enrollments']) {
+    const protectedId = (await as(admin, "insert into public.courses(slug,title) values($1,'Protected') returning id", ['delete-protected-' + relation])).rows[0].id;
+    await db.exec('reset role');
+    if (relation === 'orders') {
+      await db.query("insert into public.orders(user_id,course_id,amount,transfer_code,status) values($1,$2,0,'DELETE_TEST','cancelled')", [alice, protectedId]);
+    } else {
+      await db.query("insert into public.enrollments(user_id,course_id,active,drive_status,drive_email) values($1,$2,false,'revoked','test@example.test')", [alice, protectedId]);
+    }
+    await assert.rejects(as(admin, 'delete from public.courses where id=$1', [protectedId]), (error) => error.code === '23503');
+    assert.equal((await as(admin, 'select id from public.courses where id=$1', [protectedId])).rows.length, 1);
+  }
+});
