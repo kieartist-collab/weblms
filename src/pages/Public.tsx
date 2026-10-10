@@ -230,8 +230,8 @@ export function CourseDetail() {
               <Play size={22} aria-hidden="true" /> Nội dung chương trình
             </h2>
             {modules.length ? (
-              modules.map((m, i) => (
-                <details className="curriculum" key={m.id} open={i === 0}>
+              modules.map((m) => (
+                <details className="curriculum" key={m.id} open>
                   <summary>
                     {labels.chapters.get(m.id)}
                     <small>{lessons.filter((l) => l.module_id === m.id).length} bài</small>
