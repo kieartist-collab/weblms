@@ -1,4 +1,5 @@
 import { curriculumLabels, titleWithoutNumber } from '../curriculum-labels';
+import { cleanupOldThumbnail } from '../thumbnail-cleanup';
 import { RichEditor } from '../RichEditor';
 import { CourseImportPanel } from '../CourseImportPanel';
 import { useEffect, useRef, useState } from 'react';
@@ -512,6 +513,7 @@ function CourseEditor() {
   const { id } = useParams();
   const navigate = useNavigate();
   const isNew = id === 'new';
+  const [cleanupWarning, setCleanupWarning] = useState('');
   const { data, loading, error, refresh } = useLoad(async () => {
     if (isNew) return { course: null, folder: '' };
     const c = check(await db().from('courses').select('*').eq('id', id!).single()) as Course;
@@ -538,6 +540,7 @@ function CourseEditor() {
       />
       <section className="panel content-section">
         <h2>{isNew ? 'Tạo khóa học' : c?.title}</h2>
+        {cleanupWarning && <Notice>{cleanupWarning}</Notice>}
         <EditorForm
           key={id}
           onSave={async (f) => {
@@ -571,7 +574,17 @@ function CourseEditor() {
             if (isNew) {
               const row = check(await db().from('courses').insert(values).select().single());
               navigate(`/admin/courses/${row.id}`);
-            } else check(await db().from('courses').update(values).eq('id', id!));
+            } else {
+              const previous = check(await db().from('courses').select('thumbnail_url').eq('id', id!).single());
+              if (!previous) throw new Error('Không tìm thấy khóa học để lưu thay đổi.');
+              check(await db().from('courses').update(values).eq('id', id!).select('id').single());
+              setCleanupWarning('');
+              try {
+                await cleanupOldThumbnail(db(), previous.thumbnail_url, thumb);
+              } catch (err) {
+                setCleanupWarning(`Đã lưu khóa học và ảnh mới, nhưng chưa xóa được ảnh cũ: ${errorText(err)}`);
+              }
+            }
           }}
         >
           <div className="form-grid">
