@@ -7,3 +7,58 @@
   [headers.values]
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[redirects]]
+  from = "/courses"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/courses/*"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/login"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/auth/callback"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/pages/*"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/setup"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/my-learning"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/orders/*"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/learn/*"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/admin"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/admin/*"
+  to = "/index.html"
+  status = 200
