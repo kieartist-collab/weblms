@@ -1,3 +1,4 @@
+import { AccessLayout, GoogleMark } from './AccessLayout';
 import { useEffect, useRef, useState } from 'react';
 import type { DependencyList, ReactNode } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
@@ -295,6 +296,15 @@ export function Protected({ children, admin = false }: { children: ReactNode; ad
       <div className="container page">
         <Notice error>{error}</Notice>
       </div>
+    );
+  if (!user && location.pathname === '/my-learning')
+    return (
+      <AccessLayout learning>
+        {demo && <Notice>Bản xem trước chưa kết nối tài khoản học viên.</Notice>}
+        <Link className="button access-google" to={demo ? '/setup' : `/login?next=${encodeURIComponent(location.pathname + location.search)}`}>
+          {!demo && <GoogleMark />}{demo ? 'Hướng dẫn kết nối' : 'Đăng nhập với Google'}
+        </Link>
+      </AccessLayout>
     );
   if (!user)
     return (

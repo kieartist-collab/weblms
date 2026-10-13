@@ -1,3 +1,4 @@
+import { AccessLayout, GoogleMark } from '../AccessLayout';
 import { curriculumLabels } from '../curriculum-labels';
 import { SoftwareStrip } from '../SoftwareStrip';
 import { MentorTeam } from '../MentorTeam';
@@ -324,18 +325,7 @@ export function Login() {
     }
   }, [user, loading, error, next, navigate]);
   return (
-    <div className="container page">
-      <div className="auth-card">
-        <span className="brand-icon">
-          <BookOpen />
-        </span>
-        <span className="eyebrow">CHÀO MỪNG BẠN TRỞ LẠI</span>
-        <h1>
-          Tiếp tục hành trình
-          <br />
-          của bạn.
-        </h1>
-        <p>Đăng nhập bằng tài khoản Google bạn muốn dùng để xem video và nhận tài liệu.</p>
+    <AccessLayout>
         {demo ? (
           <>
             <Notice>
@@ -347,7 +337,7 @@ export function Login() {
           </>
         ) : (
           <Action
-            className="button full google-button"
+            className="button full access-google"
             onClick={async () => {
               sessionStorage.setItem('login-next', next);
               check(
@@ -361,19 +351,11 @@ export function Login() {
               );
             }}
           >
-            <span className="google-letter">G</span> Tiếp tục với Google
+            <GoogleMark /> Tiếp tục với Google
           </Action>
         )}
         {(error || oauthError) && <Notice error>{error || oauthError}</Notice>}
-        <p className="small-note">
-          Quyền học trên website và quyền xem Google Drive được giảng viên cấp sau khi xác nhận
-          thanh toán.
-        </p>
-        <Link to="/courses" className="text-link">
-          Quay lại khám phá khóa học
-        </Link>
-      </div>
-    </div>
+    </AccessLayout>
   );
 }
 export function Setup() {
