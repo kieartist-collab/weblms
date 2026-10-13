@@ -9,6 +9,7 @@ import { HomeSections } from '../HomeSections';
 import { MotionSurface } from '../MotionSurface';
 import { SpiralHero } from '../SpiralHero';
 import { CourseAudience } from '../CourseAudience';
+import { GrowthJourney } from '../GrowthJourney';
 import { useAuth } from '../auth';
 import {
   Action,
@@ -119,6 +120,7 @@ export function Home({ catalog = false }: { catalog?: boolean }) {
         </section>
       )}
       {!catalog && <CourseAudience />}
+      {!catalog && <GrowthJourney />}
       {!catalog && <SoftwareStrip />}
       {!catalog && <HomeSections />}
       {!catalog && (
