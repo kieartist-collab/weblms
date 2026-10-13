@@ -2457,3 +2457,8 @@ footer.premium-footer { background: #0b0d11; border-top: 1px solid #2b303a; padd
 @media(max-width:1000px) { .pf-grid { grid-template-columns: 1fr 1fr; gap: 36px 60px; }.pf-invitation h2 { max-width: 420px; } }
 @media(max-width:600px) { .pf-shell { padding: 0 24px; }.pf-invitation { align-items: flex-start; flex-direction: column; gap: 22px; padding: 32px 0; }.pf-grid { gap: 28px 20px; padding: 34px 0; }.pf-brand-column,.pf-contact { grid-column: 1 / -1; }.pf-brand-column { padding-bottom: 24px; border-bottom: 1px solid #252b34; }.pf-description { max-width: none; }.pf-grid h3 { font-size: 11px; }.pf-links > a { font-size: 11px; }.pf-contact { padding-top: 24px; border-top: 1px solid #252b34; }.pf-bottom { flex-wrap: wrap; padding-bottom: 80px; }.pf-signoff { margin-left: 0; }.pf-bottom > span:first-child { width: 100%; }.pf-bottom button { margin-left: auto; } }
 @media(prefers-reduced-motion:reduce) { .premium-footer a,.pf-bottom button { transition: none; } }
+
+/* Shared Zuno wordmark: keep the original artwork and proportions. */
+.brand-logo { display: block; width: auto; height: 46px; object-fit: contain; flex-shrink: 0; }
+.pf-brand-column .brand-logo { height: 64px; }
+@media (max-width: 600px) { .site-header .brand-logo { height: 40px; } }

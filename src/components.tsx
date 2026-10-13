@@ -11,7 +11,6 @@ import {
   LoaderCircle,
   AlertCircle,
   Check,
-  GraduationCap,
   Film, Star, Users, CircleHelp, LayoutDashboard, LibraryBig,
 } from 'lucide-react';
 import { useAuth } from './auth';
@@ -158,13 +157,8 @@ export function Layout({ children }: { children: ReactNode }) {
       </a>
       <header className={`site-header ${location.pathname.startsWith('/admin') ? 'admin-site-header' : ''}`}>
         <div className="nav-wrap">
-          <Link to="/" className="brand">
-            <span className="brand-icon">
-              <GraduationCap size={23} />
-            </span>
-            <span>
-              học viện<span className="brand-sub">ONLINE</span>
-            </span>
+          <Link to="/" className="brand" aria-label="Zuno — Trang chủ">
+            <img className="brand-logo" src="/images/zuno.png" alt="Zuno" width="427" height="207" />
           </Link>
           <button
             className="mobile-toggle icon-button"
