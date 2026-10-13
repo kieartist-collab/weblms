@@ -515,3 +515,10 @@
 }
 .spiral-hero:not(.is-still) .spiral-art:hover .spiral-art-surface::after { opacity: var(--energy, 0); }
 .spiral-hero.is-still .spiral-art-surface::after { opacity: 0; }
+
+/* Keep the large spiral paths cheap to repaint while retaining luminous strokes. */
+.spiral-glow-trail,
+.spiral-glow-violet,
+.spiral-glow-fine { filter: none; }
+.spiral-star { box-shadow: 0 0 5px #a5e6ff90; }
+.spiral-hero.is-still .spiral-art { will-change: auto; }

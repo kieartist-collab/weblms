@@ -6,7 +6,7 @@ import { SpiralVideo } from './SpiralVideo';
 import './spiral-hero.css';
 
 const artworks = videos.slice(0, 20);
-const stars = Array.from({ length: 64 }, (_, i) => ({
+const stars = Array.from({ length: 32 }, (_, i) => ({
   x: (i * 61.803 + 9) % 100,
   y: (i * 37.719 + 13) % 100,
   depth: 0.25 + (i % 5) * 0.19,
@@ -55,6 +55,11 @@ export function SpiralHero() {
     const node = scene.current;
     if (!node) return;
     const cards = Array.from(node.querySelectorAll<HTMLElement>('.spiral-art'));
+    const heroNode = node.parentElement!;
+    const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
+    const lightweight = Boolean(connection?.saveData) || (navigator.hardwareConcurrency || 8) <= 4;
+    const frameInterval = 1000 / (lightweight ? 30 : 60);
+    let videoReady = false;
     let visible = true,
       frame = 0,
       previous = 0;
@@ -62,7 +67,14 @@ export function SpiralHero() {
     const motion = cards.map(() => ({ x: 0, y: 0, tilt: 0 }));
     const glowPaths = Array.from(node.querySelectorAll<SVGPathElement>('.spiral-glow-trail'));
     const paint = () => {
+      // Read every rectangle before any writes, avoiding a layout flush per card.
+      const rects = cards.map((card) => card.getBoundingClientRect());
+      const heroRect = heroNode.getBoundingClientRect();
       const cursor = pointer.current;
+      const pointerInside = cursor.screenX >= heroRect.left && cursor.screenX <= heroRect.right &&
+        cursor.screenY >= heroRect.top && cursor.screenY <= heroRect.bottom;
+      cursor.x = pointerInside ? ((cursor.screenX - heroRect.left) / heroRect.width) * 2 - 1 : 0;
+      cursor.y = pointerInside ? ((cursor.screenY - heroRect.top) / heroRect.height) * 2 - 1 : 0;
       cursor.currentX += (cursor.x - cursor.currentX) * 0.055;
       cursor.currentY += (cursor.y - cursor.currentY) * 0.055;
       starNodes.forEach((star, i) => {
@@ -119,7 +131,7 @@ export function SpiralHero() {
         card.style.transform = `translate3d(${p.x}px,${p.y}px,0) translate(-50%,-50%) scale(${scale})`;
         card.style.opacity = String(opacity * 0.9);
         // Hit-test the stable outer card; deform the media surface inside it.
-        const rect = card.getBoundingClientRect();
+        const rect = rects[i];
         const dx = cursor.screenX - (rect.left + rect.width / 2);
         const dy = cursor.screenY - (rect.top + rect.height / 2);
         const reach = Math.max(100, rect.width * .85);
@@ -145,7 +157,7 @@ export function SpiralHero() {
       });
     };
     const selectVideos = () => {
-      if (!visible || document.hidden || paused || reduced) {
+      if (!videoReady || !visible || document.hidden || paused || reduced) {
         selectedVideos.current = [];
         setActiveVideos((old) => (old.length ? [] : old));
         return;
@@ -179,13 +191,16 @@ export function SpiralHero() {
             Number(selectedVideos.current.includes(b.index)) -
               Number(selectedVideos.current.includes(a.index)) || b.rect.width - a.rect.width,
         )
-        .slice(0, innerWidth < 600 ? 3 : 8)
+        .slice(0, connection?.saveData ? 0 : innerWidth < 600 ? 1 : lightweight ? 2 : 3)
         .map((item) => item.index)
         .sort((a, b) => a - b);
       selectedVideos.current = candidates;
       setActiveVideos((old) => (old.join(',') === candidates.join(',') ? old : candidates));
     };
     const tick = (now: number) => {
+      frame = requestAnimationFrame(tick);
+      // High-refresh displays should not multiply decorative work to 120/144fps.
+      if (previous && now - previous < frameInterval - 0.5) return;
       if (previous) {
         const elapsed = Math.min(now - previous, 50);
         animationTime.current += elapsed / 1000;
@@ -193,7 +208,6 @@ export function SpiralHero() {
       }
       previous = now;
       paint();
-      frame = requestAnimationFrame(tick);
     };
     const sync = () => {
       cancelAnimationFrame(frame);
@@ -205,15 +219,21 @@ export function SpiralHero() {
       visible = entry.isIntersecting;
       sync();
     });
-    observer.observe(node);
+    observer.observe(heroNode);
     document.addEventListener('visibilitychange', sync);
     paint();
     sync();
+    // Let the heading and posters render before loading third-party video players.
+    const warmupTimer = window.setTimeout(() => {
+      videoReady = true;
+      selectVideos();
+    }, 1200);
     const selectionTimer = window.setInterval(selectVideos, 1000);
     return () => {
       cancelAnimationFrame(frame);
       observer.disconnect();
       window.clearInterval(selectionTimer);
+      window.clearTimeout(warmupTimer);
       document.removeEventListener('visibilitychange', sync);
     };
   }, [paused, reduced]);
@@ -224,11 +244,8 @@ export function SpiralHero() {
       aria-labelledby="welcome-title"
       onPointerMove={(event) => {
         if (paused || reduced || event.pointerType === 'touch') return;
-        const rect = event.currentTarget.getBoundingClientRect();
         pointer.current.screenX = event.clientX;
         pointer.current.screenY = event.clientY;
-        pointer.current.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-        pointer.current.y = ((event.clientY - rect.top) / rect.height) * 2 - 1;
       }}
       onPointerLeave={() => {
         pointer.current.screenX = -10000;
