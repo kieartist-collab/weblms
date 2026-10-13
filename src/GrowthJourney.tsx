@@ -1,5 +1,5 @@
-import { ArrowUpRight, BriefcaseBusiness, Radar, Sparkles, Lightbulb, TrendingUp } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { BriefcaseBusiness, Radar, Sparkles, Lightbulb, TrendingUp } from 'lucide-react';
+
 import './growth-journey.css';
 
 const steps = [
@@ -39,10 +39,6 @@ export function GrowthJourney() {
             ))}
           </ol>
         </div>
-        <footer className="growth-footer">
-          <p>Làm chủ quy trình. <strong>Phát triển dấu ấn riêng.</strong></p>
-          <Link to="/courses" className="growth-cta">Khám phá khóa học <ArrowUpRight size={18} aria-hidden="true" /></Link>
-        </footer>
       </div>
     </section>
   );

@@ -19,12 +19,6 @@
 .growth-stage-top { display: flex; justify-content: center; align-items: center; gap: 9px; color: #8bd1dc; font: 10px 'JetBrains Mono', monospace; letter-spacing: 1.5px; }
 .growth-stage h3 { font-size: clamp(24px, 2.2vw, 30px); line-height: 1.2; margin: 14px 0 10px; }
 .growth-stage p { color: #b8c2ce; font-size: 13px; line-height: 1.8; margin: 0 auto; max-width: 290px; }
-.growth-footer { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding-top: 22px; border-top: 1px solid #ffffff12; }
-.growth-footer p { margin: 0; font-size: 14px; color: #aeb9c7; line-height: 1.8; }
-.growth-footer strong { font-weight: 500; color: #e6edf2; }
-.growth-cta { display: inline-flex; align-items: center; justify-content: center; gap: 16px; padding: 12px 18px; border: 1px solid #8bd1dc55; border-radius: 4px; color: #b4e7ee; font-size: 13px; font-weight: 600; text-decoration: none; transition: background .2s, border-color .2s; }
-.growth-cta:hover { background: #8bd1dc15; border-color: #8bd1dc; }
-.growth-cta:focus-visible { outline: 2px solid #8bd1dc; outline-offset: 4px; }
 @keyframes growth-flow { to { stroke-dashoffset: -100; } }
 @media (max-width: 700px) {
   .growth-journey { padding: 40px 0 28px; }
@@ -36,7 +30,6 @@
   .growth-stage:nth-child(3) { border-left: 0; }
   .growth-stage-top { justify-content: flex-start; }
   .growth-stage p { max-width: none; }
-  .growth-footer { align-items: flex-start; flex-direction: column; gap: 16px; }
 }
 @media (max-width: 380px) {
   .growth-stages { grid-template-columns: minmax(0, 1fr); gap: 16px; }
@@ -44,5 +37,4 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .growth-route-light { animation: none; }
-  .growth-cta { transition: none; }
 }
