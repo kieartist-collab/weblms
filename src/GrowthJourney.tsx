@@ -1,6 +1,14 @@
-import { ArrowUpRight, Compass, Sparkles, TrendingUp } from 'lucide-react';
+import { ArrowUpRight, BriefcaseBusiness, Radar, Sparkles, Lightbulb, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import './growth-journey.css';
+
+const steps = [
+  { title: 'Cơ hội nghề nghiệp', description: 'Mở hướng đi với 3D, motion, dựng phim và sáng tạo nội dung.', icon: BriefcaseBusiness },
+  { title: 'Xu hướng thị trường', description: 'Cập nhật kỹ năng, chọn hướng đi phù hợp với công việc bạn theo đuổi.', icon: Radar },
+  { title: 'Tăng tốc với AI', description: 'Giảm thao tác lặp lại, thử nghiệm ý tưởng và hoàn thiện sản phẩm nhanh hơn.', icon: Sparkles },
+  { title: 'Làm chủ sáng tạo', description: 'Tư duy, thẩm mỹ và câu chuyện của bạn tạo nên sự khác biệt.', icon: Lightbulb },
+];
+const points = [{ x: 125, y: 165 }, { x: 375, y: 120 }, { x: 625, y: 70 }, { x: 875, y: 20 }];
 
 export function GrowthJourney() {
   return (
@@ -8,33 +16,29 @@ export function GrowthJourney() {
       <div className="growth-inner">
         <header className="growth-heading">
           <span className="eyebrow"><TrendingUp size={17} aria-hidden="true" /> BƯỚC TIẾP THEO CỦA BẠN</span>
-          <h2 id="growth-heading">Nâng kỹ năng. Mở cơ hội.<br /><em>Tạo dấu ấn.</em></h2>
-          <p>Từ định hướng nghề nghiệp đến làm chủ quy trình sáng tạo của riêng bạn.</p>
+          <h2 id="growth-heading">Nâng kỹ năng. Mở cơ hội. <em>Tạo dấu ấn.</em></h2>
         </header>
-
         <div className="growth-diagram">
-          <svg className="growth-route" viewBox="0 0 1400 440" preserveAspectRatio="none" aria-hidden="true">
-            <path className="growth-route-base" d="M 20 405 C 360 405 430 395 660 245 S 1080 30 1380 30" />
-            <path className="growth-route-light" pathLength="100" d="M 20 405 C 360 405 430 395 660 245 S 1080 30 1380 30" />
+          <svg className="growth-route" viewBox="0 0 1000 200" preserveAspectRatio="none" aria-hidden="true">
+            {[20, 70, 120, 165].map((y) => <path key={y} className="growth-gridline" d={`M 0 ${y} H 1000`} />)}
+            <path className="growth-area" d="M125 165 L375 120 L625 70 L875 20 L875 200 L125 200 Z" />
+            <path className="growth-route-base" d="M125 165 L375 120 L625 70 L875 20" />
+            <path className="growth-route-light" pathLength="100" d="M125 165 L375 120 L625 70 L875 20" />
+            {points.map(({ x, y }) => <path key={x} className="growth-guide" d={`M${x} ${y + 10} V200`} />)}
           </svg>
+          <div className="growth-markers" aria-hidden="true">
+            {points.map(({ y }, index) => <span className="growth-marker" key={y} style={{ top: `${y / 2}%`, left: `${12.5 + index * 25}%` }}>{String(index + 1).padStart(2, '0')}</span>)}
+          </div>
           <ol className="growth-stages">
-            <li className="growth-stage growth-stage-first">
-              <div className="growth-stage-top"><span className="growth-icon"><Compass size={25} aria-hidden="true" /></span><span className="growth-step">01 / ĐỊNH HƯỚNG</span></div>
-              <h3>Nắm bắt thị trường.<br /><span>Mở rộng cơ hội nghề nghiệp.</span></h3>
-              <p>Khám phá hướng đi trong 3D, motion graphics, dựng phim và sáng tạo nội dung. Hiểu cách các kỹ năng được ứng dụng trong công việc để chọn mục tiêu và xây dựng portfolio phù hợp.</p>
-              <ul className="growth-tags" aria-label="Các hướng nghề nghiệp"><li>3D Artist</li><li>Motion Designer</li><li>Video Editor</li><li>Content Creator</li></ul>
-              <div className="growth-outcome"><ArrowUpRight size={17} aria-hidden="true" /> Chọn hướng đi · Xây dựng portfolio</div>
-            </li>
-            <li className="growth-stage growth-stage-second">
-              <div className="growth-stage-top"><span className="growth-icon"><Sparkles size={25} aria-hidden="true" /></span><span className="growth-step">02 / PHÁT TRIỂN</span></div>
-              <h3>Tăng tốc với AI.<br /><span>Dẫn đường bằng sáng tạo.</span></h3>
-              <p>Ứng dụng AI để hỗ trợ phát triển ý tưởng và giảm thao tác lặp lại. Dành nhiều thời gian hơn cho thẩm mỹ, kể chuyện và hoàn thiện sản phẩm — những yếu tố tạo nên dấu ấn của bạn.</p>
-              <ul className="growth-tags" aria-label="Năng lực phát triển"><li>Quy trình với AI</li><li>Tư duy thẩm mỹ</li><li>Kể chuyện</li></ul>
-              <div className="growth-outcome"><ArrowUpRight size={17} aria-hidden="true" /> AI hỗ trợ quy trình · Bạn làm chủ ý tưởng</div>
-            </li>
+            {steps.map(({ title, description, icon: Icon }, index) => (
+              <li className="growth-stage" key={title}>
+                <div className="growth-stage-top"><Icon size={20} aria-hidden="true" /><span>BƯỚC {String(index + 1).padStart(2, '0')}</span></div>
+                <h3>{title}</h3>
+                <p>{description}</p>
+              </li>
+            ))}
           </ol>
         </div>
-
         <footer className="growth-footer">
           <p>Làm chủ quy trình. <strong>Phát triển dấu ấn riêng.</strong></p>
           <Link to="/courses" className="growth-cta">Khám phá khóa học <ArrowUpRight size={18} aria-hidden="true" /></Link>
