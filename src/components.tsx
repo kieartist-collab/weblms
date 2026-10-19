@@ -250,7 +250,6 @@ export function CourseCard({ course }: { course: Course }) {
     <Link to={`/courses/${course.slug}`} className="course-card">
       <div className="card-cover">
         <CourseImage course={course} />
-        <span className="cover-tag">{course.category}</span>
         <span className="cover-open">
           <ArrowUpRight size={20} />
         </span>
