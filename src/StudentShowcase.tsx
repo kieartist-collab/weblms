@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Play, X, ArrowUpRight, Clapperboard } from 'lucide-react';
-import videos from './student-videos.json';
+import {
+  useStudentVideos,
+  studentPlaylist as playlist,
+  type StudentVideo,
+} from './useStudentVideos';
 
-const playlist = 'https://www.youtube.com/playlist?list=PLfwK-27X-RuFFsTEliY6_Xd2m8uXePQA3';
-
-function VideoPopup({ video, close }: { video: (typeof videos)[number]; close: () => void }) {
+function VideoPopup({ video, close }: { video: StudentVideo; close: () => void }) {
   const dialog = useRef<HTMLDialogElement>(null);
   useEffect(() => {
     const previous = document.activeElement as HTMLElement | null;
@@ -77,7 +79,7 @@ function ExhibitionFilm({
   open,
   featured = false,
 }: {
-  video: (typeof videos)[number];
+  video: StudentVideo;
   open: () => void;
   featured?: boolean;
 }) {
@@ -103,7 +105,8 @@ function ExhibitionFilm({
 }
 
 export function StudentShowcase() {
-  const [selected, setSelected] = useState<(typeof videos)[number] | null>(null);
+  const videos = useStudentVideos();
+  const [selected, setSelected] = useState<StudentVideo | null>(null);
   const [visibleCount, setVisibleCount] = useState(10);
   const sentinel = useRef<HTMLDivElement>(null);
   const collection = videos.slice(1);
