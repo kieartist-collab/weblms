@@ -63,3 +63,32 @@
   .admin-workspace .modal { width: calc(100vw - 24px); max-height: calc(100dvh - 24px); padding: 18px; }
   .admin-workspace .lesson-sort-actions { width: 100%; }
 }
+.admin-thumbnail-preview {
+  margin: 16px 0;
+  width: 100%;
+  max-width: 480px;
+}
+.admin-thumbnail-preview figcaption {
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+.admin-thumbnail-preview-frame {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border: 1px solid #82c6d24d;
+  border-radius: 8px;
+  background: #101419;
+}
+.admin-thumbnail-preview-frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  object-fit: contain;
+}
+.admin-thumbnail-preview-frame p {
+  padding: 20px;
+  text-align: center;
+}

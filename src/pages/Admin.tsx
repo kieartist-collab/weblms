@@ -1,5 +1,6 @@
 import { curriculumLabels, titleWithoutNumber } from '../curriculum-labels';
 import { cleanupOldThumbnail } from '../thumbnail-cleanup';
+import { prepareThumbnail } from '../thumbnail-image';
 import { RichEditor } from '../RichEditor';
 import { CourseImportPanel } from '../CourseImportPanel';
 import { useEffect, useRef, useState } from 'react';
@@ -158,6 +159,8 @@ function EditorForm({
     setSaved(false);
     setError('');
     try {
+      if (form.querySelector('[data-thumbnail-uploading="true"]'))
+        throw new Error('Vui lòng đợi xử lý và tải ảnh xong trước khi lưu khóa học.');
       await onSave(data);
       form.dispatchEvent(new Event('editor-saved'));
       setSaved(true);
@@ -383,39 +386,56 @@ function Thumbnail({ value }: { value: string }) {
   const [url, setUrl] = useState(value);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
+  const [preview, setPreview] = useState('');
+  const [details, setDetails] = useState('');
+  const [previewFailed, setPreviewFailed] = useState(false);
+  useEffect(() => () => { if (preview) URL.revokeObjectURL(preview); }, [preview]);
+  const previewUrl = preview || safeUrl(url);
   return (
-    <div className="wide">
+    <div className="wide" data-thumbnail-uploading={busy} aria-busy={busy}>
       <Field label="Ảnh khóa học (URL HTTPS)" name="thumbnail_url">
         <input
           type="url"
           name="thumbnail_url"
           value={url}
-          onChange={(e) => setUrl(e.target.value)}
+          disabled={busy}
+          onChange={(e) => { setUrl(e.target.value); setPreview(''); setDetails(''); setPreviewFailed(false); }}
         />
       </Field>
       <label className="upload-label">
-        {busy ? 'Đang tải ảnh…' : 'Hoặc tải ảnh JPG, PNG, WebP (tối đa 5 MB)'}
+        {busy ? 'Đang xử lý và tải ảnh…' : 'Hoặc tải ảnh JPG, PNG, WebP (tối đa 20 MB)'}
         <input
           type="file"
           accept="image/jpeg,image/png,image/webp"
           disabled={busy}
           onChange={async (e) => {
             const f = e.target.files?.[0];
+            e.target.value = '';
             if (!f) return;
             setError('');
             setBusy(true);
             try {
-              if (f.size > 5242880 || !['image/jpeg', 'image/png', 'image/webp'].includes(f.type))
-                throw new Error('Chỉ nhận JPG, PNG hoặc WebP tối đa 5 MB.');
-              const ext = f.type.split('/')[1];
+              if (!['image/jpeg', 'image/png', 'image/webp'].includes(f.type) || f.size > 20 * 1024 * 1024)
+                throw new Error('Chỉ nhận JPG, PNG hoặc WebP tối đa 20 MB.');
+              setPreview(URL.createObjectURL(f));
+              setPreviewFailed(false);
+              setDetails('Đang tối ưu ảnh…');
+              const prepared = await prepareThumbnail(f);
+              const optimized = prepared.file;
+              setPreview(URL.createObjectURL(optimized));
+              setPreviewFailed(false);
+              setDetails(`${prepared.width} × ${prepared.height} px · ${(f.size / 1024).toFixed(1)} KB → ${(optimized.size / 1024).toFixed(1)} KB`);
+              const ext = optimized.name.split('.').pop();
               const path = `${crypto.randomUUID()}.${ext}`;
               check(
                 await db()
                   .storage.from('course-thumbnails')
-                  .upload(path, f, { contentType: f.type }),
+                  .upload(path, optimized, { contentType: optimized.type }),
               );
               setUrl(db().storage.from('course-thumbnails').getPublicUrl(path).data.publicUrl);
             } catch (err) {
+              setPreview('');
+              setDetails('');
               setError(errorText(err));
             } finally {
               setBusy(false);
@@ -423,6 +443,18 @@ function Thumbnail({ value }: { value: string }) {
           }}
         />
       </label>
+      <p className="muted">Ảnh tự động thu nhỏ tối đa 1280 × 720 px, giữ nguyên tỷ lệ và nén để giảm dung lượng.</p>
+      <figure className="admin-thumbnail-preview">
+        <figcaption>Xem trước ảnh khóa học</figcaption>
+        <div className="admin-thumbnail-preview-frame">
+          {previewUrl && !previewFailed ? (
+            <img key={previewUrl} src={previewUrl} alt="Xem trước ảnh đại diện khóa học" onError={() => setPreviewFailed(true)} />
+          ) : (
+            <p className="muted">{previewFailed ? 'Không thể hiển thị ảnh. Vui lòng kiểm tra URL hoặc chọn ảnh khác.' : 'Chọn ảnh hoặc nhập URL để xem trước tại đây.'}</p>
+          )}
+        </div>
+        <p className="muted" aria-live="polite">{details || (previewUrl ? 'Ảnh đại diện hiện tại của khóa học' : 'Ảnh xem trước sẽ hiện ngay khi bạn chọn tệp.')}</p>
+      </figure>
       {error && (
         <p role="alert" className="field-error">
           {error}
