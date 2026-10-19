@@ -56,5 +56,8 @@ export async function loadVideos(key, playlistIds, request = fetch) {
     }
   }
   if (!videos.length) throw new Error('No public videos; preserving previous collection');
-  return videos.sort((a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt));
+  // videos.list does not guarantee the order of the requested IDs.
+  // Restore the playlist order, including across pages and deduplicated playlists.
+  const positions = new Map(allIds.map((id, index) => [id, index]));
+  return videos.sort((a, b) => positions.get(a.id) - positions.get(b.id));
 }

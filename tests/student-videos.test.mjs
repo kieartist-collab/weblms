@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { loadVideos } from '../supabase/functions/student-videos/youtube.mjs';
 
-test('loads all pages, deduplicates playlists, filters unavailable videos, sorts newest first', async () => {
+test('preserves manual playlist order across pages even when video details arrive in reverse order', async () => {
   const calls = [];
   const request = async (url) => {
     calls.push(url);
@@ -13,15 +13,15 @@ test('loads all pages, deduplicates playlists, filters unavailable videos, sorts
       : {
           items: [
             {
-              id: 'aaaaaaaaaaa',
-              snippet: { title: 'Old', publishedAt: '2025-01-01' },
-              contentDetails: { duration: 'PT1H2M3S' },
-              status: { privacyStatus: 'public' },
-            },
-            {
               id: 'bbbbbbbbbbb',
               snippet: { title: 'New', publishedAt: '2026-01-01' },
               contentDetails: { duration: 'PT35S' },
+              status: { privacyStatus: 'public' },
+            },
+            {
+              id: 'aaaaaaaaaaa',
+              snippet: { title: 'Old', publishedAt: '2025-01-01' },
+              contentDetails: { duration: 'PT1H2M3S' },
               status: { privacyStatus: 'public' },
             },
             { id: 'ccccccccccc', status: { privacyStatus: 'private' } },
@@ -33,9 +33,9 @@ test('loads all pages, deduplicates playlists, filters unavailable videos, sorts
   const videos = await loadVideos('secret', ['one', 'two'], request);
   assert.deepEqual(
     videos.map((v) => v.title),
-    ['New', 'Old'],
+    ['Old', 'New'],
   );
-  assert.equal(videos[1].duration, 3723);
+  assert.equal(videos[0].duration, 3723);
   assert.equal(calls.length, 5);
   assert.equal(calls.at(-1).searchParams.get('id'), 'aaaaaaaaaaa,bbbbbbbbbbb');
 });
