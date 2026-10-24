@@ -1,6 +1,6 @@
 .software-strip {
   padding: 39px 0 40px;
-  background: #111418;
+  background: #181211;
   border-bottom: 1px solid #ffffff0d;
   overflow: hidden;
 }
@@ -14,7 +14,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #85bac4;
+  color: #df936a;
   font-size: 9px;
   letter-spacing: 1.7px;
 }
@@ -24,7 +24,7 @@
   font-size: clamp(17px, 2vw, 23px);
   line-height: 1.5;
   margin: 12px 0 0;
-  color: #dae0e6;
+  color: #eae1d6;
   font-weight: 500;
 }
 .software-toggle {
@@ -36,15 +36,15 @@
   border-radius: 50%;
   border: 1px solid #ffffff20;
   background: transparent;
-  color: #aebec8;
+  color: #d3b4a3;
   cursor: pointer;
 }
 .software-toggle:hover {
-  border-color: #8acbd5;
-  color: #defaff;
+  border-color: #f59b6a;
+  color: #ffeade;
 }
 .software-toggle:focus-visible {
-  outline: 2px solid #8acbd5;
+  outline: 2px solid #f59b6a;
   outline-offset: 4px;
 }
 .software-window {
@@ -76,7 +76,7 @@
   height: 78px;
   padding: 0 24px;
   border-right: 1px solid #ffffff0b;
-  color: #aebbc5;
+  color: #c5b8ae;
 }
 .software-brand img {
   width: 42px;

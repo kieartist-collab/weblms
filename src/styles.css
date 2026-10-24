@@ -2,15 +2,15 @@
 
 :root {
   font-family: Arial, 'Segoe UI', sans-serif;
-  color: #202d29;
+  color: #2d2220;
   background: #fafbf9;
   font-synthesis: none;
   font-weight: 400;
   line-height: 1.6;
-  --green: #173f35;
+  --green: #442312;
   --lime: #d7f599;
-  --muted: #718079;
-  --line: #e1e7e2;
+  --muted: #82726f;
+  --line: #eee3da;
   --white: #fff;
 }
 * {
@@ -96,7 +96,7 @@ textarea {
 }
 ::selection {
   background: #d7f599;
-  color: #173f35;
+  color: #442312;
 }
 .container {
   width: min(1200px, calc(100% - 80px));
@@ -118,7 +118,7 @@ textarea {
 }
 .lead {
   font-size: 1.08rem;
-  color: #718079;
+  color: #82726f;
   max-width: 760px;
 }
 .muted {
@@ -142,7 +142,7 @@ textarea {
 .tiny-line {
   height: 2px;
   width: 25px;
-  background: #628667;
+  background: #866862;
 }
 .site-header {
   background: rgba(255, 255, 255, 0.96);
@@ -241,7 +241,7 @@ textarea {
 .button.secondary {
   background: white;
   color: var(--green);
-  border: 1px solid #d5dfd8;
+  border: 1px solid #e8d8cc;
 }
 .button.secondary:hover {
   background: #f0f5ee;
@@ -269,7 +269,7 @@ textarea {
   color: inherit;
 }
 .icon-button:hover {
-  background: #edf2ee;
+  background: #f5efea;
 }
 .danger {
   color: #a33333;
@@ -294,7 +294,7 @@ textarea {
   text-align: center;
   padding: 7px 15px;
   background: #edf3e8;
-  color: #526450;
+  color: #645350;
 }
 .demo-bar a {
   text-decoration: underline;
@@ -318,10 +318,10 @@ textarea {
 }
 .hero-copy h1 em {
   font-style: normal;
-  color: #648369;
+  color: #836964;
 }
 .hero-copy > p {
-  color: #758079;
+  color: #847471;
   font-size: 0.96rem;
   line-height: 1.8;
   margin-bottom: 28px;
@@ -331,7 +331,7 @@ textarea {
   gap: 25px;
   margin-top: 26px;
   font-size: 0.75rem;
-  color: #718079;
+  color: #82726f;
 }
 .hero-points span {
   display: flex;
@@ -356,7 +356,7 @@ textarea {
 .hero-image-shade {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, transparent 40%, #102d26bb);
+  background: linear-gradient(180deg, transparent 40%, #31190cbb);
   border-radius: 14px;
 }
 .image-caption {
@@ -396,7 +396,7 @@ textarea {
   left: -40px;
   padding: 17px 21px;
   background: white;
-  border: 1px solid #e5ebe5;
+  border: 1px solid #f1e7df;
   box-shadow: 0 10px 30px #112f2310;
   border-radius: 9px;
   display: flex;
@@ -410,7 +410,7 @@ textarea {
 }
 .floating-note div > span {
   font-size: 0.72rem;
-  color: #849086;
+  color: #938981;
 }
 .floating-note > svg {
   color: #779769;
@@ -432,7 +432,7 @@ textarea {
   justify-content: center;
   flex-direction: column;
   gap: 30px;
-  background: #dfe8de;
+  background: #eee2d8;
   border-radius: 14px;
   color: var(--green);
 }
@@ -453,11 +453,11 @@ textarea {
   gap: 12px;
   align-items: center;
   font-size: 0.8rem;
-  color: #5e6e60;
+  color: #6e615e;
 }
 .benefit-inner svg {
   width: 19px;
-  color: #729172;
+  color: #917f72;
 }
 .course-section {
   padding-top: 66px;
@@ -478,7 +478,7 @@ textarea {
 }
 .section-heading p {
   font-size: 0.875rem;
-  color: #7b857d;
+  color: #8a7f76;
   margin-top: 12px;
 }
 .section-heading > .text-link {
@@ -549,7 +549,7 @@ textarea {
 .card-body > .eyebrow {
   font-size: 0.62rem;
   letter-spacing: 0.1em;
-  color: #758b70;
+  color: #8b7570;
 }
 .card-body h3 {
   font-size: 1.12rem;
@@ -560,11 +560,11 @@ textarea {
 .card-body > p {
   font-size: 0.81rem;
   line-height: 1.75;
-  color: #818b82;
+  color: #90857c;
   margin-bottom: 25px;
 }
 .card-footer {
-  border-top: 1px solid #edf0eb;
+  border-top: 1px solid #f4ede7;
   padding-top: 17px;
   display: flex;
   align-items: center;
@@ -581,12 +581,12 @@ textarea {
   align-items: center;
   gap: 7px;
   font-size: 0.71rem;
-  color: #6a7e6a;
+  color: #7e6d6a;
 }
 .course-placeholder {
   padding: 28px;
-  background: #d8e2fa;
-  color: #223d75;
+  background: #ffecd3;
+  color: #7d521a;
   position: relative;
   overflow: hidden;
   display: flex;
@@ -624,7 +624,7 @@ textarea {
 }
 .note-number {
   align-self: start;
-  color: #8da086;
+  color: #a09186;
   font-size: 0.8rem;
   padding-top: 7px;
 }
@@ -635,7 +635,7 @@ textarea {
 }
 .learning-note > p {
   font-size: 0.85rem;
-  color: #7c877e;
+  color: #8c8077;
   max-width: 365px;
   margin-left: auto;
 }
@@ -648,14 +648,14 @@ textarea {
   gap: 20px;
   padding: 30px 0;
   font-size: 0.75rem;
-  color: #7e887f;
+  color: #8d8279;
 }
 footer {
   background: #f1f4ee;
   border-top: 1px solid var(--line);
 }
 footer .brand {
-  color: #344738;
+  color: #473734;
   font-size: 1.1rem;
 }
 footer .brand-icon {
@@ -695,7 +695,7 @@ footer p {
   display: flex;
   flex-wrap: wrap;
   gap: 22px;
-  color: #708075;
+  color: #82726e;
   font-size: 0.85rem;
   margin: 25px 0;
 }
@@ -714,7 +714,7 @@ footer p {
 .prose {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
-  color: #5a6e60;
+  color: #6e5d5a;
   font-size: 0.96rem;
 }
 .purchase-card {
@@ -743,7 +743,7 @@ footer p {
 }
 .purchase-hint {
   font-size: 0.7rem;
-  color: #819080;
+  color: #92877e;
   text-align: center;
   margin-top: 12px;
 }
@@ -766,7 +766,7 @@ footer p {
 }
 .small-note {
   font-size: 0.8rem;
-  color: #7a897f;
+  color: #8c8077;
   margin-top: 24px;
 }
 .curriculum {
@@ -787,12 +787,12 @@ footer p {
 }
 .curriculum summary > span {
   font-size: 0.75rem;
-  color: #76936c;
+  color: #93736c;
 }
 .curriculum summary > small {
   margin-left: auto;
   font-size: 0.73rem;
-  color: #758579;
+  color: #877673;
   white-space: nowrap;
 }
 .curriculum-lesson {
@@ -800,8 +800,8 @@ footer p {
   align-items: center;
   gap: 12px;
   padding: 14px 22px;
-  border-top: 1px solid #edf0eb;
-  color: #647368;
+  border-top: 1px solid #f4ede7;
+  color: #746663;
   font-size: 0.85rem;
 }
 .curriculum-lesson > small {
@@ -828,7 +828,7 @@ footer p {
 }
 .auth-card > p {
   font-size: 0.9rem;
-  color: #748176;
+  color: #847471;
   margin-bottom: 25px;
 }
 .auth-card > .text-link {
@@ -844,7 +844,7 @@ footer p {
 }
 .google-letter {
   font-size: 1.2rem;
-  color: #467dc6;
+  color: #ec9420;
   font-weight: bold;
 }
 .notice {
@@ -858,7 +858,7 @@ footer p {
   font-size: 0.85rem;
   line-height: 1.7;
   margin: 16px 0;
-  color: #4b6347;
+  color: #634c47;
 }
 .notice > svg {
   margin-top: 4px;
@@ -896,16 +896,16 @@ footer p {
   flex-direction: column;
   align-items: center;
   gap: 18px;
-  border: 1px dashed #cfdbcf;
+  border: 1px dashed #dbd4cf;
   border-radius: 12px;
   margin: 25px auto;
   max-width: 900px;
 }
 .empty > svg {
-  color: #93a58d;
+  color: #a5978d;
 }
 .empty p {
-  color: #778572;
+  color: #857572;
   max-width: 580px;
   font-size: 0.9rem;
 }
@@ -938,7 +938,7 @@ footer p {
   justify-content: space-between;
   gap: 10px;
   font-size: 0.75rem;
-  color: #778576;
+  color: #887773;
   margin: 10px 0;
 }
 .progress-caption strong {
@@ -988,7 +988,7 @@ progress::-moz-progress-bar {
   font-size: 0.94rem;
 }
 .order-row small {
-  color: #7a897f;
+  color: #8c8077;
 }
 .badge {
   display: inline-block;
@@ -998,7 +998,7 @@ progress::-moz-progress-bar {
   padding: 5px 10px;
   font-size: 0.7rem;
   font-weight: 600;
-  color: #617458;
+  color: #745d58;
 }
 .badge.reported,
 .badge.paid {
@@ -1027,7 +1027,7 @@ progress::-moz-progress-bar {
 }
 .bank-details small {
   display: block;
-  color: #74816d;
+  color: #81706d;
   font-size: 0.8rem;
   margin-bottom: 5px;
 }
@@ -1091,7 +1091,7 @@ progress::-moz-progress-bar {
   border-radius: 7px;
   margin: 3px 0;
   font-size: 0.85rem;
-  color: #6c7c70;
+  color: #7d6e6b;
 }
 .lesson-link:hover {
   background: #e8eee3;
@@ -1102,7 +1102,7 @@ progress::-moz-progress-bar {
 }
 .lesson-link small {
   display: block;
-  color: #82907f;
+  color: #91867e;
   font-size: 0.72rem;
   margin-top: 3px;
 }
@@ -1136,7 +1136,7 @@ progress::-moz-progress-bar {
   align-items: center;
   justify-content: center;
   gap: 20px;
-  color: #b9c9b8;
+  color: #c9bfb8;
 }
 .video-help {
   display: flex;
@@ -1144,7 +1144,7 @@ progress::-moz-progress-bar {
   justify-content: space-between;
   gap: 20px;
   font-size: 0.78rem;
-  color: #7c897f;
+  color: #8c8179;
   margin: 18px 0;
 }
 .video-help > span {
@@ -1191,7 +1191,7 @@ progress::-moz-progress-bar {
   gap: 8px;
   padding: 10px 16px;
   font-size: 0.875rem;
-  color: #6c7c71;
+  color: #7d6e6b;
   border-radius: 7px;
 }
 .admin-tabs a.active {
@@ -1213,7 +1213,7 @@ table {
 }
 th {
   background: #f1f5ef;
-  color: #6c7e6a;
+  color: #7e6d6a;
   font-size: 0.73rem;
   font-weight: 600;
   white-space: nowrap;
@@ -1228,7 +1228,7 @@ tr:last-child td {
 }
 td small {
   display: block;
-  color: #7d8c7c;
+  color: #8e837a;
   margin-top: 3px;
   font-size: 0.75rem;
 }
@@ -1253,7 +1253,7 @@ td .inline {
   gap: 7px;
   margin-bottom: 17px;
   font-size: 0.85rem;
-  color: #5c705d;
+  color: #705f5c;
 }
 .field > span {
   font-weight: 600;
@@ -1263,7 +1263,7 @@ td .inline {
 .field textarea {
   padding: 12px;
   background: #fff;
-  border: 1px solid #d5dfd2;
+  border: 1px solid #dfd8d2;
   border-radius: 6px;
   width: 100%;
   color: #263c2c;
@@ -1274,7 +1274,7 @@ td .inline {
 }
 .field small {
   font-size: 0.75rem;
-  color: #82917e;
+  color: #91867e;
 }
 .field.wide,
 .wide {
@@ -1306,7 +1306,7 @@ td .inline {
   display: block;
   font-size: 0.8rem;
   margin-bottom: 20px;
-  color: #72846e;
+  color: #84726e;
 }
 .upload-label input {
   display: block;
@@ -1344,7 +1344,7 @@ td .inline {
 }
 .module-lesson small {
   display: block;
-  color: #81917b;
+  color: #91857b;
   font-size: 0.75rem;
 }
 .modal-backdrop {
@@ -1373,7 +1373,7 @@ td .inline {
 }
 .order-admin > p {
   font-size: 0.85rem;
-  color: #6f816b;
+  color: #816f6b;
 }
 .transfer-code {
   display: block;
@@ -1398,7 +1398,7 @@ td .inline {
 .enrollment-row small {
   display: block;
   font-size: 0.75rem;
-  color: #7d8f75;
+  color: #8f8075;
   margin: 7px 0;
 }
 .setup-steps h2 {
@@ -1410,7 +1410,7 @@ td .inline {
 }
 .setup-steps p {
   font-size: 0.9rem;
-  color: #6c7d65;
+  color: #7d6965;
 }
 .setup-steps {
   margin-top: 30px;
@@ -1511,7 +1511,7 @@ code {
     z-index: 50;
     padding: 25px;
     border-bottom: 1px solid var(--line);
-    box-shadow: 0 15px 25px #1232;
+    box-shadow: 0 15px 25px #36250e22;
     align-items: stretch;
   }
   .nav.open {

@@ -18,12 +18,12 @@
   margin: 20px 0 0;
 }
 .mentor-team-heading h2 em {
-  color: #85c7d1;
+  color: #f19665;
   font-style: normal;
 }
 .mentor-team-heading > p {
   max-width: 340px;
-  color: #aeb7c3;
+  color: #c3b7ae;
   font-size: 13px;
   line-height: 1.9;
   margin: 0;
@@ -34,20 +34,20 @@
   gap: 24px;
 }
 .mentor-profile {
-  --mentor-accent: #88cdd6;
+  --mentor-accent: var(--s8-ember);
   border: 1px solid #ffffff18;
   border-radius: 14px;
   overflow: hidden;
-  background: #161a20;
+  background: #211c15;
   transition:
     border-color 0.3s,
     transform 0.3s;
 }
 .mentor-profile:nth-child(2) {
-  --mentor-accent: #b8a6df;
+  --mentor-accent: var(--s8-gold);
 }
 .mentor-profile:nth-child(3) {
-  --mentor-accent: #99c6b2;
+  --mentor-accent: var(--s8-sky);
 }
 .mentor-portrait {
   height: 300px;
@@ -59,14 +59,14 @@
       color-mix(in srgb, var(--mentor-accent) 22%, transparent),
       transparent 72%
     ),
-    #1b2229;
+    #2a231a;
   border-bottom: 1px solid #ffffff0d;
 }
 .mentor-portrait::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(transparent 70%, #161a20);
+  background: linear-gradient(transparent 70%, #211c15);
   pointer-events: none;
 }
 .mentor-index {
@@ -134,7 +134,7 @@
 }
 .mentor-profile-copy h3 {
   margin: 0 0 7px;
-  color: #eef2f4;
+  color: #f7efeb;
   font:
     600 30px/1.15 'Barlow Condensed',
     sans-serif;
@@ -154,7 +154,7 @@
   border: 1px solid #ffffff12;
   padding: 5px 8px;
   border-radius: 4px;
-  color: #aeb9c7;
+  color: #cfbda7;
   font-size: 9px;
 }
 .mentor-quote-icon {
@@ -167,7 +167,7 @@
   border: 0;
   font-size: 13px;
   line-height: 1.95;
-  color: #c2c9d1;
+  color: #d1c9c2;
 }
 .mentor-team-bottom {
   display: flex;
@@ -176,20 +176,20 @@
   gap: 20px;
   margin-top: 28px;
   font-size: 12px;
-  color: #96a2b1;
+  color: #b1a296;
 }
 .mentor-team-bottom a {
   display: inline-flex;
   align-items: center;
   gap: 9px;
-  color: #87cbd6;
+  color: #f89965;
   text-decoration: none;
 }
 .mentor-team-bottom a:hover {
-  color: #d5faff;
+  color: #ffe4d5;
 }
 .mentor-team-bottom a:focus-visible {
-  outline: 2px solid #87cbd6;
+  outline: 2px solid #f89965;
   outline-offset: 5px;
 }
 @media (hover: hover) {

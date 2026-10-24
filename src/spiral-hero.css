@@ -8,7 +8,7 @@
   overflow: hidden;
   display: grid;
   place-items: center;
-  background: #0e1114;
+  background: #140f0e;
   color: #f4f3ee;
 }
 .spiral-scene {
@@ -24,7 +24,7 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  stroke: #8ac9d0;
+  stroke: #ee9a6c;
   stroke-width: 1;
   opacity: 0.24;
 }
@@ -45,7 +45,7 @@
   border-radius: 9px;
   overflow: hidden;
   border: 1px solid #ffffff26;
-  background: #1b252c;
+  background: #2e2019;
   box-shadow: 0 12px 48px #0006;
   will-change: transform;
 }
@@ -62,12 +62,12 @@
   background:
     radial-gradient(
       ellipse 37% 40% at 50% 48%,
-      #0e1114 15%,
-      #0e1114f5 50%,
-      #0e111499 76%,
+      #140f0e 15%,
+      #140f0ef5 50%,
+      #140f0e99 76%,
       transparent 100%
     ),
-    linear-gradient(0deg, #0e1114 0%, transparent 18%, transparent 86%, #0e111455);
+    linear-gradient(0deg, #140f0e 0%, transparent 18%, transparent 86%, #140f0e55);
 }
 .spiral-copy {
   position: relative;
@@ -79,7 +79,7 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  color: #9abec2;
+  color: #d3a389;
   font:
     11px 'JetBrains Mono',
     monospace;
@@ -89,8 +89,8 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #88d1dc;
-  box-shadow: 0 0 15px #88d1dc80;
+  background: #ff9b65;
+  box-shadow: 0 0 15px #ff9b6580;
 }
 .spiral-hero h1 {
   font-family: 'Barlow Condensed', sans-serif;
@@ -101,11 +101,11 @@
   margin: 27px 0 22px;
 }
 .spiral-hero h1 em {
-  color: #85c8d2;
+  color: #f39664;
   font-style: normal;
 }
 .spiral-copy > p {
-  color: #b5bdc4;
+  color: #c4bcb5;
   font-size: 16px;
   line-height: 1.8;
   margin: 0 0 28px;
@@ -123,7 +123,7 @@
   min-height: 48px;
 }
 .spiral-actions .secondary {
-  background: #10161ae6;
+  background: #1b130fe6;
 }
 .spiral-signature {
   display: block;
@@ -132,7 +132,7 @@
     10px 'JetBrains Mono',
     monospace;
   letter-spacing: 3px;
-  color: #829397;
+  color: #978b82;
 }
 .spiral-bottom {
   position: absolute;
@@ -150,14 +150,14 @@
   align-items: center;
   gap: 10px;
   font-size: 11px;
-  color: #b4c5c9;
+  color: #c9bdb4;
   text-decoration: none;
 }
 .spiral-pause {
-  border: 1px solid #aacbd22b;
+  border: 1px solid #e3b3992b;
   border-radius: 30px;
   padding: 10px 15px;
-  background: #0e1114b3;
+  background: #140f0eb3;
   cursor: pointer;
 }
 .spiral-scroll:hover,
@@ -166,7 +166,7 @@
 }
 .spiral-hero a:focus-visible,
 .spiral-pause:focus-visible {
-  outline: 2px solid #85c8d2;
+  outline: 2px solid #f39664;
   outline-offset: 5px;
 }
 @media (min-width: 1800px) {
@@ -183,8 +183,8 @@
   }
   .spiral-shade {
     background:
-      radial-gradient(ellipse 60% 42% at 50% 47%, #0e1114 30%, #0e1114ee 62%, transparent 100%),
-      linear-gradient(0deg, #0e1114, transparent 25%);
+      radial-gradient(ellipse 60% 42% at 50% 47%, #140f0e 30%, #140f0eee 62%, transparent 100%),
+      linear-gradient(0deg, #140f0e, transparent 25%);
   }
 }
 @media (max-width: 600px) {
@@ -226,8 +226,8 @@
   }
   .spiral-shade {
     background:
-      radial-gradient(ellipse 85% 39% at 50% 48%, #0e1114 20%, #0e1114ef 65%, transparent 100%),
-      linear-gradient(0deg, #0e1114, transparent 25%);
+      radial-gradient(ellipse 85% 39% at 50% 48%, #140f0e 20%, #140f0eef 65%, transparent 100%),
+      linear-gradient(0deg, #140f0e, transparent 25%);
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -250,7 +250,7 @@
   overflow: hidden;
   border: 1px solid #ffffff30;
   border-radius: 10px;
-  background: #172126;
+  background: #281c15;
   box-shadow: 0 12px 48px #0006;
 }
 .spiral-video {
@@ -301,7 +301,7 @@
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
   .spiral-hero:not(.is-still) .spiral-art:hover .spiral-art-surface {
     border-radius: 19px 7px 20px 8px;
-    border-color: #94d6df99;
+    border-color: #ffa57499;
   }
 }
 .spiral-hero.is-still .spiral-art-surface {
@@ -320,17 +320,17 @@
   pointer-events: none;
 }
 .spiral-glow-trail {
-  stroke: #9beefa;
+  stroke: #ffbb96;
   stroke-width: 2;
   stroke-linecap: round;
   stroke-dasharray: 38 962;
-  filter: drop-shadow(0 0 4px #82e2f5) drop-shadow(0 0 12px #4ec7ef);
+  filter: drop-shadow(0 0 4px #ffa778) drop-shadow(0 0 12px #ff823e);
 }
 .spiral-glow-violet {
-  stroke: #ba9def;
+  stroke: #ff9a8d;
   stroke-width: 1.5;
   stroke-dasharray: 22 978;
-  filter: drop-shadow(0 0 6px #ab7ef0);
+  filter: drop-shadow(0 0 6px #ff806f);
 }
 .spiral-glow-fine {
   stroke-width: 1;
@@ -355,17 +355,17 @@
   opacity: 0;
   background: radial-gradient(
     circle at var(--shine-x, 50%) var(--shine-y, 50%),
-    #abf0ff38,
+    #ffc8ab38,
     transparent 65%
   );
-  box-shadow: inset 0 0 0 2px #b8f3ff77;
+  box-shadow: inset 0 0 0 2px #ffd1b877;
   transition: opacity 0.4s;
 }
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
   .spiral-hero:not(.is-still) .spiral-art:hover .spiral-art-surface {
     filter: saturate(1.65) contrast(1.08) brightness(1.1);
-    border-color: #b9f3ff;
-    box-shadow: 0 0 28px #8ee9ff70;
+    border-color: #ffd2b9;
+    box-shadow: 0 0 28px #ffb68e70;
   }
   .spiral-hero:not(.is-still) .spiral-art:hover .spiral-art-surface::after {
     opacity: 1;
@@ -416,16 +416,16 @@
   opacity: 1;
 }
 .spiral-glow-trail {
-  stroke: #d2fbff;
+  stroke: #ffe2d2;
   stroke-width: 4;
   stroke-dasharray: 65 935;
-  filter: drop-shadow(0 0 5px #a3f7ff) drop-shadow(0 0 14px #4bd6ff) drop-shadow(0 0 28px #35b6ff);
+  filter: drop-shadow(0 0 5px #ffc3a3) drop-shadow(0 0 14px #ff8a4b) drop-shadow(0 0 28px #ff7c35);
 }
 .spiral-glow-violet {
-  stroke: #d8bcff;
+  stroke: #ffc4bc;
   stroke-width: 3;
   stroke-dasharray: 45 955;
-  filter: drop-shadow(0 0 7px #c9a1ff) drop-shadow(0 0 20px #9e64ff);
+  filter: drop-shadow(0 0 7px #ffaca1) drop-shadow(0 0 20px #ff7664);
 }
 .spiral-glow-fine {
   stroke-width: 2;
@@ -441,17 +441,17 @@
 .spiral-star {
   position: absolute;
   border-radius: 50%;
-  background: #d5f5ff;
+  background: #ffe4d5;
   box-shadow:
-    0 0 6px #a5e6ff,
-    0 0 14px #68bdff80;
+    0 0 6px #ffc4a5,
+    0 0 14px #ffbe6880;
   pointer-events: none;
 }
 .spiral-star.is-spark::before,
 .spiral-star.is-spark::after {
   content: '';
   position: absolute;
-  background: linear-gradient(transparent, #e5faff, transparent);
+  background: linear-gradient(transparent, #ffeee5, transparent);
   left: 50%;
   top: 50%;
   width: 1px;
@@ -477,7 +477,7 @@
 .spiral-copy { max-width: 620px; padding: 36px 22px; }
 .spiral-hero h1 { font-size: clamp(42px, 4.2vw, 68px); }
 .spiral-copy > p { font-size: 14px; }
-.spiral-shade { background: radial-gradient(ellipse 27% 32% at 50% 49%, #0e1114 15%, #0e1114ed 48%, #0e111455 78%, transparent 100%); }
+.spiral-shade { background: radial-gradient(ellipse 27% 32% at 50% 49%, #140f0e 15%, #140f0eed 48%, #140f0e55 78%, transparent 100%); }
 .spiral-art-surface,
 .spiral-hero:not(.is-still) .spiral-art:hover .spiral-art-surface {
   border-radius: 12px;
@@ -492,7 +492,7 @@
   .spiral-hero { min-height: 560px; }
   .spiral-hero h1 { font-size: clamp(36px, 9vw, 50px); }
   .spiral-copy { max-width: 92%; }
-  .spiral-shade { background: radial-gradient(ellipse 60% 35% at 50% 48%, #0e1114 20%, #0e1114dd 65%, transparent 100%); }
+  .spiral-shade { background: radial-gradient(ellipse 60% 35% at 50% 48%, #140f0e 20%, #140f0edd 65%, transparent 100%); }
 }
 
 /* Borderless video planes with a gentle three-axis tilt. */
@@ -507,7 +507,7 @@
 /* Cursor light stays inside the video plane; no outline or border glow. */
 .spiral-art-surface::after {
   display: block;
-  background: radial-gradient(circle 85px at var(--shine-x, 50%) var(--shine-y, 50%), #b5f0ff66, #85dced22 45%, transparent 100%);
+  background: radial-gradient(circle 85px at var(--shine-x, 50%) var(--shine-y, 50%), #ffcfb566, #ffa47322 45%, transparent 100%);
   box-shadow: none;
   opacity: var(--energy, 0);
   pointer-events: none;
@@ -520,5 +520,5 @@
 .spiral-glow-trail,
 .spiral-glow-violet,
 .spiral-glow-fine { filter: none; }
-.spiral-star { box-shadow: 0 0 5px #a5e6ff90; }
+.spiral-star { box-shadow: 0 0 5px #ffc4a590; }
 .spiral-hero.is-still .spiral-art { will-change: auto; }

@@ -1,24 +1,28 @@
-.growth-journey { padding: 56px 0 36px; background: radial-gradient(ellipse at 80% 38%, #86c7d00c, transparent 50%), #101419; border-bottom: 1px solid #ffffff0c; }
+.growth-journey { padding: 56px 0 36px; background: radial-gradient(ellipse at 80% 38%, #ef96670c, transparent 50%), #1a150f; border-bottom: 1px solid #ffffff0c; }
 .growth-inner { width: calc(100% - 96px); max-width: 1600px; margin-inline: auto; }
-.growth-heading .eyebrow { display: flex; align-items: center; gap: 10px; color: #8bd1dc; }
+.growth-heading .eyebrow { display: flex; align-items: center; gap: 10px; color: #fe9d69; }
 .growth-heading h2 { margin: 18px 0 0; font-size: clamp(32px, 3.3vw, 48px); line-height: 1.12; text-transform: uppercase; }
-.growth-heading h2 em { color: #8bd1dc; font-style: normal; }
+.growth-heading h2 em { color: #fe9d69; font-style: normal; }
 .growth-diagram { position: relative; margin: 36px 0 28px; padding-top: 200px; }
 .growth-route, .growth-markers { position: absolute; inset: 0 0 auto; width: 100%; height: 200px; pointer-events: none; }
 .growth-route { overflow: visible; }
 .growth-route path { fill: none; vector-effect: non-scaling-stroke; }
-.growth-route .growth-area { fill: #8bd1dc07; }
+.growth-route .growth-area { fill: #fe9d6907; }
 .growth-gridline { stroke: #ffffff09; stroke-width: 1; }
-.growth-guide { stroke: #8bd1dc25; stroke-dasharray: 3 5; }
-.growth-route-base { stroke: #8bd1dc95; stroke-width: 2; }
-.growth-route-light { stroke: #c6f7ff; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 7 93; filter: drop-shadow(0 0 5px #8bd1dc); animation: growth-flow 9s linear infinite; }
-.growth-marker { position: absolute; transform: translate(-50%, -50%); display: grid; place-items: center; width: 32px; height: 32px; border: 1px solid #8bd1dc; border-radius: 50%; background: #172a32; box-shadow: 0 0 18px #8bd1dc20; color: #bcebf2; font: 11px 'JetBrains Mono', monospace; }
+.growth-guide { stroke: #fe9d6925; stroke-dasharray: 3 5; }
+.growth-route-base { stroke: #fe9d6995; stroke-width: 2; }
+.growth-route-light { stroke: #ffdac6; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 7 93; filter: drop-shadow(0 0 5px #fe9d69); animation: growth-flow 9s linear infinite; }
+.growth-marker { position: absolute; transform: translate(-50%, -50%); display: grid; place-items: center; width: 32px; height: 32px; border: 1px solid var(--growth-step, #fe9d69); border-radius: 50%; background: #241812; box-shadow: 0 0 18px color-mix(in srgb, var(--growth-step, #fe9d69) 14%, transparent); color: var(--growth-step, #ffcbaf); font: 11px 'JetBrains Mono', monospace; }
 .growth-stages { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); list-style: none; padding: 0; margin: 0; }
 .growth-stage { min-width: 0; padding: 20px clamp(12px, 2vw, 32px) 8px; text-align: center; }
 .growth-stage + .growth-stage { border-left: 1px solid #ffffff0c; }
-.growth-stage-top { display: flex; justify-content: center; align-items: center; gap: 9px; color: #8bd1dc; font: 10px 'JetBrains Mono', monospace; letter-spacing: 1.5px; }
+.growth-stage-top { display: flex; justify-content: center; align-items: center; gap: 9px; color: var(--growth-step, #fe9d69); font: 10px 'JetBrains Mono', monospace; letter-spacing: 1.5px; }
 .growth-stage h3 { font-size: clamp(24px, 2.2vw, 30px); line-height: 1.2; margin: 14px 0 10px; }
-.growth-stage p { color: #b8c2ce; font-size: 13px; line-height: 1.8; margin: 0 auto; max-width: 290px; }
+.growth-stage p { color: #d5c5b1; font-size: 13px; line-height: 1.8; margin: 0 auto; max-width: 290px; }
+/* Each step gets its own companion color; markers and steps share the order. */
+.growth-marker:nth-child(2), .growth-stage:nth-child(2) { --growth-step: var(--s8-gold); }
+.growth-marker:nth-child(3), .growth-stage:nth-child(3) { --growth-step: var(--s8-coral); }
+.growth-marker:nth-child(4), .growth-stage:nth-child(4) { --growth-step: var(--s8-sage); }
 @keyframes growth-flow { to { stroke-dashoffset: -100; } }
 @media (max-width: 700px) {
   .growth-journey { padding: 40px 0 28px; }
