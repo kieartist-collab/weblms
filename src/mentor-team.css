@@ -18,7 +18,7 @@
   margin: 20px 0 0;
 }
 .mentor-team-heading h2 em {
-  color: #f19665;
+  color: var(--s8-ember);
   font-style: normal;
 }
 .mentor-team-heading > p {
@@ -182,14 +182,14 @@
   display: inline-flex;
   align-items: center;
   gap: 9px;
-  color: #f89965;
+  color: var(--s8-ember);
   text-decoration: none;
 }
 .mentor-team-bottom a:hover {
   color: #ffe4d5;
 }
 .mentor-team-bottom a:focus-visible {
-  outline: 2px solid #f89965;
+  outline: 2px solid var(--s8-ember);
   outline-offset: 5px;
 }
 @media (hover: hover) {

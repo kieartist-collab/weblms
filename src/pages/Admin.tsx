@@ -46,7 +46,7 @@ export function Admin() {
     <div className="admin-workspace">
       <header className="admin-workspace-heading">
         <span className="eyebrow">KHÔNG GIAN GIẢNG VIÊN</span>
-        <h1 className="page-title">Quản trị Zuno</h1>
+        <h1 className="page-title">Quản trị S8 Space Academy</h1>
       </header>
       <nav className="admin-tabs" aria-label="Quản trị">
         <NavLink to="/admin" end>

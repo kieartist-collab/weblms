@@ -32,7 +32,7 @@
   border-radius: 50%;
   border: 1px solid #f0966544;
   background: #f0966513;
-  color: #fea97b;
+  color: var(--s8-ember);
   font-size: 17px;
   font-weight: 600;
 }
@@ -60,7 +60,7 @@
   margin-left: 8px;
   background: transparent;
   border: 0;
-  color: #fe9d69;
+  color: var(--s8-ember);
   text-decoration: underline;
   cursor: pointer;
 }

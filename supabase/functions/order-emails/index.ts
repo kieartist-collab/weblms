@@ -8,7 +8,7 @@ Deno.serve(async req => {
   const apiKey = Deno.env.get('RESEND_API_KEY');
   const from = Deno.env.get('ORDER_EMAIL_FROM');
   const site = Deno.env.get('SITE_URL');
-  const brand = Deno.env.get('ORDER_EMAIL_BRAND') || 'Zuno';
+  const brand = Deno.env.get('ORDER_EMAIL_BRAND') || 'S8 Space Academy';
   if (!apiKey || !from || !site || !/^https:\/\//.test(site)) return new Response('Missing email configuration', { status: 503 });
   const db = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
   const { data: jobs, error } = await db.rpc('claim_order_emails');

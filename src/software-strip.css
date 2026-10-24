@@ -40,11 +40,11 @@
   cursor: pointer;
 }
 .software-toggle:hover {
-  border-color: #f59b6a;
+  border-color: var(--s8-ember);
   color: #ffeade;
 }
 .software-toggle:focus-visible {
-  outline: 2px solid #f59b6a;
+  outline: 2px solid var(--s8-ember);
   outline-offset: 4px;
 }
 .software-window {

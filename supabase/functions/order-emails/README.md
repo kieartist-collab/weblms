@@ -6,9 +6,9 @@
 2. Chạy `supabase/migrations/012_order_emails.sql` bằng Supabase SQL Editor. Không chạy lại migration cũ. Migration chỉ tạo email cho sự kiện phát sinh sau đó, không gửi lại toàn bộ đơn cũ.
 3. Lưu các secrets trong Supabase Dashboard > Edge Functions > Secrets (không đặt trong biến VITE hoặc commit vào Git):
    - `RESEND_API_KEY`: API key có quyền gửi của Resend.
-   - `ORDER_EMAIL_FROM`: ví dụ `Zuno <thongbao@example.com>`.
+   - `ORDER_EMAIL_FROM`: ví dụ `S8 Space Academy <thongbao@example.com>`.
    - `SITE_URL`: URL HTTPS chính thức của website, không kèm đường dẫn con.
-   - `ORDER_EMAIL_BRAND`: tên học viện (mặc định Zuno).
+   - `ORDER_EMAIL_BRAND`: tên học viện (mặc định S8 Space Academy).
    - `ORDER_EMAIL_SECRET`: chuỗi ngẫu nhiên tối thiểu 32 ký tự, dùng riêng cho worker.
    Supabase cung cấp sẵn SUPABASE_URL và SUPABASE_SERVICE_ROLE_KEY cho Edge Function.
 4. Deploy: `supabase functions deploy order-emails --no-verify-jwt`. Worker tự kiểm tra secret riêng; không nhận JWT người dùng làm quyền chạy worker.

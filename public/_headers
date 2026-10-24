@@ -1,5 +1,5 @@
 # Cloudflare Pages response headers (netlify.toml is not read by Cloudflare).
-# Block other sites from framing Zuno (clickjacking). YouTube embeds inside Zuno are unaffected.
+# Block other sites from framing S8 Space Academy (clickjacking). YouTube embeds inside the site are unaffected.
 /*
   X-Frame-Options: DENY
   Content-Security-Policy: frame-ancestors 'none'

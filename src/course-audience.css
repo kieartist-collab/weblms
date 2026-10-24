@@ -14,7 +14,7 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  color: #f39f71;
+  color: var(--s8-ember);
 }
 .audience-heading h2 {
   font-family: 'Barlow Condensed', sans-serif;
@@ -24,7 +24,7 @@
   margin: 18px 0 0;
 }
 .audience-heading h2 em {
-  color: #ef9667;
+  color: var(--s8-ember);
   font-style: normal;
 }
 .audience-heading > p {
@@ -171,7 +171,7 @@
   line-height: 1.8;
 }
 .audience-guidance p svg {
-  color: #f19665;
+  color: var(--s8-ember);
   flex-shrink: 0;
 }
 .audience-guidance a {
@@ -179,7 +179,7 @@
   align-items: center;
   gap: 10px;
   flex-shrink: 0;
-  color: #fe9d69;
+  color: var(--s8-ember);
   font-size: 12px;
   text-decoration: none;
   padding: 8px 0;
@@ -191,7 +191,7 @@
   transform: translate(3px, -3px);
 }
 .audience-guidance a:focus-visible {
-  outline: 2px solid #fe9d69;
+  outline: 2px solid var(--s8-ember);
   outline-offset: 5px;
 }
 @media (hover: hover) {

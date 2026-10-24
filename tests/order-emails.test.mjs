@@ -9,13 +9,13 @@ test('email templates distinguish payment receipt and escape customer data', asy
   const js = ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2022}}).outputText;
   const {emailContent} = await import(`data:text/javascript;base64,${Buffer.from(js).toString('base64')}`);
   const job = {order_id:'abc',audience:'customer',event:'pending',payload:{course_title:'<script>x</script>',amount:100,transfer_code:'HV123',bank_name:'BANK',bank_account:'123',bank_owner:'OWNER'}};
-  const pending = emailContent(job,'https://example.test','Zuno');
+  const pending = emailContent(job,'https://example.test','S8 Space Academy');
   assert.match(pending.text,/đang chờ thanh toán/);
   assert.match(pending.text,/Nội dung chuyển khoản: HV123/);
   assert.ok(!pending.html.includes('<script>'));
   assert.match(pending.html,/https:\/\/example.test\/orders\/abc/);
-  assert.match(emailContent({...job,event:'reported'},'https://example.test','Zuno').text,/chưa phải xác nhận/);
-  assert.match(emailContent({...job,audience:'admin'},'https://example.test','Zuno').text,/\/admin\/orders/);
+  assert.match(emailContent({...job,event:'reported'},'https://example.test','S8 Space Academy').text,/chưa phải xác nhận/);
+  assert.match(emailContent({...job,audience:'admin'},'https://example.test','S8 Space Academy').text,/\/admin\/orders/);
 });
 
 const users = ['00000000-0000-0000-0000-000000000001','00000000-0000-0000-0000-000000000002','00000000-0000-0000-0000-000000000003'];
