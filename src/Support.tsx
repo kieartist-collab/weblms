@@ -410,9 +410,11 @@ export function AdminReports() {
               </Action>
             </div>
           ))}
+          {/* Only paginate when there is more than one page (20 per page). */}
+          {(data?.count ?? 0) > 20 && (
           <div className="support-actions">
             <button
-              className="button secondary"
+              className="button secondary small"
               disabled={page === 0}
               onClick={() => setPage(page - 1)}
             >
@@ -422,13 +424,14 @@ export function AdminReports() {
               Trang {page + 1} · {data?.count ?? 0} báo lỗi
             </span>
             <button
-              className="button secondary"
+              className="button secondary small"
               disabled={(page + 1) * 20 >= (data?.count ?? 0)}
               onClick={() => setPage(page + 1)}
             >
               Sau
             </button>
           </div>
+          )}
         </>
       )}
     </>

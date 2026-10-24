@@ -34,3 +34,8 @@ Chạy `supabase/migrations/004_admin_directory.sql` trong Supabase SQL Editor t
 - Mỗi trang 25/50/100 dòng. Database trả tổng số kết quả và chỉ dữ liệu trang hiện tại. Bộ lọc và trang lưu trên URL.
 - Bấm Chi tiết để tải đơn hoặc các quyền học/tiến độ của đúng người đó. Escape hoặc nút đóng trở về bảng giữ nguyên bộ lọc.
 - Các thao tác duyệt tiền, cấp/thu hồi quyền vẫn qua RPC cũ, có xác nhận. Không tự động chia sẻ/thu hồi Drive.
+
+# Email đơn hàng
+
+Triển khai migration 012, Edge Function và Cron theo [hướng dẫn email](supabase/functions/order-emails/README.md). Cần cấu hình Resend, tên miền gửi và secrets trước khi email thực sự được gửi. Tất cả admin ở thời điểm sự kiện nhận thông báo đơn mới và khách báo thanh toán; quyền được kiểm tra lại trước gửi. Theo dõi tại `/admin/emails`.
+

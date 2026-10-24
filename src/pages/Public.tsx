@@ -197,10 +197,10 @@ export function CourseDetail() {
       <div className="breadcrumb">
         <Link to="/courses">Khóa học</Link>
         <ChevronRight size={14} />
-        <span>{course.category}</span>
+        <span aria-current="page">{course.title}</span>
       </div>
       <div className="detail-grid">
-        <div>
+        <div className="detail-intro">
           <span className="eyebrow">
             {course.category} · {course.level}
           </span>
@@ -212,16 +212,27 @@ export function CourseDetail() {
           )}
           <RichText className="lead" value={course.summary} />
           <div className="detail-meta">
-            <span>
-              <BookOpen size={17} />
-              {lessons.length} bài học
-            </span>
-            <span>
-              <Clock size={17} />
-              {lessons.reduce((s, l) => s + l.duration_minutes, 0)} phút
-            </span>
+            {lessons.length ? (
+              <>
+                <span>
+                  <BookOpen size={17} />
+                  {lessons.length} bài học
+                </span>
+                <span>
+                  <Clock size={17} />
+                  {lessons.reduce((s, l) => s + l.duration_minutes, 0)} phút
+                </span>
+              </>
+            ) : (
+              <span>
+                <BookOpen size={17} />
+                Bài học đang được cập nhật
+              </span>
+            )}
             <span>{course.instructor}</span>
           </div>
+        </div>
+        <div className="detail-content">
           <section className="content-section">
             <h2 className="info-heading">
               <BookOpen size={22} aria-hidden="true" /> Về khóa học

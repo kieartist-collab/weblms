@@ -12,6 +12,7 @@ import {
   Users,
   Settings as SettingsIcon,
   History,
+  Mail,
   Plus,
   ChevronLeft,
   Pencil,
@@ -26,6 +27,7 @@ import { Action, Empty, Loading, Notice, useLoad } from '../components';
 import { AdminPages, AdminReports } from '../Support';
 import { AdminRoles } from './AdminRoles';
 import { AdminDirectory } from './AdminDirectory';
+import { AdminEmails } from './AdminEmails';
 import { useAuth } from '../auth';
 import { check, db, driveId, errorText, money, safeUrl, validDrive } from '../lib';
 import type {
@@ -79,6 +81,7 @@ export function Admin() {
           <History size={17} />
           Nhật ký
         </NavLink>
+        <NavLink to="/admin/emails"><Mail size={17} />Email đơn hàng</NavLink>
       </nav>
       <div className="admin-workspace-content">
       <Routes>
@@ -91,6 +94,7 @@ export function Admin() {
         <Route path="pages" element={<AdminPages />} />
         <Route path="reports" element={<AdminReports />} />
         <Route path="audit" element={<AuditPage />} />
+        <Route path="emails" element={<AdminEmails />} />
         <Route path="*" element={<Empty title="Không tìm thấy trang quản trị" />} />
       </Routes>
       </div>
@@ -280,7 +284,7 @@ function AdminCourses() {
                 <tr key={c.id}>
                   <td>
                     <strong>{c.title}</strong>
-                    <small>{c.category}</small>
+                    {c.category && c.category !== 'Khóa học' && <small>{c.category}</small>}
                   </td>
                   <td>{money(c.price)}</td>
                   <td>
@@ -1232,11 +1236,16 @@ function BankQrUpload({ value }: { value: string }) {
   const image = preview || (!removed && safeUrl(value));
   return (
     <div className="field wide">
-      <label htmlFor="bank-qr-file">Ảnh QR chuyển khoản (không bắt buộc)</label>
+      <span id="bank-qr-label">Ảnh QR chuyển khoản (không bắt buộc)</span>
       <input type="hidden" name="bank_qr_url" value={removed ? '' : value} />
+      {/* Native file inputs show browser-language text; keep the visible control Vietnamese. */}
+      <label className="file-picker">
+        <span className="button secondary small">{file ? 'Chọn ảnh khác' : 'Chọn ảnh QR'}</span>
+        <span className="muted">{file ? file.name : 'Chưa chọn ảnh mới'}</span>
       <input
         ref={input}
         id="bank-qr-file"
+        aria-labelledby="bank-qr-label"
         name="bank_qr_file"
         type="file"
         accept="image/png,image/jpeg,image/webp"
@@ -1257,6 +1266,7 @@ function BankQrUpload({ value }: { value: string }) {
           setRemoved(false);
         }}
       />
+      </label>
       <small>JPG, PNG, WebP · Tối đa 5 MB. Chọn ảnh rồi bấm Lưu thay đổi.</small>
       {error && (
         <p className="field-error" role="alert">
@@ -1361,7 +1371,10 @@ function AuditPage() {
   if (error) return <Notice error>{error}</Notice>;
   return (
     <>
-      <h2>200 thao tác quản trị gần nhất</h2>
+      <h2>Thao tác quản trị gần nhất</h2>
+      <p className="muted">
+        {data?.logs.length ?? 0} thao tác{data?.logs.length === 200 ? ' (hiển thị tối đa 200)' : ''}.
+      </p>
       {data?.logs.length ? (
         <div className="table-wrap">
           <table>
@@ -1370,20 +1383,27 @@ function AuditPage() {
                 <th>Thời gian</th>
                 <th>Người thực hiện</th>
                 <th>Thao tác</th>
-                <th>Mã tham chiếu</th>
+                <th>Đối tượng</th>
               </tr>
             </thead>
             <tbody>
-              {data.logs.map((a) => (
-                <tr key={a.id}>
-                  <td>{new Date(a.created_at).toLocaleString('vi-VN')}</td>
-                  <td>{data.profiles.find((p) => p.id === a.actor_id)?.email}</td>
-                  <td>{labels[a.action] || a.action}</td>
-                  <td>
-                    <code>{a.target_id}</code>
-                  </td>
-                </tr>
-              ))}
+              {data.logs.map((a) => {
+                const person = data.profiles.find((p) => p.id === a.target_id);
+                return (
+                  <tr key={a.id}>
+                    <td>{new Date(a.created_at).toLocaleString('vi-VN')}</td>
+                    <td>{data.profiles.find((p) => p.id === a.actor_id)?.email}</td>
+                    <td>{labels[a.action] || a.action}</td>
+                    <td>
+                      {person ? (
+                        person.email
+                      ) : (
+                        <code title={a.target_id}>{a.target_id.slice(0, 8)}</code>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

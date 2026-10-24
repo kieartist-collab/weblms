@@ -677,7 +677,19 @@ footer p {
 .detail-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 355px;
-  gap: 65px;
+  /* The tall purchase card spans both rows; let the second row absorb its extra height. */
+  grid-template-rows: auto 1fr;
+  column-gap: 65px;
+}
+.detail-intro,
+.detail-content {
+  grid-column: 1;
+  min-width: 0;
+}
+/* Desktop keeps the purchase card beside both parts; mobile follows DOM order (title first). */
+.detail-grid > .purchase-card {
+  grid-column: 2;
+  grid-row: 1 / span 2;
 }
 .detail-meta {
   display: flex;
@@ -1467,7 +1479,7 @@ code {
   }
   .detail-grid {
     grid-template-columns: 1fr 320px;
-    gap: 35px;
+    column-gap: 35px;
   }
   .classroom {
     grid-template-columns: 275px 1fr;
@@ -1566,12 +1578,19 @@ code {
   }
   .detail-grid {
     grid-template-columns: 1fr;
+    grid-template-rows: none;
   }
-  .purchase-card {
+  .detail-grid > .purchase-card {
     position: static;
     max-width: 600px;
     width: 100%;
-    grid-row: 1;
+    grid-column: 1;
+    grid-row: auto;
+    order: 1;
+    margin-top: 10px;
+  }
+  .detail-grid > .detail-content {
+    order: 2;
   }
   .purchase-card > img,
   .purchase-card > .course-placeholder {
