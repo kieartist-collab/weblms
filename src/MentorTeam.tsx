@@ -1,4 +1,4 @@
-import { UsersRound, Quote, UserRound, ArrowUpRight } from 'lucide-react';
+import { Presentation, Quote, UserRound, ArrowUpRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import './mentor-team.css';
 
@@ -45,7 +45,7 @@ export function MentorTeam({ embedded = false }: { embedded?: boolean }) {
       <header className="mentor-team-heading">
         <div>
           <span className="eyebrow section-kicker">
-            <UsersRound size={18} aria-hidden="true" /> NGƯỜI ĐỨNG SAU BÀI HỌC
+            <Presentation size={18} aria-hidden="true" /> NGƯỜI ĐỨNG SAU BÀI HỌC
           </span>
           <h2 id="mentor-team-title">
             Chia sẻ góc nhìn.

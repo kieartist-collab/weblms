@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, BookOpen, CircleCheck, FileText, Layers3, Play, ShieldCheck } from 'lucide-react';
+import { ArrowLeft, BookOpen, CircleCheck, FileText, GraduationCap, Play, ShieldCheck } from 'lucide-react';
 import './access-layout.css';
 
 export function AccessLayout({ children, learning = false }: { children: ReactNode; learning?: boolean }) {
@@ -8,14 +8,14 @@ export function AccessLayout({ children, learning = false }: { children: ReactNo
     <section className={`access-page ${learning ? 'access-learning' : ''}`}>
       <div className="access-shell">
         <div className="access-story">
-          <span className="eyebrow"><Layers3 size={17} aria-hidden="true" /> HỌC · THỰC HÀNH · SÁNG TẠO</span>
+          <span className="eyebrow"><GraduationCap size={17} aria-hidden="true" /> HỌC · THỰC HÀNH · SÁNG TẠO</span>
           <h1>{learning ? <>Không gian học tập.<br /><em>Dành riêng cho bạn.</em></> : <>Ý tưởng của bạn.<br /><em>Hành trình của bạn.</em></>}</h1>
           <p>{learning ? 'Các khóa học đã đăng ký, tiến độ và tài liệu được tập hợp tại một nơi.' : 'Tiếp nối những bài học, luyện tập kỹ năng và từng bước biến ý tưởng thành sản phẩm.'}</p>
           <div className="access-visual" aria-hidden="true">
             <div className="access-orbit" />
             <div className="access-preview">
               <div className="access-preview-top"><BookOpen size={19} /><span>HÀNH TRÌNH SÁNG TẠO</span><span className="access-live-dot" /></div>
-              <div className="access-preview-art"><Layers3 size={66} strokeWidth={1} /><span>LEARN / CREATE / REPEAT</span></div>
+              <div className="access-preview-art"><GraduationCap size={66} strokeWidth={1} /><span>LEARN / CREATE / REPEAT</span></div>
               <div className="access-preview-row"><span className="access-preview-icon"><Play size={15} /></span><div><strong>Học qua từng dự án</strong><small>Từ ý tưởng đến sản phẩm</small></div><CircleCheck size={19} /></div>
             </div>
             <div className="access-resource"><FileText size={19} /><span>Video & tài liệu<small>Đồng hành khi thực hành</small></span></div>

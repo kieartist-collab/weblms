@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { Play, X, ArrowUpRight, Clapperboard } from 'lucide-react';
+import { Play, X, ArrowUpRight, Award } from 'lucide-react';
 import {
   useStudentVideos,
   studentPlaylist as playlist,
@@ -137,7 +137,7 @@ export function StudentShowcase() {
       <div className="cinema-heading">
         <div>
           <span className="eyebrow section-kicker">
-            <Clapperboard size={18} aria-hidden="true" /> STUDENT SHOWCASE / SẢN PHẨM HỌC VIÊN
+            <Award size={18} aria-hidden="true" /> STUDENT SHOWCASE / SẢN PHẨM HỌC VIÊN
           </span>
           <h2>
             Từ bài học

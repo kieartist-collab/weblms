@@ -24,7 +24,7 @@
   padding: 12px 0;
   margin: 0;
   border: 1px solid var(--line);
-  background: #1e1913;
+  background: #faf6f1;
 }
 .admin-workspace .admin-tabs a { border-radius: 0; padding: 14px 18px; }
 .admin-workspace .admin-tabs a svg { flex-shrink: 0; }
@@ -77,9 +77,9 @@
   place-items: center;
   aspect-ratio: 16 / 9;
   overflow: hidden;
-  border: 1px solid #f494604d;
+  border: 1px solid #bd4b0d4d;
   border-radius: 8px;
-  background: #1a150f;
+  background: #fbf7f4;
 }
 .admin-thumbnail-preview-frame img {
   display: block;

@@ -9,7 +9,7 @@ import { Link, NavLink, Route, Routes, useNavigate, useParams } from 'react-rout
 import {
   BookOpen,
   CreditCard,
-  Users,
+  GraduationCap,
   Settings as SettingsIcon,
   History,
   Mail,
@@ -58,7 +58,7 @@ export function Admin() {
           Đơn hàng
         </NavLink>
         <NavLink to="/admin/students">
-          <Users size={17} />
+          <GraduationCap size={17} />
           Học viên
         </NavLink>
         <NavLink to="/admin/administrators">

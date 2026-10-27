@@ -1,11 +1,11 @@
-import { BriefcaseBusiness, Radar, Sparkles, Lightbulb, TrendingUp } from 'lucide-react';
+import { BriefcaseBusiness, ChartLine, BrainCircuit, Lightbulb, TrendingUp } from 'lucide-react';
 
 import './growth-journey.css';
 
 const steps = [
   { title: 'Cơ hội nghề nghiệp', description: 'Mở hướng đi với 3D, motion, dựng phim và sáng tạo nội dung.', icon: BriefcaseBusiness },
-  { title: 'Xu hướng thị trường', description: 'Cập nhật kỹ năng, chọn hướng đi phù hợp với công việc bạn theo đuổi.', icon: Radar },
-  { title: 'Tăng tốc với AI', description: 'Giảm thao tác lặp lại, thử nghiệm ý tưởng và hoàn thiện sản phẩm nhanh hơn.', icon: Sparkles },
+  { title: 'Xu hướng thị trường', description: 'Cập nhật kỹ năng, chọn hướng đi phù hợp với công việc bạn theo đuổi.', icon: ChartLine },
+  { title: 'Tăng tốc với AI', description: 'Giảm thao tác lặp lại, thử nghiệm ý tưởng và hoàn thiện sản phẩm nhanh hơn.', icon: BrainCircuit },
   { title: 'Làm chủ sáng tạo', description: 'Tư duy, thẩm mỹ và câu chuyện của bạn tạo nên sự khác biệt.', icon: Lightbulb },
 ];
 const points = [{ x: 125, y: 165 }, { x: 375, y: 120 }, { x: 625, y: 70 }, { x: 875, y: 20 }];

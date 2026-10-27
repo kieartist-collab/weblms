@@ -8,8 +8,8 @@
   overflow: hidden;
   display: grid;
   place-items: center;
-  background: #140f0e;
-  color: #f4f3ee;
+  background: #faf8f7;
+  color: #231d1a;
 }
 .spiral-scene {
   position: absolute;
@@ -44,9 +44,9 @@
   aspect-ratio: 16/9;
   border-radius: 9px;
   overflow: hidden;
-  border: 1px solid #ffffff26;
-  background: #2e2019;
-  box-shadow: 0 12px 48px #0006;
+  border: 1px solid #2a211d26;
+  background: #f7efea;
+  box-shadow: 0 12px 48px #2a211d2e;
   will-change: transform;
 }
 .spiral-art img {
@@ -62,12 +62,12 @@
   background:
     radial-gradient(
       ellipse 37% 40% at 50% 48%,
-      #140f0e 15%,
-      #140f0ef5 50%,
-      #140f0e99 76%,
+      #faf8f7 15%,
+      #faf8f7f5 50%,
+      #faf8f799 76%,
       transparent 100%
     ),
-    linear-gradient(0deg, #140f0e 0%, transparent 18%, transparent 86%, #140f0e55);
+    linear-gradient(0deg, #faf8f7 0%, transparent 18%, transparent 86%, #faf8f755);
 }
 .spiral-copy {
   position: relative;
@@ -79,7 +79,7 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  color: #d3a389;
+  color: #925736;
   font:
     11px 'JetBrains Mono',
     monospace;
@@ -90,7 +90,7 @@
   height: 6px;
   border-radius: 50%;
   background: var(--s8-ember);
-  box-shadow: 0 0 15px #ff9b6580;
+  box-shadow: 0 0 15px #da4d0080;
 }
 .spiral-hero h1 {
   font-family: 'Barlow Condensed', sans-serif;
@@ -105,7 +105,7 @@
   font-style: normal;
 }
 .spiral-copy > p {
-  color: #c4bcb5;
+  color: #4b423c;
   font-size: 16px;
   line-height: 1.8;
   margin: 0 0 28px;
@@ -123,7 +123,7 @@
   min-height: 48px;
 }
 .spiral-actions .secondary {
-  background: #1b130fe6;
+  background: #faf6f3e6;
 }
 .spiral-signature {
   display: block;
@@ -132,7 +132,7 @@
     10px 'JetBrains Mono',
     monospace;
   letter-spacing: 3px;
-  color: #978b82;
+  color: #6f635c;
 }
 .spiral-bottom {
   position: absolute;
@@ -150,19 +150,19 @@
   align-items: center;
   gap: 10px;
   font-size: 11px;
-  color: #c9bdb4;
+  color: #4b3f39;
   text-decoration: none;
 }
 .spiral-pause {
-  border: 1px solid #e3b3992b;
+  border: 1px solid #be65342b;
   border-radius: 30px;
   padding: 10px 15px;
-  background: #140f0eb3;
+  background: #faf8f7b3;
   cursor: pointer;
 }
 .spiral-scroll:hover,
 .spiral-pause:hover {
-  color: #fff;
+  color: #1f1f1f;
 }
 .spiral-hero a:focus-visible,
 .spiral-pause:focus-visible {
@@ -183,8 +183,8 @@
   }
   .spiral-shade {
     background:
-      radial-gradient(ellipse 60% 42% at 50% 47%, #140f0e 30%, #140f0eee 62%, transparent 100%),
-      linear-gradient(0deg, #140f0e, transparent 25%);
+      radial-gradient(ellipse 60% 42% at 50% 47%, #faf8f7 30%, #faf8f7ee 62%, transparent 100%),
+      linear-gradient(0deg, #faf8f7, transparent 25%);
   }
 }
 @media (max-width: 600px) {
@@ -226,8 +226,8 @@
   }
   .spiral-shade {
     background:
-      radial-gradient(ellipse 85% 39% at 50% 48%, #140f0e 20%, #140f0eef 65%, transparent 100%),
-      linear-gradient(0deg, #140f0e, transparent 25%);
+      radial-gradient(ellipse 85% 39% at 50% 48%, #faf8f7 20%, #faf8f7ef 65%, transparent 100%),
+      linear-gradient(0deg, #faf8f7, transparent 25%);
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -248,10 +248,10 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
-  border: 1px solid #ffffff30;
+  border: 1px solid #2a211d30;
   border-radius: 10px;
-  background: #281c15;
-  box-shadow: 0 12px 48px #0006;
+  background: #f8f1ee;
+  box-shadow: 0 12px 48px #2a211d2e;
 }
 .spiral-video {
   position: absolute;
@@ -301,7 +301,7 @@
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
   .spiral-hero:not(.is-still) .spiral-art:hover .spiral-art-surface {
     border-radius: 19px 7px 20px 8px;
-    border-color: #ffa57499;
+    border-color: #e9520099;
   }
 }
 .spiral-hero.is-still .spiral-art-surface {
@@ -320,17 +320,17 @@
   pointer-events: none;
 }
 .spiral-glow-trail {
-  stroke: #ffbb96;
+  stroke: #ff5a00;
   stroke-width: 2;
   stroke-linecap: round;
   stroke-dasharray: 38 962;
-  filter: drop-shadow(0 0 4px var(--s8-ember)) drop-shadow(0 0 12px #ff823e);
+  filter: drop-shadow(0 0 4px var(--s8-ember)) drop-shadow(0 0 12px #b33f00);
 }
 .spiral-glow-violet {
-  stroke: #ff9a8d;
+  stroke: #ff1d00;
   stroke-width: 1.5;
   stroke-dasharray: 22 978;
-  filter: drop-shadow(0 0 6px #ff806f);
+  filter: drop-shadow(0 0 6px #e41b00);
 }
 .spiral-glow-fine {
   stroke-width: 1;
@@ -355,17 +355,17 @@
   opacity: 0;
   background: radial-gradient(
     circle at var(--shine-x, 50%) var(--shine-y, 50%),
-    #ffc8ab38,
+    #31292538,
     transparent 65%
   );
-  box-shadow: inset 0 0 0 2px #ffd1b877;
+  box-shadow: inset 0 0 0 2px #29231f77;
   transition: opacity 0.4s;
 }
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
   .spiral-hero:not(.is-still) .spiral-art:hover .spiral-art-surface {
     filter: saturate(1.65) contrast(1.08) brightness(1.1);
-    border-color: #ffd2b9;
-    box-shadow: 0 0 28px #ffb68e70;
+    border-color: var(--accent);
+    box-shadow: 0 0 28px #ff5a0070;
   }
   .spiral-hero:not(.is-still) .spiral-art:hover .spiral-art-surface::after {
     opacity: 1;
@@ -416,16 +416,16 @@
   opacity: 1;
 }
 .spiral-glow-trail {
-  stroke: #ffe2d2;
+  stroke: var(--accent);
   stroke-width: 4;
   stroke-dasharray: 65 935;
-  filter: drop-shadow(0 0 5px #ffc3a3) drop-shadow(0 0 14px #ff8a4b) drop-shadow(0 0 28px #ff7c35);
+  filter: drop-shadow(0 0 6px #f2692588);
 }
 .spiral-glow-violet {
-  stroke: #ffc4bc;
+  stroke: var(--s8-coral);
   stroke-width: 3;
   stroke-dasharray: 45 955;
-  filter: drop-shadow(0 0 7px #ffaca1) drop-shadow(0 0 20px #ff7664);
+  filter: drop-shadow(0 0 6px #c9463a66);
 }
 .spiral-glow-fine {
   stroke-width: 2;
@@ -441,17 +441,17 @@
 .spiral-star {
   position: absolute;
   border-radius: 50%;
-  background: #ffe4d5;
+  background: #f2692599;
   box-shadow:
-    0 0 6px #ffc4a5,
-    0 0 14px #ffbe6880;
+    0 0 6px #f2692544,
+    0 0 14px #dd7e0080;
   pointer-events: none;
 }
 .spiral-star.is-spark::before,
 .spiral-star.is-spark::after {
   content: '';
   position: absolute;
-  background: linear-gradient(transparent, #ffeee5, transparent);
+  background: linear-gradient(transparent, #231d1a, transparent);
   left: 50%;
   top: 50%;
   width: 1px;
@@ -477,7 +477,7 @@
 .spiral-copy { max-width: 620px; padding: 36px 22px; }
 .spiral-hero h1 { font-size: clamp(42px, 4.2vw, 68px); }
 .spiral-copy > p { font-size: 14px; }
-.spiral-shade { background: radial-gradient(ellipse 27% 32% at 50% 49%, #140f0e 15%, #140f0eed 48%, #140f0e55 78%, transparent 100%); }
+.spiral-shade { background: radial-gradient(ellipse 27% 32% at 50% 49%, #faf8f7 15%, #faf8f7ed 48%, #faf8f755 78%, transparent 100%); }
 .spiral-art-surface,
 .spiral-hero:not(.is-still) .spiral-art:hover .spiral-art-surface {
   border-radius: 12px;
@@ -492,7 +492,7 @@
   .spiral-hero { min-height: 560px; }
   .spiral-hero h1 { font-size: clamp(36px, 9vw, 50px); }
   .spiral-copy { max-width: 92%; }
-  .spiral-shade { background: radial-gradient(ellipse 60% 35% at 50% 48%, #140f0e 20%, #140f0edd 65%, transparent 100%); }
+  .spiral-shade { background: radial-gradient(ellipse 60% 35% at 50% 48%, #faf8f7 20%, #faf8f7dd 65%, transparent 100%); }
 }
 
 /* Borderless video planes with a gentle three-axis tilt. */
@@ -507,7 +507,7 @@
 /* Cursor light stays inside the video plane; no outline or border glow. */
 .spiral-art-surface::after {
   display: block;
-  background: radial-gradient(circle 85px at var(--shine-x, 50%) var(--shine-y, 50%), #ffcfb566, #ffa47322 45%, transparent 100%);
+  background: radial-gradient(circle 85px at var(--shine-x, 50%) var(--shine-y, 50%), #2b242066, #e8510022 45%, transparent 100%);
   box-shadow: none;
   opacity: var(--energy, 0);
   pointer-events: none;
@@ -520,5 +520,5 @@
 .spiral-glow-trail,
 .spiral-glow-violet,
 .spiral-glow-fine { filter: none; }
-.spiral-star { box-shadow: 0 0 5px #ffc4a590; }
+.spiral-star { box-shadow: 0 0 5px #342c2790; }
 .spiral-hero.is-still .spiral-art { will-change: auto; }
