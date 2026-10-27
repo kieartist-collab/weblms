@@ -1,11 +1,11 @@
 .course-instructors {
   margin-top: 42px;
   padding-top: 30px;
-  border-top: 1px solid #2a211d18;
+  border-top: 1px solid #ffffff18;
 }
 .course-instructors-intro {
   font-size: 13px;
-  color: #52453e;
+  color: #c3b7ae;
   margin: 0 0 22px;
   line-height: 1.8;
 }
@@ -19,9 +19,9 @@
   align-items: center;
   gap: 16px;
   padding: 20px;
-  border: 1px solid #2a211d16;
+  border: 1px solid #ffffff16;
   border-radius: 12px;
-  background: linear-gradient(120deg, #b94d1208, transparent), #f6f4f2;
+  background: linear-gradient(120deg, #f0966508, transparent), #211917;
 }
 .course-instructor-avatar {
   flex-shrink: 0;
@@ -30,8 +30,8 @@
   width: 54px;
   height: 54px;
   border-radius: 50%;
-  border: 1px solid #b94d1244;
-  background: #b94d1213;
+  border: 1px solid #f0966544;
+  background: #f0966513;
   color: var(--s8-ember);
   font-size: 17px;
   font-weight: 600;
@@ -39,21 +39,21 @@
 .course-instructor h3 {
   margin: 0 0 7px;
   font-size: 17px;
-  color: #231d1a;
+  color: #f7efeb;
   overflow-wrap: anywhere;
 }
 .course-instructor span {
   display: flex;
   align-items: center;
   gap: 6px;
-  color: #7c613f;
+  color: #c9b295;
   font-size: 12px;
 }
 .instructor-status {
   padding: 18px;
-  border: 1px solid #2a211d16;
+  border: 1px solid #ffffff16;
   border-radius: 10px;
-  color: #483d36;
+  color: #ccc0b6;
   font-size: 13px;
 }
 .instructor-status button {

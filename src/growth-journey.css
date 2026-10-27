@@ -1,4 +1,4 @@
-.growth-journey { padding: 56px 0 36px; background: radial-gradient(ellipse at 80% 38%, #b94d130c, transparent 50%), #fbf7f4; border-bottom: 1px solid #2a211d0c; }
+.growth-journey { padding: 56px 0 36px; background: radial-gradient(ellipse at 80% 38%, #ef96670c, transparent 50%), #1a150f; border-bottom: 1px solid #ffffff0c; }
 .growth-inner { width: calc(100% - 96px); max-width: 1600px; margin-inline: auto; }
 .growth-heading .eyebrow { display: flex; align-items: center; gap: 10px; color: var(--s8-ember); }
 .growth-heading h2 { margin: 18px 0 0; font-size: clamp(32px, 3.3vw, 48px); line-height: 1.12; text-transform: uppercase; }
@@ -7,18 +7,18 @@
 .growth-route, .growth-markers { position: absolute; inset: 0 0 auto; width: 100%; height: 200px; pointer-events: none; }
 .growth-route { overflow: visible; }
 .growth-route path { fill: none; vector-effect: non-scaling-stroke; }
-.growth-route .growth-area { fill: #dc4e0107; }
-.growth-gridline { stroke: #2a211d09; stroke-width: 1; }
-.growth-guide { stroke: #dc4e0125; stroke-dasharray: 3 5; }
-.growth-route-base { stroke: #dc4e0195; stroke-width: 2; }
-.growth-route-light { stroke: var(--accent); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 7 93; filter: drop-shadow(0 0 4px #f2692566); animation: growth-flow 9s linear infinite; }
-.growth-marker { position: absolute; transform: translate(-50%, -50%); display: grid; place-items: center; width: 32px; height: 32px; border: 1px solid var(--growth-step, var(--s8-ember)); border-radius: 50%; background: #fff; box-shadow: 0 0 18px color-mix(in srgb, var(--growth-step, var(--s8-ember)) 14%, transparent); color: var(--growth-step, #2f2723); font: 11px 'JetBrains Mono', monospace; }
+.growth-route .growth-area { fill: #fe9d6907; }
+.growth-gridline { stroke: #ffffff09; stroke-width: 1; }
+.growth-guide { stroke: #fe9d6925; stroke-dasharray: 3 5; }
+.growth-route-base { stroke: #fe9d6995; stroke-width: 2; }
+.growth-route-light { stroke: #ffdac6; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 7 93; filter: drop-shadow(0 0 5px var(--s8-ember)); animation: growth-flow 9s linear infinite; }
+.growth-marker { position: absolute; transform: translate(-50%, -50%); display: grid; place-items: center; width: 32px; height: 32px; border: 1px solid var(--growth-step, var(--s8-ember)); border-radius: 50%; background: #241812; box-shadow: 0 0 18px color-mix(in srgb, var(--growth-step, var(--s8-ember)) 14%, transparent); color: var(--growth-step, #ffcbaf); font: 11px 'JetBrains Mono', monospace; }
 .growth-stages { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); list-style: none; padding: 0; margin: 0; }
 .growth-stage { min-width: 0; padding: 20px clamp(12px, 2vw, 32px) 8px; text-align: center; }
-.growth-stage + .growth-stage { border-left: 1px solid #2a211d0c; }
+.growth-stage + .growth-stage { border-left: 1px solid #ffffff0c; }
 .growth-stage-top { display: flex; justify-content: center; align-items: center; gap: 9px; color: var(--growth-step, var(--s8-ember)); font: 10px 'JetBrains Mono', monospace; letter-spacing: 1.5px; }
 .growth-stage h3 { font-size: clamp(24px, 2.2vw, 30px); line-height: 1.2; margin: 14px 0 10px; }
-.growth-stage p { color: #796041; font-size: 13px; line-height: 1.8; margin: 0 auto; max-width: 290px; }
+.growth-stage p { color: #d5c5b1; font-size: 13px; line-height: 1.8; margin: 0 auto; max-width: 290px; }
 /* Each step gets its own companion color; markers and steps share the order. */
 .growth-marker:nth-child(2), .growth-stage:nth-child(2) { --growth-step: var(--s8-gold); }
 .growth-marker:nth-child(3), .growth-stage:nth-child(3) { --growth-step: var(--s8-coral); }

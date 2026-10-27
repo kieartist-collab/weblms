@@ -1,7 +1,7 @@
 .course-audience {
   padding: 88px 0 66px;
-  background: radial-gradient(ellipse at 10% 0%, #b94b100b, transparent 55%), #f8f7f6;
-  border-block: 1px solid #2a211d0c;
+  background: radial-gradient(ellipse at 10% 0%, #f194620b, transparent 55%), #181211;
+  border-block: 1px solid #ffffff0c;
 }
 .audience-heading {
   display: flex;
@@ -32,7 +32,7 @@
   margin: 0 0 4px;
   font-size: 14px;
   line-height: 1.9;
-  color: #53463e;
+  color: #c2b7ae;
 }
 .audience-grid {
   display: grid;
@@ -46,9 +46,9 @@
   position: relative;
   padding: 28px;
   overflow: hidden;
-  border: 1px solid #2a211d16;
+  border: 1px solid #ffffff16;
   border-radius: 16px;
-  background: linear-gradient(150deg, #2a211d04, transparent 60%), #f6f4f2;
+  background: linear-gradient(150deg, #ffffff04, transparent 60%), #211917;
   transition:
     transform 0.3s,
     border-color 0.3s,
@@ -90,7 +90,7 @@
   font:
     600 64px/1 'Barlow Condensed',
     sans-serif;
-  color: #2a211d10;
+  color: #ffffff10;
   letter-spacing: -2px;
 }
 .audience-label {
@@ -101,7 +101,7 @@
   letter-spacing: 1.1px;
 }
 .audience-card h3 {
-  color: #231d1a;
+  color: #f7f1ed;
   font:
     600 28px/1.2 'Barlow Condensed',
     sans-serif;
@@ -110,7 +110,7 @@
 .audience-card > p {
   font-size: 13px;
   line-height: 1.95;
-  color: #4e423b;
+  color: #c5bbb3;
   margin: 0 0 25px;
 }
 .audience-card ul {
@@ -127,10 +127,10 @@
   gap: 5px;
   font-size: 10px;
   padding: 6px 8px;
-  color: #3a312b;
+  color: #d6ccc5;
   border-radius: 5px;
-  background: #2a211d05;
-  border: 1px solid #2a211d0c;
+  background: #ffffff05;
+  border: 1px solid #ffffff0c;
 }
 .audience-card li svg {
   color: var(--audience-accent);
@@ -141,8 +141,8 @@
   align-items: center;
   gap: 9px;
   padding-top: 20px;
-  border-top: 1px solid #2a211d12;
-  color: #39302b;
+  border-top: 1px solid #ffffff12;
+  color: #d5cdc7;
   font-size: 11px;
   line-height: 1.6;
 }
@@ -165,7 +165,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  color: #52453e;
+  color: #c3b7ae;
   font-size: 12px;
   margin: 0;
   line-height: 1.8;
@@ -198,7 +198,7 @@
   .audience-card:hover {
     transform: translateY(-5px);
     border-color: color-mix(in srgb, var(--audience-accent) 45%, transparent);
-    box-shadow: 0 18px 38px #2a211d17;
+    box-shadow: 0 18px 38px #0003;
   }
 }
 @media (max-width: 1000px) {
